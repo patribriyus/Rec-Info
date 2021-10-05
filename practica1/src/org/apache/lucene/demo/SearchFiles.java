@@ -96,7 +96,7 @@ public class SearchFiles {
 
     IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
     IndexSearcher searcher = new IndexSearcher(reader);
-    Analyzer analyzer = new SpanishAnalyzer();
+    Analyzer analyzer = new SpanishAnalyzer2();
 
     BufferedReader in = null;
     if (queries != null) {

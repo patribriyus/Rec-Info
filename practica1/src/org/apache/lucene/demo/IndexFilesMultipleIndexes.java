@@ -14,7 +14,6 @@ package org.apache.lucene.demo;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.es.SpanishAnalyzer;
@@ -81,7 +80,7 @@ public class IndexFilesMultipleIndexes {
       System.out.println("Indexing to directory '" + indexPath + "'...");
 
       Directory dir = FSDirectory.open(Paths.get(indexPath));
-      Analyzer analyzer = new SpanishAnalyzer();
+      Analyzer analyzer = new SpanishAnalyzer2();
       IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
       if (create) {
