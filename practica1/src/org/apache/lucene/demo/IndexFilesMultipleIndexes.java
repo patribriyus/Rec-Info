@@ -1,6 +1,4 @@
-package org.apache.lucene.demo;
-
-/*
+package org.apache.lucene.demo;/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -17,22 +15,23 @@ package org.apache.lucene.demo;
  * limitations under the License.
  */
 
+import com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.Date;
 
@@ -41,16 +40,16 @@ import java.util.Date;
  * This is a command-line application demonstrating simple Lucene indexing.
  * Run it with no command-line arguments for usage information.
  */
-public class IndexFiles {
+public class IndexFilesMultipleIndexes {
 
-  private IndexFiles() {}
+  private IndexFilesMultipleIndexes() {}
 
   /** Index all text files under a directory. */
   public static void main(String[] args) {
     String usage = "java org.apache.lucene.demo.IndexFiles"
-            + " [-index INDEX_PATH] [-docs DOCS_PATH] [-update]\n\n"
-            + "This indexes the documents in DOCS_PATH, creating a Lucene index"
-            + "in INDEX_PATH that can be searched with SearchFiles";
+                 + " [-index INDEX_PATH] [-docs DOCS_PATH] [-update]\n\n"
+                 + "This indexes the documents in DOCS_PATH, creating a Lucene index"
+                 + "in INDEX_PATH that can be searched with SearchFiles";
     String indexPath = "index";
     String docsPath = null;
     boolean create = true;
@@ -76,7 +75,7 @@ public class IndexFiles {
       System.out.println("Document directory '" +docDir.getAbsolutePath()+ "' does not exist or is not readable, please check the path");
       System.exit(1);
     }
-
+    
     Date start = new Date();
     try {
       System.out.println("Indexing to directory '" + indexPath + "'...");
@@ -102,6 +101,7 @@ public class IndexFiles {
       // iwc.setRAMBufferSizeMB(256.0);
 
       IndexWriter writer = new IndexWriter(dir, iwc);
+
       indexDocs(writer, docDir);
 
       // NOTE: if you want to maximize search performance,
@@ -119,27 +119,27 @@ public class IndexFiles {
 
     } catch (IOException e) {
       System.out.println(" caught a " + e.getClass() +
-              "\n with message: " + e.getMessage());
+       "\n with message: " + e.getMessage());
     }
   }
 
   /**
    * Indexes the given file using the given writer, or if a directory is given,
    * recurses over files and directories found under the given directory.
-   *
+   * 
    * NOTE: This method indexes one document per input file.  This is slow.  For good
    * throughput, put multiple documents into your input file(s).  An example of this is
    * in the benchmark module, which can create "line doc" files, one document per line,
    * using the
    * <a href="../../../../../contrib-benchmark/org/apache/lucene/benchmark/byTask/tasks/WriteLineDocTask.html"
    * >WriteLineDocTask</a>.
-   *
+   *  
    * @param writer Writer to the index where the given file/dir info will be stored
    * @param file The file to index, or the directory to recurse into to find files to index
    * @throws IOException If there is a low-level I/O error
    */
   static void indexDocs(IndexWriter writer, File file)
-          throws IOException {
+    throws IOException {
     // do not try to index files that cannot be read
     if (file.canRead()) {
       if (file.isDirectory()) {
@@ -150,7 +150,7 @@ public class IndexFiles {
             indexDocs(writer, new File(file, files[i]));
           }
         }
-      } else {
+      } else {  //file is an XML file
 
         FileInputStream fis;
         try {
@@ -182,11 +182,39 @@ public class IndexFiles {
           // February 17, 2011, 2-3 PM.
           doc.add(new StoredField("modified", file.lastModified()));
 
-          // Add the contents of the file to a field named "contents".  Specify a Reader,
+          //we get the DOM tree out of the file
+          DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+          DocumentBuilder docBuild = documentBuilderFactory.newDocumentBuilder();
+          org.w3c.dom.Document docTree = docBuild.parse(file);
+
+          NodeList nodeList = docTree.getElementsByTagName("dc:subject");
+
+          /*// Add the contents of the file to a field named "contents".  Specify a Reader,
           // so that the text of the file is tokenized and indexed, but not stored.
           // Note that FileReader expects the file to be in UTF-8 encoding.
           // If that's not the case searching for special characters will fail.
           doc.add(new TextField("contents", new BufferedReader(new InputStreamReader(fis, "UTF-8"))));
+          */
+          doc.add(new TextField("title", new BufferedReader(new StringReader(docTree.getElementsByTagName("dc:title").item(0).getTextContent()))));
+
+          doc.add(new StringField("identifier", docTree.getElementsByTagName("dc:identifier").item(0).getTextContent(), Field.Store.YES));
+
+          if(nodeList.item(0) != null)
+            doc.add(new TextField("subject", new BufferedReader(new StringReader(docTree.getElementsByTagName("dc:subject").item(0).getTextContent()))));
+
+          doc.add(new StringField("type", docTree.getElementsByTagName("dc:type").item(0).getTextContent(), Field.Store.YES));
+
+
+          doc.add(new TextField("description", new BufferedReader(new StringReader(docTree.getElementsByTagName("dc:description").item(0).getTextContent()))));
+          AddTextField(doc, docTree, "dc:creator", "creator");
+          AddTextField(doc, docTree, "dc:publisher", "publisher");
+          nodeList = docTree.getElementsByTagName("dc:format");
+          if(nodeList.item(0) != null)
+            doc.add(new StringField("format", docTree.getElementsByTagName("dc:format").item(0).getTextContent(), Field.Store.YES));
+
+          doc.add(new StringField("language", docTree.getElementsByTagName("dc:language").item(0).getTextContent(), Field.Store.YES));
+
+
 
           if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):
@@ -199,11 +227,22 @@ public class IndexFiles {
             System.out.println("updating " + file);
             writer.updateDocument(new Term("path", file.getPath()), doc);
           }
-
+          
+        } catch (ParserConfigurationException e) {
+          e.printStackTrace();
+        } catch (SAXException e) {
+          e.printStackTrace();
         } finally {
           fis.close();
         }
       }
     }
+  }
+
+  private static void AddTextField(Document doc, org.w3c.dom.Document docTree, String s, String creator) {
+    NodeList nodeList;
+    nodeList = docTree.getElementsByTagName(s);
+    if (nodeList.item(0) != null)
+      doc.add(new TextField(creator, new BufferedReader(new StringReader(docTree.getElementsByTagName(s).item(0).getTextContent()))));
   }
 }
