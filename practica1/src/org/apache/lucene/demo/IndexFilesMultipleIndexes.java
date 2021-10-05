@@ -15,7 +15,6 @@ package org.apache.lucene.demo;/*
  * limitations under the License.
  */
 
-import com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.*;
@@ -194,6 +193,7 @@ public class IndexFilesMultipleIndexes {
           doc.add(new TextField("contents", new BufferedReader(new InputStreamReader(fis, "UTF-8"))));
           */
           AddTextField(doc, docTree, "dc:title", "title");
+
           AddStringField(doc, docTree, "dc:identifier", "identifier");
 
           AddTextField(doc, docTree, "dc:subject", "subject");

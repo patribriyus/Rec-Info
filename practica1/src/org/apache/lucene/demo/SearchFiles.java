@@ -30,7 +30,6 @@ import java.time.format.FormatStyle;
 import java.util.Date;
 import java.util.Locale;
 
-import com.sun.org.apache.xalan.internal.lib.ExsltDatetime;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.DateTools;
