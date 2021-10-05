@@ -187,32 +187,27 @@ public class IndexFilesMultipleIndexes {
           DocumentBuilder docBuild = documentBuilderFactory.newDocumentBuilder();
           org.w3c.dom.Document docTree = docBuild.parse(file);
 
-          NodeList nodeList = docTree.getElementsByTagName("dc:subject");
-
           /*// Add the contents of the file to a field named "contents".  Specify a Reader,
           // so that the text of the file is tokenized and indexed, but not stored.
           // Note that FileReader expects the file to be in UTF-8 encoding.
           // If that's not the case searching for special characters will fail.
           doc.add(new TextField("contents", new BufferedReader(new InputStreamReader(fis, "UTF-8"))));
           */
-          doc.add(new TextField("title", new BufferedReader(new StringReader(docTree.getElementsByTagName("dc:title").item(0).getTextContent()))));
+          AddTextField(doc, docTree, "dc:title", "title");
+          AddStringField(doc, docTree, "dc:identifier", "identifier");
 
-          doc.add(new StringField("identifier", docTree.getElementsByTagName("dc:identifier").item(0).getTextContent(), Field.Store.YES));
+          AddTextField(doc, docTree, "dc:subject", "subject");
 
-          if(nodeList.item(0) != null)
-            doc.add(new TextField("subject", new BufferedReader(new StringReader(docTree.getElementsByTagName("dc:subject").item(0).getTextContent()))));
+          AddStringField(doc, docTree, "dc:type", "type");
 
-          doc.add(new StringField("type", docTree.getElementsByTagName("dc:type").item(0).getTextContent(), Field.Store.YES));
-
-
-          doc.add(new TextField("description", new BufferedReader(new StringReader(docTree.getElementsByTagName("dc:description").item(0).getTextContent()))));
+          AddTextField(doc, docTree, "dc:description", "description");
           AddTextField(doc, docTree, "dc:creator", "creator");
           AddTextField(doc, docTree, "dc:publisher", "publisher");
-          nodeList = docTree.getElementsByTagName("dc:format");
-          if(nodeList.item(0) != null)
-            doc.add(new StringField("format", docTree.getElementsByTagName("dc:format").item(0).getTextContent(), Field.Store.YES));
 
-          doc.add(new StringField("language", docTree.getElementsByTagName("dc:language").item(0).getTextContent(), Field.Store.YES));
+
+          AddStringField(doc, docTree, "dc:format", "format");
+
+          AddStringField(doc, docTree, "dc:language", "language");
 
 
 
@@ -244,5 +239,11 @@ public class IndexFilesMultipleIndexes {
     nodeList = docTree.getElementsByTagName(s);
     if (nodeList.item(0) != null)
       doc.add(new TextField(creator, new BufferedReader(new StringReader(docTree.getElementsByTagName(s).item(0).getTextContent()))));
+  }
+  private static void AddStringField(Document doc, org.w3c.dom.Document docTree, String s, String creator) {
+    NodeList nodeList;
+    nodeList = docTree.getElementsByTagName(s);
+    if (nodeList.item(0) != null)
+      doc.add(new StringField(creator, docTree.getElementsByTagName(s).item(0).getTextContent(), Field.Store.YES));
   }
 }
