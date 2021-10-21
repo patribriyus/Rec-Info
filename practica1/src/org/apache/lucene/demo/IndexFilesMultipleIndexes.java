@@ -80,7 +80,7 @@ public class IndexFilesMultipleIndexes {
       System.out.println("Indexing to directory '" + indexPath + "'...");
 
       Directory dir = FSDirectory.open(Paths.get(indexPath));
-      Analyzer analyzer = new SpanishAnalyzer2();
+      Analyzer analyzer = new StandardAnalyzer();
       IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
       if (create) {
@@ -206,9 +206,15 @@ public class IndexFilesMultipleIndexes {
 
 
           AddStringField(doc, docTree, "dc:format", "format");
-
           AddStringField(doc, docTree, "dc:language", "language");
 
+          AddStringField(doc, docTree, "dcterms:issued", "issued");
+          AddStringField(doc, docTree, "dcterms:created", "created");
+
+
+
+          AddDoublePointField(doc, docTree, "ows:LowerCorner");
+          AddDoublePointField(doc, docTree, "ows:UpperCorner");
 
 
           if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
@@ -243,7 +249,44 @@ public class IndexFilesMultipleIndexes {
   private static void AddStringField(Document doc, org.w3c.dom.Document docTree, String s, String creator) {
     NodeList nodeList;
     nodeList = docTree.getElementsByTagName(s);
-    if (nodeList.item(0) != null)
-      doc.add(new StringField(creator, docTree.getElementsByTagName(s).item(0).getTextContent(), Field.Store.YES));
+    if (nodeList.item(0) != null){
+      doc.add(new StringField(creator, docTree.getElementsByTagName(s).item(0).getTextContent().replaceAll("-", ""), Field.Store.YES));
+      /*if(creator.equals("issued"))
+        System.out.println(docTree.getElementsByTagName(s).item(0).getTextContent().replaceAll("-", ""));*/
+    }
+  }
+
+  private static void AddDoublePointField(Document doc, org.w3c.dom.Document docTree, String s){
+    NodeList nodeList;
+    nodeList = docTree.getElementsByTagName(s);
+    if (nodeList.item(0) != null) {
+      if (s.equals("ows:LowerCorner")) {
+        DoublePoint westField = new DoublePoint("west",
+                Double.parseDouble(docTree.getElementsByTagName(s).item(0).getTextContent().split(" ")[0]));
+
+        DoublePoint southField = new DoublePoint("south",
+                Double.parseDouble(docTree.getElementsByTagName(s).item(0).getTextContent().split(" ")[1]));
+
+        doc.add(westField);
+        doc.add(southField);
+        //VERIFICACION DE LOS DATOS INTRODUCIDOS COMO CAMPOS
+        //System.out.println("westField: " + Double.parseDouble(docTree.getElementsByTagName(s).item(0).getTextContent().split(" ")[0]));
+
+      }else if(s.equals("ows:UpperCorner")){
+        DoublePoint eastField = new DoublePoint("east",
+                Double.parseDouble(docTree.getElementsByTagName(s).item(0).getTextContent().split(" ")[0]));
+
+        DoublePoint northField = new DoublePoint("north",
+                Double.parseDouble(docTree.getElementsByTagName(s).item(0).getTextContent().split(" ")[1]));
+
+        doc.add(eastField);
+        doc.add(northField);
+
+      }else{
+        //COMPORTAMIENTO NO ESPERADO
+        System.out.println("COMPORTAMIENTO NO ESPERADO, LINEA 266 DE INDEXFILESMULTIPLEINDEXES");
+      }
+
+    }
   }
 }
