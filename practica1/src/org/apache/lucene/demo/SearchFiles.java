@@ -114,6 +114,9 @@ public class SearchFiles {
         break;
       }
 
+      BooleanQuery.Builder builder = new BooleanQuery.Builder(); // consulta para spatial
+      BooleanQuery.Builder builder2 = new BooleanQuery.Builder(); // consulta final
+
       if(line.contains("spatial")){
 
         // Se coge solo la restriccion de spatial
@@ -138,45 +141,34 @@ public class SearchFiles {
         // Ymax ≥ South
         Query northRangeQuery = DoublePoint.newRangeQuery("north", 
                 south, Double.POSITIVE_INFINITY);
-        BooleanQuery query = new BooleanQuery.Builder()
-                .add(westRangeQuery, BooleanClause.Occur.MUST).add(eastRangeQuery, BooleanClause.Occur.MUST)
-                .add(northRangeQuery, BooleanClause.Occur.MUST).add(southRangeQuery, BooleanClause.Occur.MUST).build();
 
-        System.out.println("Searching for: " + query.toString(field));
-
-        if (repeat > 0) {                           // repeat & time as benchmark
-          Date start = new Date();
-          for (int i = 0; i < repeat; i++) {
-            searcher.search(query, 100);
-          }
-          Date end = new Date();
-          System.out.println("Time: " + (end.getTime() - start.getTime()) + "ms");
-        }
-
-        doPagingSearch(in, searcher, query, hitsPerPage, raw, queries == null && queryString == null);
-
-        if (queryString != null) {
-          break;
-        }
+        builder.add(westRangeQuery, BooleanClause.Occur.MUST).add(eastRangeQuery, BooleanClause.Occur.MUST)
+              .add(northRangeQuery, BooleanClause.Occur.MUST).add(southRangeQuery, BooleanClause.Occur.MUST);
 
         // Disyuncion
         line = line.replaceAll(spatialLine, "");
-      } 
+        builder2.add(builder.build(), BooleanClause.Occur.SHOULD);
+      }
+      
       //resto de queries
+      
+      if(!line.isEmpty()){
+        Query query = parser.parse(line);
+        builder2.add(query, BooleanClause.Occur.SHOULD);
+      }
 
-      Query query = parser.parse(line);
-      System.out.println("Searching for: " + query.toString(field));
+      System.out.println("Searching for: " + builder2.build().toString(field));
 
       if (repeat > 0) {                           // repeat & time as benchmark
         Date start = new Date();
         for (int i = 0; i < repeat; i++) {
-          searcher.search(query, 100);
+          searcher.search(builder2.build(), 100);
         }
         Date end = new Date();
         System.out.println("Time: " + (end.getTime() - start.getTime()) + "ms");
       }
 
-      doPagingSearch(in, searcher, query, hitsPerPage, raw, queries == null && queryString == null);
+      doPagingSearch(in, searcher, builder2.build(), hitsPerPage, raw, queries == null && queryString == null);
 
       if (queryString != null) {
         break;
