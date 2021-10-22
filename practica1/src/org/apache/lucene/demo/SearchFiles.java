@@ -23,17 +23,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Date;
-import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.es.SpanishAnalyzer;
-import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.DoublePoint;
 import org.apache.lucene.index.DirectoryReader;
@@ -120,60 +114,36 @@ public class SearchFiles {
         break;
       }
 
-      if(line.split(":")[0].equals("spatial")){
+      if(line.contains("spatial")){
+
+        // Se coge solo la restriccion de spatial
+        String spatialLine = line.substring(line.indexOf("spatial"));
+        spatialLine = spatialLine.split(" ")[0];
+
         //spatial:<west>,<east>,<south>,<north>
-        Double west = Double.valueOf(line.split(":")[1].split(",")[0]);
-        Double east = Double.valueOf(line.split(":")[1].split(",")[1]);
-        Double south = Double.valueOf(line.split(":")[1].split(",")[2]);
-        Double north = Double.valueOf(line.split(":")[1].split(",")[3]);
+        Double west = Double.valueOf(spatialLine.split(":")[1].split(",")[0]);
+        Double east = Double.valueOf(spatialLine.split(":")[1].split(",")[1]);
+        Double south = Double.valueOf(spatialLine.split(":")[1].split(",")[2]);
+        Double north = Double.valueOf(spatialLine.split(":")[1].split(",")[3]);
 
         // Xmin <= east
-        Query westRangeQuery = DoublePoint.newRangeQuery("west",Double.
-                NEGATIVE_INFINITY, east);
-        //Xmax ≥ West
-        Query eastRangeQuery = DoublePoint.newRangeQuery("east", west,
-                Double.POSITIVE_INFINITY );
-        //Ymin ≤ North
-        Query southRangeQuery = DoublePoint.newRangeQuery("south", Double.NEGATIVE_INFINITY, north);
-        //Ymax ≥ South
-        Query northRangeQuery = DoublePoint.newRangeQuery("north", south, Double.
-                POSITIVE_INFINITY);
+        Query westRangeQuery = DoublePoint.newRangeQuery("west",
+                Double.NEGATIVE_INFINITY, east);
+        // Xmax ≥ West
+        Query eastRangeQuery = DoublePoint.newRangeQuery("east", 
+                west, Double.POSITIVE_INFINITY );
+        // Ymin ≤ North
+        Query southRangeQuery = DoublePoint.newRangeQuery("south", 
+                Double.NEGATIVE_INFINITY, north);
+        // Ymax ≥ South
+        Query northRangeQuery = DoublePoint.newRangeQuery("north", 
+                south, Double.POSITIVE_INFINITY);
         BooleanQuery query = new BooleanQuery.Builder()
                 .add(westRangeQuery, BooleanClause.Occur.MUST).add(eastRangeQuery, BooleanClause.Occur.MUST)
                 .add(northRangeQuery, BooleanClause.Occur.MUST).add(southRangeQuery, BooleanClause.Occur.MUST).build();
 
         System.out.println("Searching for: " + query.toString(field));
 
-        /*line = line.split("\n")[1];
-        Query query2 = null;
-        if(!line.isEmpty() && !line.split(":")[0].equals("spatial")) {
-
-          query2 = parser.parse(line);
-        }else{
-          //TODO COMPORTAMIENTO INESPERADO;
-        }*/
-
-        if (repeat > 0) {                           // repeat & time as benchmark
-          Date start = new Date();
-          for (int i = 0; i < repeat; i++) {
-            searcher.search(query, 100);
-          }
-          Date end = new Date();
-          System.out.println("Time: " + (end.getTime() - start.getTime()) + "ms");
-        }
-
-
-        doPagingSearch(in, searcher, query, hitsPerPage, raw, queries == null && queryString == null);
-
-        if (queryString != null) {
-          break;
-        }
-
-      }else { //resto de queries
-
-        Query query = parser.parse(line);
-        System.out.println("Searching for: " + query.toString(field));
-
         if (repeat > 0) {                           // repeat & time as benchmark
           Date start = new Date();
           for (int i = 0; i < repeat; i++) {
@@ -188,6 +158,28 @@ public class SearchFiles {
         if (queryString != null) {
           break;
         }
+
+        // Disyuncion
+        line = line.replaceAll(spatialLine, "");
+      } 
+      //resto de queries
+
+      Query query = parser.parse(line);
+      System.out.println("Searching for: " + query.toString(field));
+
+      if (repeat > 0) {                           // repeat & time as benchmark
+        Date start = new Date();
+        for (int i = 0; i < repeat; i++) {
+          searcher.search(query, 100);
+        }
+        Date end = new Date();
+        System.out.println("Time: " + (end.getTime() - start.getTime()) + "ms");
+      }
+
+      doPagingSearch(in, searcher, query, hitsPerPage, raw, queries == null && queryString == null);
+
+      if (queryString != null) {
+        break;
       }
     }
     reader.close();
