@@ -21,8 +21,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.LowerCaseFilter;
@@ -46,7 +44,7 @@ public final class SpanishAnalyzer2 extends StopwordAnalyzerBase {
     private final CharArraySet stemExclusionSet;
 
     /** File containing default Spanish stopwords. */
-    public final static String DEFAULT_STOPWORD_FILE = "/home/diego/Desktop/info/4-1/RecuInfo/practica/lucene-8.6.2/analysis/common/src/resources/org/apache/lucene/analysis/snowball/spanish_stop.txt";
+    public final static String DEFAULT_STOPWORD_FILE = "spanish_stop.txt";
 
     /**
      * Returns a modifiable instance of the teacher default stop words set.
