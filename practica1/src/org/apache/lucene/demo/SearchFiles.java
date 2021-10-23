@@ -24,12 +24,15 @@ import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.DoublePoint;
+import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -113,21 +116,22 @@ public class SearchFiles {
       if (line.length() == 0) {
         break;
       }
+      
+      BooleanQuery.Builder queryFinal = new BooleanQuery.Builder(); // consulta final
 
-      BooleanQuery.Builder builder = new BooleanQuery.Builder(); // consulta para spatial
-      BooleanQuery.Builder builder2 = new BooleanQuery.Builder(); // consulta final
-
-      if(line.contains("spatial")){
+      // spatial:<west>,<east>,<south>,<north>
+      Pattern pat = Pattern.compile("spatial\\:\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?\\s*,\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?\\s*," +
+                                      "\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?\\s*,\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?");
+      Matcher mat = pat.matcher(line.toLowerCase());
+      if(mat.find()){
 
         // Se coge solo la restriccion de spatial
-        String spatialLine = line.substring(line.indexOf("spatial"));
-        spatialLine = spatialLine.split(" ")[0];
+        String spatialLine = mat.group(0).replaceAll("\\s+", "");
 
-        //spatial:<west>,<east>,<south>,<north>
-        Double west = Double.valueOf(spatialLine.split(":")[1].split(",")[0]);
-        Double east = Double.valueOf(spatialLine.split(":")[1].split(",")[1]);
-        Double south = Double.valueOf(spatialLine.split(":")[1].split(",")[2]);
-        Double north = Double.valueOf(spatialLine.split(":")[1].split(",")[3]);
+        Double west = Double.valueOf(spatialLine.split(":")[1].split(",")[0]),
+               east = Double.valueOf(spatialLine.split(":")[1].split(",")[1]),
+               south = Double.valueOf(spatialLine.split(":")[1].split(",")[2]),
+               north = Double.valueOf(spatialLine.split(":")[1].split(",")[3]);
 
         // Xmin <= east
         Query westRangeQuery = DoublePoint.newRangeQuery("west",
@@ -141,34 +145,84 @@ public class SearchFiles {
         // Ymax ≥ South
         Query northRangeQuery = DoublePoint.newRangeQuery("north", 
                 south, Double.POSITIVE_INFINITY);
-
-        builder.add(westRangeQuery, BooleanClause.Occur.MUST).add(eastRangeQuery, BooleanClause.Occur.MUST)
-              .add(northRangeQuery, BooleanClause.Occur.MUST).add(southRangeQuery, BooleanClause.Occur.MUST);
+        
+        BooleanQuery query = new BooleanQuery.Builder()
+              .add(westRangeQuery, BooleanClause.Occur.MUST)
+              .add(eastRangeQuery, BooleanClause.Occur.MUST)
+              .add(northRangeQuery, BooleanClause.Occur.MUST)
+              .add(southRangeQuery, BooleanClause.Occur.MUST).build();
 
         // Disyuncion
-        line = line.replaceAll(spatialLine, "");
-        builder2.add(builder.build(), BooleanClause.Occur.SHOULD);
+        line = line.replace(spatialLine, "");
+
+        // Se añade la restricción de spatial
+        queryFinal.add(query, BooleanClause.Occur.SHOULD);
+      }
+
+      // temporal:[<fecha inicio> TO <fecha fin>]
+      pat = Pattern.compile("temporal\\:\\s*\\[\\s*\\d{4,8}\\s*to\\s*\\d{4,8}\\s*\\]");
+      mat = pat.matcher(line.toLowerCase());
+      if (mat.find()) {
+        // Se coge solo la restriccion de temporal
+        String temporalLine = mat.group(0);
+        
+        String[] date = new String[2];
+        pat = Pattern.compile("\\d{4,8}");
+        mat = pat.matcher(temporalLine);
+        mat.find(); date[0] = mat.group(0);
+        mat.find(); date[1] = mat.group(0);
+
+        // En caso de faltar el mes o el día se añade predeterminadamente
+        // YYYY/01/01 para begin y YYYY/12/31 para end
+        for(int i=0; i<2; i++){
+          if(date[i].length() < 6){
+            // no tiene mes
+            if(i==0) date[i] += "01"; else date[i] += "12";
+            if(date[i].length() < 8){
+              // no tiene día
+              if(i==0) date[i] += "01"; else date[i] += "31";
+            }
+          }
+        }
+
+        // begin <= fecha fin
+        Query beginRangeQuery = LongPoint.newRangeQuery("begin", 
+                Long.parseLong(date[0]), Long.MAX_VALUE);
+        // end ≥ fecha inicio
+        Query endRangeQuery = LongPoint.newRangeQuery("end", 
+                Long.MIN_VALUE, Long.parseLong(date[1]));
+        
+        BooleanQuery query = new BooleanQuery.Builder()
+              .add(beginRangeQuery, BooleanClause.Occur.MUST)
+              .add(endRangeQuery, BooleanClause.Occur.MUST).build();
+
+        // Disyuncion
+        line = line.replace(temporalLine, "");
+
+        // Se añade la restricción de temporal
+        queryFinal.add(query, BooleanClause.Occur.SHOULD);
       }
       
       //resto de queries
       
       if(!line.isEmpty()){
         Query query = parser.parse(line);
-        builder2.add(query, BooleanClause.Occur.SHOULD);
+        // Se añaden restro de restricciones a la query final
+        queryFinal.add(query, BooleanClause.Occur.SHOULD);
       }
 
-      System.out.println("Searching for: " + builder2.build().toString(field));
+      System.out.println("Searching for: " + queryFinal.build().toString(field));
 
       if (repeat > 0) {                           // repeat & time as benchmark
         Date start = new Date();
         for (int i = 0; i < repeat; i++) {
-          searcher.search(builder2.build(), 100);
+          searcher.search(queryFinal.build(), 100);
         }
         Date end = new Date();
         System.out.println("Time: " + (end.getTime() - start.getTime()) + "ms");
       }
 
-      doPagingSearch(in, searcher, builder2.build(), hitsPerPage, raw, queries == null && queryString == null);
+      doPagingSearch(in, searcher, queryFinal.build(), hitsPerPage, raw, queries == null && queryString == null);
 
       if (queryString != null) {
         break;

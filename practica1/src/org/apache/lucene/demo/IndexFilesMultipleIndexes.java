@@ -216,6 +216,8 @@ public class IndexFilesMultipleIndexes {
           AddDoublePointField(doc, docTree, "ows:LowerCorner");
           AddDoublePointField(doc, docTree, "ows:UpperCorner");
 
+          AddDateField(doc, docTree, "dcterms:temporal");
+
 
           if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):
@@ -251,8 +253,6 @@ public class IndexFilesMultipleIndexes {
     nodeList = docTree.getElementsByTagName(s);
     if (nodeList.item(0) != null){
       doc.add(new StringField(creator, docTree.getElementsByTagName(s).item(0).getTextContent().replaceAll("-", ""), Field.Store.YES));
-      /*if(creator.equals("issued"))
-        System.out.println(docTree.getElementsByTagName(s).item(0).getTextContent().replaceAll("-", ""));*/
     }
   }
 
@@ -284,9 +284,49 @@ public class IndexFilesMultipleIndexes {
 
       }else{
         //COMPORTAMIENTO NO ESPERADO
-        System.out.println("COMPORTAMIENTO NO ESPERADO, LINEA 266 DE INDEXFILESMULTIPLEINDEXES");
+        System.out.println("COMPORTAMIENTO NO ESPERADO, LINEA DE INDEXFILESMULTIPLEINDEXES FUNC AddDoublePointField");
       }
 
+    }
+  }
+
+  private static void AddDateField(Document doc, org.w3c.dom.Document docTree, String s) {
+    NodeList nodeList;
+    nodeList = docTree.getElementsByTagName(s);
+    
+    if (nodeList.item(0) != null) {
+      // En caso de faltar el mes o el día se añade predeterminadamente
+      // YYYY/01/01 para begin y YYYY/12/31 para end
+      String[] date = new String[2];
+
+      String temporal = docTree.getElementsByTagName(s).item(0).getTextContent();
+      if(temporal.contains("begin") && temporal.contains("end")){ // buen formato
+        date[0] = temporal.split("=")[1].split(";")[0].replaceAll("-", "");
+        date[1] = temporal.split("=")[2].split(";")[0].replaceAll("-", "");
+      }
+      else {
+        try{
+          Long.parseLong(temporal); // comprobamos si es un número
+          date[0] = date[1] = temporal;
+        } catch (NumberFormatException excepcion) {
+          System.err.println("Err: El formato de 'dcterms:temporal' del documento '"+ doc.get("path") +"' no sigue nuestras reglas.");
+          return;
+        }
+      }      
+      
+      for(int i=0; i<2; i++){
+        if(date[i].length() < 6){
+          // no tiene mes
+          if(i==0) date[i] += "01"; else date[i] += "12";
+          if(date[i].length() < 8){
+            // no tiene día
+            if(i==0) date[i] += "01"; else date[i] += "31";
+          }
+        }
+      }
+
+      doc.add(new LongPoint("begin", Long.parseLong(date[0])));
+      doc.add(new LongPoint("end", Long.parseLong(date[1])));
     }
   }
 }
