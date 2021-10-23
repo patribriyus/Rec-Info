@@ -120,8 +120,8 @@ public class SearchFiles {
       BooleanQuery.Builder queryFinal = new BooleanQuery.Builder(); // consulta final
 
       // spatial:<west>,<east>,<south>,<north>
-      Pattern pat = Pattern.compile("spatial\\:\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?\\s*,\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?\\s*," +
-                                      "\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?\\s*,\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?");
+      Pattern pat = Pattern.compile("spatial\\:(\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?\\s*,){3}" +
+                                    "\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?");
       Matcher mat = pat.matcher(line.toLowerCase());
       if(mat.find()){
 
