@@ -44,6 +44,8 @@ public final class SpanishAnalyzer2 extends StopwordAnalyzerBase {
     private final CharArraySet stemExclusionSet;
 
     /** File containing default Spanish stopwords. */
+    // public final static String DEFAULT_STOPWORD_FILE = "C:\\UNI\\recinfo\\miniTREC\\src\\org\\apache\\lucene\\demo\\spanish_stop.txt";
+    // public final static String DEFAULT_STOPWORD_FILE = "/src/org/apache/lucene/demo/spanish_stop.txt";
     public final static String DEFAULT_STOPWORD_FILE = "spanish_stop.txt";
 
     /**
@@ -94,7 +96,7 @@ public final class SpanishAnalyzer2 extends StopwordAnalyzerBase {
      * Builds an analyzer with the default stop words: {@link #DEFAULT_STOPWORD_FILE}.
      */
     public SpanishAnalyzer2() {
-        this(createStopSet2(), CharArraySet.EMPTY_SET);
+        this(createStopSet3(), CharArraySet.EMPTY_SET);
     }
 
     /**
