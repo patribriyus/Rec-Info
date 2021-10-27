@@ -234,13 +234,21 @@ public class IndexFilesMultipleIndexes {
     NodeList nodeList;
     nodeList = docTree.getElementsByTagName(s);
     if (nodeList.item(0) != null)
-      doc.add(new TextField(creator, new BufferedReader(new StringReader(docTree.getElementsByTagName(s).item(0).getTextContent()))));
+      doc.add(new TextField(creator, new BufferedReader(new StringReader(docTree.getElementsByTagName(s).item(0).getTextContent()
+              .replaceAll("-", "")
+              .replaceAll(":", "")
+              .replaceAll("/", "")
+              .toLowerCase()))));
   }
   private static void AddStringField(Document doc, org.w3c.dom.Document docTree, String s, String creator) {
     NodeList nodeList;
     nodeList = docTree.getElementsByTagName(s);
     if (nodeList.item(0) != null){
-      doc.add(new StringField(creator, docTree.getElementsByTagName(s).item(0).getTextContent().replaceAll("-", ""), Field.Store.YES));
+      doc.add(new StringField(creator, docTree.getElementsByTagName(s).item(0).getTextContent()
+              .replaceAll("-", "")
+              .replaceAll(":", "")
+              .replaceAll("/", "")
+              .toLowerCase(), Field.Store.YES));
     }
   }
 
