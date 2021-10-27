@@ -161,16 +161,16 @@ public class SearchFiles {
         queryFinal.add(query, BooleanClause.Occur.SHOULD);
       }
 
-      // temporal:[<fecha inicio> TO <fecha fin>]
-      pat = Pattern.compile("temporal\\:\\s*\\[\\s*\\d{4,8}\\s*to\\s*\\d{4,8}\\s*\\]");
+      // date:[<fecha inicio> TO <fecha fin>]
+      pat = Pattern.compile("date\\:\\s*\\[\\s*\\d{4,8}\\s*to\\s*\\d{4,8}\\s*\\]");
       mat = pat.matcher(line.toLowerCase());
       if (mat.find()) {
-        // Se coge solo la restriccion de temporal
-        String temporalLine = mat.group(0);
+        // Se coge solo la restriccion de date
+        String datelLine = mat.group(0);
         
         String[] date = new String[2];
         pat = Pattern.compile("\\d{4,8}");
-        mat = pat.matcher(temporalLine);
+        mat = pat.matcher(datelLine);
         mat.find(); date[0] = mat.group(0);
         mat.find(); date[1] = mat.group(0);
 
@@ -199,9 +199,9 @@ public class SearchFiles {
               .add(endRangeQuery, BooleanClause.Occur.MUST).build();
 
         // Disyuncion
-        line = line.replace(temporalLine, "");
+        line = line.replace(datelLine, "");
 
-        // Se añade la restricción de temporal
+        // Se añade la restricción de date
         queryFinal.add(query, BooleanClause.Occur.SHOULD);
       }
       

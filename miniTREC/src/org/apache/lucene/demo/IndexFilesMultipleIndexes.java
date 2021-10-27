@@ -191,30 +191,20 @@ public class IndexFilesMultipleIndexes {
           doc.add(new TextField("contents", new BufferedReader(new InputStreamReader(fis, "UTF-8"))));
           */
           AddTextField(doc, docTree, "dc:title", "title");
-
+          AddTextField(doc, docTree, "dc:contributor", "contributor");
           AddStringField(doc, docTree, "dc:identifier", "identifier");
-
           AddTextField(doc, docTree, "dc:subject", "subject");
-
           AddStringField(doc, docTree, "dc:type", "type");
-
           AddTextField(doc, docTree, "dc:description", "description");
           AddTextField(doc, docTree, "dc:creator", "creator");
           AddTextField(doc, docTree, "dc:publisher", "publisher");
-
-
           AddStringField(doc, docTree, "dc:format", "format");
           AddStringField(doc, docTree, "dc:language", "language");
-
           AddStringField(doc, docTree, "dcterms:issued", "issued");
           AddStringField(doc, docTree, "dcterms:created", "created");
-
-
-
           AddDoublePointField(doc, docTree, "ows:LowerCorner");
           AddDoublePointField(doc, docTree, "ows:UpperCorner");
-
-          AddDateField(doc, docTree, "dcterms:temporal");
+          AddDateField(doc, docTree, "dc:date");
 
 
           if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
@@ -307,7 +297,7 @@ public class IndexFilesMultipleIndexes {
           Long.parseLong(temporal); // comprobamos si es un número
           date[0] = date[1] = temporal;
         } catch (NumberFormatException excepcion) {
-          System.err.println("Err: El formato de 'dcterms:temporal' del documento '"+ doc.get("path") +"' no sigue nuestras reglas.");
+          System.err.println("Err: El formato de " + s + " del documento '"+ doc.get("path") +"' no sigue nuestras reglas.");
           return;
         }
       }      
