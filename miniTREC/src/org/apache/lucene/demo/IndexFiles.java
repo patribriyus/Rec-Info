@@ -37,9 +37,9 @@ import java.util.Date;
  * This is a command-line application demonstrating simple Lucene indexing.
  * Run it with no command-line arguments for usage information.
  */
-public class IndexFilesMultipleIndexes {
+public class IndexFiles {
 
-  private IndexFilesMultipleIndexes() {}
+  private IndexFiles() {}
 
   /** Index all text files under a directory. */
   public static void main(String[] args) {
@@ -47,6 +47,7 @@ public class IndexFilesMultipleIndexes {
                  + " [-index INDEX_PATH] [-docs DOCS_PATH] [-update]\n\n"
                  + "This indexes the documents in DOCS_PATH, creating a Lucene index"
                  + "in INDEX_PATH that can be searched with SearchFiles";
+    // String indexPath = null; TODO: requisito tecnico
     String indexPath = "index";
     String docsPath = null;
     boolean create = true;
@@ -62,6 +63,7 @@ public class IndexFilesMultipleIndexes {
       }
     }
 
+    // if (docsPath == null || indexPath == null) { TODO: requisito tecnico
     if (docsPath == null) {
       System.err.println("Usage: " + usage);
       System.exit(1);
@@ -72,6 +74,14 @@ public class IndexFilesMultipleIndexes {
       System.out.println("Document directory '" +docDir.getAbsolutePath()+ "' does not exist or is not readable, please check the path");
       System.exit(1);
     }
+
+    // TODO Comprobar que el indexPath tambien existe
+    // final File docDir2 = new File(indexPath);
+    // if (!docDir.exists() || !docDir.canRead()) {
+    //   System.out.println("Document directory '" +docDir.getAbsolutePath()+ "' does not exist or is not readable, please check the path");
+    //   System.exit(1);
+    // }
+    
     
     Date start = new Date();
     try {
@@ -265,8 +275,6 @@ public class IndexFilesMultipleIndexes {
 
         doc.add(westField);
         doc.add(southField);
-        //VERIFICACION DE LOS DATOS INTRODUCIDOS COMO CAMPOS
-        //System.out.println("westField: " + Double.parseDouble(docTree.getElementsByTagName(s).item(0).getTextContent().split(" ")[0]));
 
       }else if(s.equals("ows:UpperCorner")){
         DoublePoint eastField = new DoublePoint("east",
