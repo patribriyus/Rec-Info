@@ -5,63 +5,50 @@
  */
 package org.apache.lucene.demo;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.DoublePoint;
 import org.apache.lucene.document.LongPoint;
-import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 
 public class LanguageParser {
-    private FileReader fileReader = null;
-
-    private Matcher needMatcher = null;
+    private Scanner scanner = null;
+    private FileWriter fileWriter = null;
 
     private BooleanQuery query = null;
     
     private String idNeed = null;
-    private String allNeeds = null;
 
     LanguageParser(String needsPath, String resultsPath){
         
         try {
-            // Abrir fichero
-            File file = new File (needsPath);
-            fileReader = new FileReader (file);
-            BufferedReader bufferReader = new BufferedReader(fileReader);
-   
-            // Lectura del fichero
-            String linea;
-            while((linea=bufferReader.readLine())!=null)
-                allNeeds += linea;
+            // Expresion regular para detectar las necesidades
+            scanner = new Scanner(new File(needsPath)).useDelimiter("\\d+\\-\\d+[^(\\d+\\-\\d+)]*");
+            scanner.next();
+            // String alo = scanner.match().toString();
 
-            // TODO: crear fichero de escritura fileWriter
+            // Si el fichero ya existe lo reescribe
+            fileWriter = new FileWriter(resultsPath);
          }
          catch(Exception e){
             e.printStackTrace();
          }
-
-         // Expresion regular para detectar las necesidades
-         Pattern pat = Pattern.compile("\\d+\\-\\d+[^(\\d+\\-\\d+)]*");
-         needMatcher = pat.matcher(allNeeds); 
     }
 
     public Boolean nextNeed(){
-        if(needMatcher.find()){
-            String need = needMatcher.group(0);
-
-            // Se guarda el identificador de la necesidad
-            Pattern pat = Pattern.compile("\\d+\\-\\d+[^(\\d+\\-\\d+)]*");
-            Matcher mat = pat.matcher(need);
-            mat.find(); idNeed = mat.group(0);
+        if(scanner.hasNext()){
+            idNeed = scanner.findInLine("\\d+\\-\\d+");
+            String need = scanner.next();
 
             parsear(need);
 
@@ -70,8 +57,8 @@ public class LanguageParser {
         else {
             // Cerrar fichero de entrada y de salida
             try{                    
-                if(fileReader != null){   
-                    fileReader.close();
+                if(scanner != null){   
+                    scanner.close();
                     fileWriter.close();
                 }                  
              }catch (Exception e2){ 
@@ -176,10 +163,13 @@ public class LanguageParser {
         this.query = queryFinal.build();
     }
 
-    public void writeResults(IndexSearcher searcher, ScoreDoc[] hits){
-        // TODO: escribe en el fichero txt
-        Document doc = searcher.doc(hits[i].doc);
-        String path = doc.get("path");
+    public void writeResults(IndexSearcher searcher, ScoreDoc[] hits) throws IOException{
+        for(ScoreDoc hit : hits){
+            Document doc = searcher.doc(hit.doc);
+            String path = doc.get("path");
+    
+            fileWriter.write(idNeed + "\t" + path + "\n");
+        }
     }
 
     public BooleanQuery getBooleanQuery() {
