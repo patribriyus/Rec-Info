@@ -12,9 +12,12 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.DoublePoint;
 import org.apache.lucene.document.LongPoint;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
@@ -22,6 +25,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 
 public class LanguageParser {
+    QueryParser parser = null;
     private Scanner scanner = null;
     private FileWriter fileWriter = null;
 
@@ -29,23 +33,20 @@ public class LanguageParser {
     
     private String idNeed = null;
 
-    LanguageParser(String needsPath, String resultsPath){
-        
-        try {
-            // Expresion regular para detectar las necesidades
-            scanner = new Scanner(new File(needsPath)).useDelimiter("\\d+\\-\\d+[^(\\d+\\-\\d+)]*");
-            scanner.next();
-            // String alo = scanner.match().toString();
+    LanguageParser(String needsPath, String resultsPath) throws IOException{
 
-            // Si el fichero ya existe lo reescribe
-            fileWriter = new FileWriter(resultsPath);
-         }
-         catch(Exception e){
-            e.printStackTrace();
-         }
+        // Expresion regular para detectar las necesidades
+        scanner = new Scanner(new File(needsPath)).useDelimiter("\\d+\\-\\d+[^(\\d+\\-\\d+)]*");
+        scanner.next(); // saltamos el primer match
+
+        // Si el fichero ya existe lo reescribe
+        fileWriter = new FileWriter(resultsPath);
+
+        Analyzer analyzer = new SpanishAnalyzer2();
+        parser = new QueryParser("contents", analyzer);
     }
 
-    public Boolean nextNeed(){
+    public Boolean nextNeed() throws ParseException, IOException{
         if(scanner.hasNext()){
             idNeed = scanner.findInLine("\\d+\\-\\d+");
             String need = scanner.next();
@@ -56,20 +57,14 @@ public class LanguageParser {
         }
         else {
             // Cerrar fichero de entrada y de salida
-            try{                    
-                if(scanner != null){   
-                    scanner.close();
-                    fileWriter.close();
-                }                  
-             }catch (Exception e2){ 
-                e2.printStackTrace();
-             }
+            scanner.close();
+            fileWriter.close();
 
             return false;
         }
     }
 
-    private void parsear(String line){
+    private void parsear(String line) throws ParseException{
         // TODO: Modifica el this.query
 
         BooleanQuery.Builder queryFinal = new BooleanQuery.Builder(); // consulta final
@@ -156,6 +151,9 @@ public class LanguageParser {
 
             // Se añade la restricción de date
             queryFinal.add(query, BooleanClause.Occur.SHOULD);
+
+            // TODO: importante usar el parser
+            Query q = parser.parse(line);
         }
         
         //resto de queries
