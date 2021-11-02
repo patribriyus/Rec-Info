@@ -1,16 +1,19 @@
 /*
  *    Author:         Patricia Briones Yus, 735576
  *    Creation Date:  Thursday, October 28th 2021
- *    File: LanguajeParser.java
+ *    File: LanguageParser.java
  */
 package org.apache.lucene.demo;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -23,41 +26,43 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.xml.sax.SAXException;
 
 public class LanguageParser {
-    QueryParser parser = null;
-    private Scanner scanner = null;
+    private QueryParser parser = null;
     private FileWriter fileWriter = null;
 
-    private BooleanQuery query = null;
-    
+    private org.w3c.dom.Document docTree = null;
+    private BooleanQuery query = null;    
     private String idNeed = null;
+    private int iterator = 0;
 
-    LanguageParser(String needsPath, String resultsPath) throws IOException{
-
-        // Expresion regular para detectar las necesidades
-        scanner = new Scanner(new File(needsPath)).useDelimiter("\\d+\\-\\d+[^(\\d+\\-\\d+)]*");
-        scanner.next(); // saltamos el primer match
-
-        // Si el fichero ya existe lo reescribe
-        fileWriter = new FileWriter(resultsPath);
+    LanguageParser(String needsPath, String resultsPath) throws IOException, SAXException, ParserConfigurationException{
 
         Analyzer analyzer = new SpanishAnalyzer2();
         parser = new QueryParser("contents", analyzer);
+
+        // Se extraen todas las necesidades de información
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuild = documentBuilderFactory.newDocumentBuilder();
+        docTree = docBuild.parse(new File(needsPath));
+
+        // Si el fichero de resultados ya existe, lo reescribe
+        fileWriter = new FileWriter(resultsPath);
     }
 
     public Boolean nextNeed() throws ParseException, IOException{
-        if(scanner.hasNext()){
-            idNeed = scanner.findInLine("\\d+\\-\\d+");
-            String need = scanner.next();
-
+        if(docTree.getElementsByTagName("informationNeed").item(iterator) != null){
+            String need = docTree.getElementsByTagName("text").item(iterator).getTextContent();
             parsear(need);
+
+            setIdNeed(docTree.getElementsByTagName("identifier").item(iterator).getTextContent());
+            iterator++;
 
             return true;
         }
         else {
-            // Cerrar fichero de entrada y de salida
-            scanner.close();
+            // Cerrar fichero de salida
             fileWriter.close();
 
             return false;
@@ -186,7 +191,7 @@ public class LanguageParser {
         return idNeed;
     }
 
-    public void setIdNeed(String idNeed) {
+    public void setIdNeed(String idNeed){
         this.idNeed = idNeed;
     }
 
