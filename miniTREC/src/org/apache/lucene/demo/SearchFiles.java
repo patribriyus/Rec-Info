@@ -4,7 +4,6 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.Date;
 
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;

@@ -5,7 +5,12 @@
  */
 package org.apache.lucene.demo;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,20 +18,33 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import opennlp.tools.namefind.NameFinderME;
-import opennlp.tools.namefind.TokenNameFinderModel;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.DoublePoint;
 import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.BoostQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
 import org.xml.sax.SAXException;
-import opennlp.tools.*;
+
+import opennlp.tools.namefind.NameFinderME;
+import opennlp.tools.namefind.TokenNameFinderModel;
 
 public class LanguageParser {
-    private QueryParser parser = null;
+
+    private static final int TYPE_WEIGHT = 10;
+    private static final int LANGUAGE_WEIGHT = 10;
+    private static final int DATE_WEIGHT = 10;
+    private static final int DESCRIPTION_WEIGHT = 4;
+    private static final int TITLE_WEIGHT = 4;
+    private static final int SUBJECT_WEIGHT = 4;
+    private static final int LOCATION_WEIGHT = 10;
+    private static final int CURRENT_YEAR = 2021;
+
     private FileWriter fileWriter = null;
     private Analyzer analyzer = null;
     NameFinderME nameFinder = null;
@@ -34,20 +52,11 @@ public class LanguageParser {
     private org.w3c.dom.Document docTree = null;
     private BooleanQuery query = null;    
     private String idNeed = null;
-    private int iterator = 0;
-
-    private final int TYPE_WEIGHT = 10;
-    private final int LANGUAGE_WEIGHT = 10;
-    private final int DATE_WEIGHT = 10;
-    private final int DESCRIPTION_WEIGHT = 4;
-    private final int TITLE_WEIGHT = 4;
-    private final int SUBJECT_WEIGHT = 4;
-    private final int LOCATION_WEIGHT = 10;
-    private final int CURRENT_YEAR = 2021;
+    private int iterator = 0;    
 
     LanguageParser(String needsPath, String resultsPath) throws IOException, SAXException, ParserConfigurationException{
 
-        try (InputStream modelIn = new FileInputStream("/home/diego/Desktop/info/4-1/RecuInfo/git-practicas/miniTREC/es-ner-person.bin")){
+        try (InputStream modelIn = new FileInputStream("es-ner-person.bin")){
             TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
             this.nameFinder = new NameFinderME(model);
         } catch (IOException e) {
@@ -55,7 +64,6 @@ public class LanguageParser {
         }
 
         analyzer = new SpanishAnalyzer2();
-        parser = new QueryParser("contents", analyzer);
 
         // Se extraen todas las necesidades de información
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -85,11 +93,12 @@ public class LanguageParser {
     }
 
     private void parsear(String line) throws ParseException, FileNotFoundException {
+        line = line.toLowerCase();
 
         BooleanQuery.Builder queryFinal = new BooleanQuery.Builder(); // consulta final
 
-        BoostQuery description = new BoostQuery(new QueryParser("description", analyzer).parse(line),DESCRIPTION_WEIGHT);
-        BoostQuery title = new BoostQuery(new QueryParser("title", analyzer).parse(line),TITLE_WEIGHT);
+        BoostQuery description = new BoostQuery(new QueryParser("description", analyzer).parse(line), DESCRIPTION_WEIGHT);
+        BoostQuery title = new BoostQuery(new QueryParser("title", analyzer).parse(line), TITLE_WEIGHT);
 
         BooleanQuery type = queryType(line);
         if(type != null)
@@ -97,11 +106,11 @@ public class LanguageParser {
 
         BooleanQuery language = queryLanguage(line);
         if(language != null)
-            queryFinal.add(language, BooleanClause.Occur.SHOULD);
+            queryFinal.add(language, BooleanClause.Occur.MUST);
 
         BooleanQuery date = queryDate(line);
         if(date != null)
-            queryFinal.add(date, BooleanClause.Occur.SHOULD);
+            queryFinal.add(date, BooleanClause.Occur.MUST);
 
         BooleanQuery Publisher = queryPublisher(line);
         if(Publisher != null)
@@ -111,7 +120,7 @@ public class LanguageParser {
         if(contributorsCreator != null)
             queryFinal.add(contributorsCreator, BooleanClause.Occur.SHOULD);
 
-        BoostQuery subject = new BoostQuery(new QueryParser("subject", analyzer).parse(line),SUBJECT_WEIGHT);
+        BoostQuery subject = new BoostQuery(new QueryParser("subject", analyzer).parse(line), SUBJECT_WEIGHT);
 
         queryFinal.add(description, BooleanClause.Occur.SHOULD);
         queryFinal.add(title, BooleanClause.Occur.SHOULD);
@@ -120,123 +129,154 @@ public class LanguageParser {
         query = queryFinal.build();
 
     }
-    private BooleanQuery queryContributorsCreator(String line) {
-        String[] lineArray = line.split("");
 
-        nameFinder.find(lineArray);
-
-
-
-        return null;
-    }
-    /*
-     *   Query for Publisher field
-     */
-    private BooleanQuery queryPublisher(String line) throws ParseException {
-
-        Pattern pat = Pattern.compile("departamento?\\s*(de)?\\s*(.*?)(\\?|,|\\.|!|;)");
-
-        Matcher mat = pat.matcher(line.toLowerCase());
-
-        BooleanQuery.Builder builder = new BooleanQuery.Builder();
-
-        if (mat.find()) {
-            BoostQuery queryLocation = new BoostQuery(new QueryParser("publisher", analyzer).parse(mat.group(2)), LOCATION_WEIGHT);
-
-            builder.add(queryLocation, BooleanClause.Occur.SHOULD);
-
-            line.replace("departamento " + mat.group(1) + mat.group(2), "");
-
-        }
-
-        return builder.build();
-    }
-    /*
-     *   Query for date field
-     */
-    private BooleanQuery queryDate(String line) throws ParseException {
-
-        Pattern pat = Pattern.compile("[ú|u]ltimos (\\d*) años");
-
-        Pattern pat2 = Pattern.compile("entre (\\d*) y (\\d*)");
-
-        Matcher mat = pat.matcher(line.toLowerCase());
-
-        Matcher mat2 = pat2.matcher(line.toLowerCase());
-        BooleanQuery.Builder builder = new BooleanQuery.Builder();
-
-        if (mat.find()) {
-            Query rangeQuery = LongPoint.newRangeQuery("begin",
-                    CURRENT_YEAR-Long.parseLong(mat.group(1)), CURRENT_YEAR);
-
-
-            builder.add(rangeQuery, BooleanClause.Occur.SHOULD);
-
-            line.replace("últimos " + mat.group(1) + " años", "");
-
-        }
-
-        if (mat2.find()) {
-            Query beginRangeQuery = LongPoint.newRangeQuery("begin",
-                    Long.parseLong(mat2.group(1)), Long.MAX_VALUE);
-            // end ≥ fecha inicio
-            Query endRangeQuery = LongPoint.newRangeQuery("end",
-                    Long.MIN_VALUE, Long.parseLong(mat2.group(2)));
-
-            builder.add(beginRangeQuery, BooleanClause.Occur.SHOULD);
-            builder.add(endRangeQuery, BooleanClause.Occur.SHOULD);
-
-            line.replace("entre " + mat2.group(1) + " y " + mat2.group(2), "");
-
-        }
-
-        return builder.build();
-    }
     /*
      *   Query for type field
      */
     private BooleanQuery queryType(String line) throws ParseException {
 
-        Pattern pat = Pattern.compile("trabajos (de)?\\s*fin (de)?\\s*grado|trabajos (de)?\\s*fin (de)?\\s* m[a|á]ster" +
-                "\\s*([o,y]\\s*((trabajos (de)?\\s*fin (de)?\\s*)?grado|\\s*(trabajos (de)?\\s*fin (de)?\\s*)?m[a|á]ster))*");
-        Matcher mat = pat.matcher(line.toLowerCase());
+        Pattern patTFG = Pattern.compile("trabajos? (de)?\\s*fin (de)?\\s*grado|TFGs?"),
+                patTFM = Pattern.compile("trabajos? (de)?\\s*fin (de)?\\s* m[a|á]ster|TFMs?"),
+                patTESIS = Pattern.compile("tesis");
+        Matcher matTFG = patTFG.matcher(line),
+                matTFM = patTFM.matcher(line),
+                matTESIS = patTESIS.matcher(line);
 
-        if (mat.find()) {
-            BoostQuery queryTypeTFG = new BoostQuery(new QueryParser("type", analyzer).parse("TFG"), TYPE_WEIGHT);
-            BoostQuery queryTypeTFM = new BoostQuery(new QueryParser("type", analyzer).parse("TFM"), TYPE_WEIGHT);
+        BooleanQuery.Builder builder = new BooleanQuery.Builder();
+        BoostQuery queryTypeTFG = null, 
+                   queryTypeTFM = null,
+                   queryTypeTESIS = null;
 
-            BooleanQuery.Builder builder = new BooleanQuery.Builder();
+        if(!matTFG.matches() && !matTFM.matches() && !matTESIS.matches()) return null;
+
+        if(matTFG.find()){
+            queryTypeTFG = new BoostQuery(new QueryParser("type", analyzer).parse("TFG"), TYPE_WEIGHT);
             builder.add(queryTypeTFG, BooleanClause.Occur.SHOULD);
-            builder.add(queryTypeTFM, BooleanClause.Occur.SHOULD);
-
-            return builder.build();
-
-        }else{
-            return null;
+            line = line.replace(matTFG.group(0), "");
         }
-
+        if(matTFM.find()){
+            queryTypeTFM = new BoostQuery(new QueryParser("type", analyzer).parse("TFM"), TYPE_WEIGHT);
+            builder.add(queryTypeTFM, BooleanClause.Occur.SHOULD);
+            line = line.replace(matTFM.group(0), "");
+        }
+        if(matTESIS.find()){
+            queryTypeTFM = new BoostQuery(new QueryParser("type", analyzer).parse("TESIS"), TYPE_WEIGHT);
+            builder.add(queryTypeTESIS, BooleanClause.Occur.SHOULD);
+            line = line.replace(matTESIS.group(0), "");
+        }
+        
+        return builder.build();
     }
+
     /*
      *   Query for language field
      */
     private BooleanQuery queryLanguage(String line) throws ParseException {
-        Pattern pat = Pattern.compile("lenguaje ([a-z]*)");
-        Matcher mat = pat.matcher(line.toLowerCase());
 
-        if (mat.find()) {
-            BoostQuery queryLanguage = new BoostQuery(new QueryParser("language", analyzer)
-                    .parse(mat.group(1).equals("espa") ? "spa":"eng"), LANGUAGE_WEIGHT);
+        Pattern pat = Pattern.compile("(lenguaje ([a-z]*)) | en\\s[ingl[e|é]s|español]");
+        Matcher mat = pat.matcher(line);
 
-            BooleanQuery.Builder builder = new BooleanQuery.Builder();
-            builder.add(queryLanguage, BooleanClause.Occur.SHOULD);
+        if (!mat.find()) return null;
 
-            line.replace("lenguaje " + mat.group(1), "");
+        BoostQuery queryLanguage = new BoostQuery(new QueryParser("language", analyzer)
+                .parse(mat.group(0).matches("espa.*") ? "spa" : "eng"), LANGUAGE_WEIGHT);
 
-            return builder.build();
+        BooleanQuery.Builder builder = new BooleanQuery.Builder();
+        builder.add(queryLanguage, BooleanClause.Occur.SHOULD);
 
-        }else{
-            return null;
+        line = line.replace(mat.group(0), "");
+
+        return builder.build();
+    }
+    
+    /*
+     *   Query for date field
+     */
+    private BooleanQuery queryDate(String line) throws ParseException {
+
+        Pattern pat1 = Pattern.compile("[ú|u]ltimos? \\d+ años?"),
+                pat2 = Pattern.compile("entre \\d{4} y \\d{4}"),
+                patAnyo = Pattern.compile("\\d{1,3}");
+        Matcher mat1 = pat1.matcher(line),
+                mat2 = pat2.matcher(line);
+
+        if(!mat1.matches() && !mat2.matches()) return null;
+
+        BooleanQuery.Builder builder = new BooleanQuery.Builder();
+
+        String dateLine = null;
+        String[] date = new String[2];
+        if (mat1.find()) {
+            dateLine = mat1.group(0);
+            Matcher mat = patAnyo.matcher(dateLine);
+            
+            mat.find(); date[0] = Long.toString(CURRENT_YEAR - Long.parseLong(mat.group(0))); // begin
+            date[1] = Long.toString(CURRENT_YEAR); // end
         }
+        else if (mat2.find()) {
+            dateLine = mat1.group(0);
+            Matcher mat = patAnyo.matcher(dateLine);
+            
+            // Se asume que la fecha introducida inicial será menor que la final
+            mat.find(); date[0] = mat.group(0);
+            mat.find(); date[1] = mat.group(0);
+        }
+
+        defaultDate(date);
+
+        // begin <= fecha fin
+        Query beginRangeQuery = LongPoint.newRangeQuery("begin", 
+                Long.parseLong(date[0]), Long.MAX_VALUE);
+        // end ≥ fecha inicio
+        Query endRangeQuery = LongPoint.newRangeQuery("end", 
+                Long.MIN_VALUE, Long.parseLong(date[1]));
+
+        BooleanQuery rangeQuery = new BooleanQuery.Builder()
+                .add(beginRangeQuery, BooleanClause.Occur.MUST)
+                .add(endRangeQuery, BooleanClause.Occur.MUST).build();
+
+        builder.add(rangeQuery, BooleanClause.Occur.SHOULD);
+
+        line.replace(dateLine, "");
+
+        return builder.build();
+    }
+
+    /*
+     *   Query for Publisher field
+     */
+    private BooleanQuery queryPublisher(String line) throws ParseException {
+
+        Pattern patDEP = Pattern.compile("departamento?\\s*(de)?\\s*(.*?)(\\?|,|\\.|!|;)"),
+                patUNI = Pattern.compile("universidad\\sde");
+        Matcher matDEP = patDEP.matcher(line),
+                matUNI = patUNI.matcher(line);
+
+        if(!matDEP.matches() && !matUNI.matches()) return null;
+
+        BooleanQuery.Builder builder = new BooleanQuery.Builder();
+
+        String publisher = null;
+        if (matDEP.find()) publisher = matDEP.group(0);
+        else if(matUNI.find()) publisher = matUNI.group(0);
+
+        BoostQuery queryLocation = new BoostQuery(new QueryParser("publisher", analyzer).parse(publisher), LOCATION_WEIGHT);
+        builder.add(queryLocation, BooleanClause.Occur.SHOULD);
+
+        line = line.replace(publisher, "");
+
+        return builder.build();
+    }
+    
+    /*
+     *   Query for contributor and creator field
+     */
+    private BooleanQuery queryContributorsCreator(String line) {
+        String[] lineArray = line.split("");
+
+        nameFinder.find(lineArray);
+
+        return null;
     }
 
     public void writeResults(IndexSearcher searcher, ScoreDoc[] hits) throws IOException{
@@ -245,6 +285,21 @@ public class LanguageParser {
             String path = doc.get("path");
     
             fileWriter.write(idNeed + "\t" + path + "\n");
+        }
+    }
+
+    private void defaultDate(String[] date){
+        // En caso de faltar el mes o el día se añade predeterminadamente
+        // YYYY/01/01 para begin y YYYY/12/31 para end
+        for(int i=0; i<2; i++){
+            if(date[i].length() < 6){
+                // no tiene mes
+                if(i==0) date[i] += "01"; else date[i] += "12";
+                if(date[i].length() < 8){
+                // no tiene día
+                if(i==0) date[i] += "01"; else date[i] += "31";
+                }
+            }
         }
     }
 

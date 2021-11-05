@@ -220,38 +220,6 @@ public class IndexFiles {
     }
   }
 
-  private static void AddDoublePointField(Document doc, org.w3c.dom.Document docTree, String s){
-    NodeList nodeList;
-    nodeList = docTree.getElementsByTagName(s);
-    if (nodeList.item(0) != null) {
-      if (s.equals("ows:LowerCorner")) {
-        DoublePoint westField = new DoublePoint("west",
-                Double.parseDouble(docTree.getElementsByTagName(s).item(0).getTextContent().split(" ")[0]));
-
-        DoublePoint southField = new DoublePoint("south",
-                Double.parseDouble(docTree.getElementsByTagName(s).item(0).getTextContent().split(" ")[1]));
-
-        doc.add(westField);
-        doc.add(southField);
-
-      }else if(s.equals("ows:UpperCorner")){
-        DoublePoint eastField = new DoublePoint("east",
-                Double.parseDouble(docTree.getElementsByTagName(s).item(0).getTextContent().split(" ")[0]));
-
-        DoublePoint northField = new DoublePoint("north",
-                Double.parseDouble(docTree.getElementsByTagName(s).item(0).getTextContent().split(" ")[1]));
-
-        doc.add(eastField);
-        doc.add(northField);
-
-      }else{
-        //COMPORTAMIENTO NO ESPERADO
-        System.out.println("COMPORTAMIENTO NO ESPERADO, LINEA DE INDEXFILESMULTIPLEINDEXES FUNC AddDoublePointField");
-      }
-
-    }
-  }
-
   private static void AddDateField(Document doc, org.w3c.dom.Document docTree, String s) {
     NodeList nodeList;
     nodeList = docTree.getElementsByTagName(s);
