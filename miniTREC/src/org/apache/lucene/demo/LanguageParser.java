@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 public class LanguageParser {
     private QueryParser parser = null;
     private FileWriter fileWriter = null;
+    private Analyzer analyzer = null;
 
     private org.w3c.dom.Document docTree = null;
     private BooleanQuery query = null;    
@@ -42,7 +43,7 @@ public class LanguageParser {
 
     LanguageParser(String needsPath, String resultsPath) throws IOException, SAXException, ParserConfigurationException{
 
-        Analyzer analyzer = new SpanishAnalyzer2();
+        analyzer = new SpanishAnalyzer2();
         parser = new QueryParser("contents", analyzer);
 
         // Se extraen todas las necesidades de información
@@ -54,10 +55,10 @@ public class LanguageParser {
         fileWriter = new FileWriter(resultsPath);
     }
 
-    public Boolean nextNeed(Analyzer analyzer) throws ParseException, IOException{
+    public Boolean nextNeed() throws ParseException, IOException{
         if(docTree.getElementsByTagName("informationNeed").item(iterator) != null){
             String need = docTree.getElementsByTagName("text").item(iterator).getTextContent();
-            parsear(need, analyzer);
+            parsear(need);
 
             setIdNeed(docTree.getElementsByTagName("identifier").item(iterator).getTextContent());
             iterator++;
@@ -72,7 +73,7 @@ public class LanguageParser {
         }
     }
 
-    private void parsear(String line, Analyzer analyzer) throws ParseException{
+    private void parsear(String line) throws ParseException{
 
         BooleanQuery.Builder queryFinal = new BooleanQuery.Builder(); // consulta final
 
@@ -104,7 +105,7 @@ public class LanguageParser {
         query = queryFinal.build();
 
     }
-    private BooleanQuery queryContributors(String line, Analyzer analyzer) throws FileNotFoundException {
+    private BooleanQuery queryContributors(String line) throws FileNotFoundException {
         try (InputStream modelIn = new FileInputStream("en-ner-person.bin")){
             TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
             NameFinderME nameFinder = new NameFinderME(model);
@@ -116,7 +117,7 @@ public class LanguageParser {
     /*
      *   Query for location field
      */
-    private BooleanQuery queryLocation(String line, Analyzer analyzer) throws ParseException {
+    private BooleanQuery queryLocation(String line) throws ParseException {
 
         Pattern pat = Pattern.compile("departamento?\\s*(de)?\\s*(.*?)(\\?|,|\\.|!|;)");
 
@@ -138,7 +139,7 @@ public class LanguageParser {
     /*
      *   Query for date field
      */
-    private BooleanQuery queryDate(String line, Analyzer analyzer) throws ParseException {
+    private BooleanQuery queryDate(String line) throws ParseException {
 
         Pattern pat = Pattern.compile("[ú|u]ltimos (\\d*) años");
 
@@ -179,7 +180,7 @@ public class LanguageParser {
     /*
      *   Query for type field
      */
-    private BooleanQuery queryType(String line, Analyzer analyzer) throws ParseException {
+    private BooleanQuery queryType(String line) throws ParseException {
 
         Pattern pat = Pattern.compile("trabajos (de)?\\s*fin (de)?\\s*grado|trabajos (de)?\\s*fin (de)?\\s* m[a|á]ster" +
                 "\\s*([o,y]\\s*((trabajos (de)?\\s*fin (de)?\\s*)?grado|\\s*(trabajos (de)?\\s*fin (de)?\\s*)?m[a|á]ster))*");
@@ -203,7 +204,7 @@ public class LanguageParser {
     /*
      *   Query for language field
      */
-    private BooleanQuery queryLanguage(String line, Analyzer analyzer) throws ParseException {
+    private BooleanQuery queryLanguage(String line) throws ParseException {
         Pattern pat = Pattern.compile("lenguaje ([a-z]*)");
         Matcher mat = pat.matcher(line.toLowerCase());
 

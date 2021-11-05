@@ -53,7 +53,7 @@ public class SearchFiles {
     Analyzer analyzer = new SpanishAnalyzer2();
     LanguageParser languageParser = new LanguageParser(infoNeeds, output);
 
-    while(languageParser.nextNeed(analyzer)){
+    while(languageParser.nextNeed()){
       System.out.println("Buscando necesidad '" + languageParser.getIdNeed() + "'': " 
                           + languageParser.getStringQuery());
       Date start = new Date();
