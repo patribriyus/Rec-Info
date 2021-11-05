@@ -50,7 +50,6 @@ public class SearchFiles {
 
     IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
     IndexSearcher searcher = new IndexSearcher(reader);
-    Analyzer analyzer = new SpanishAnalyzer2();
     LanguageParser languageParser = new LanguageParser(infoNeeds, output);
 
     while(languageParser.nextNeed()){
