@@ -13,6 +13,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import opennlp.tools.namefind.NameFinderME;
+import opennlp.tools.namefind.TokenNameFinderModel;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.DoublePoint;
@@ -21,11 +23,13 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
 import org.xml.sax.SAXException;
+import opennlp.tools.*;
 
 public class LanguageParser {
     private QueryParser parser = null;
     private FileWriter fileWriter = null;
     private Analyzer analyzer = null;
+    NameFinderME nameFinder = null;
 
     private org.w3c.dom.Document docTree = null;
     private BooleanQuery query = null;    
@@ -42,6 +46,13 @@ public class LanguageParser {
     private final int CURRENT_YEAR = 2021;
 
     LanguageParser(String needsPath, String resultsPath) throws IOException, SAXException, ParserConfigurationException{
+
+        try (InputStream modelIn = new FileInputStream("/home/diego/Desktop/info/4-1/RecuInfo/git-practicas/miniTREC/es-ner-person.bin")){
+            TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
+            this.nameFinder = new NameFinderME(model);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         analyzer = new SpanishAnalyzer2();
         parser = new QueryParser("contents", analyzer);
@@ -73,28 +84,32 @@ public class LanguageParser {
         }
     }
 
-    private void parsear(String line) throws ParseException{
+    private void parsear(String line) throws ParseException, FileNotFoundException {
 
         BooleanQuery.Builder queryFinal = new BooleanQuery.Builder(); // consulta final
 
         BoostQuery description = new BoostQuery(new QueryParser("description", analyzer).parse(line),DESCRIPTION_WEIGHT);
         BoostQuery title = new BoostQuery(new QueryParser("title", analyzer).parse(line),TITLE_WEIGHT);
 
-        BooleanQuery type = queryType(line, analyzer);
+        BooleanQuery type = queryType(line);
         if(type != null)
             queryFinal.add(type, BooleanClause.Occur.SHOULD);
 
-        BooleanQuery language = queryLanguage(line, analyzer);
+        BooleanQuery language = queryLanguage(line);
         if(language != null)
             queryFinal.add(language, BooleanClause.Occur.SHOULD);
 
-        BooleanQuery date = queryDate(line, analyzer);
+        BooleanQuery date = queryDate(line);
         if(date != null)
             queryFinal.add(date, BooleanClause.Occur.SHOULD);
 
-        BooleanQuery location = queryLocation(line, analyzer);
-        if(location != null)
-            queryFinal.add(location, BooleanClause.Occur.SHOULD);
+        BooleanQuery Publisher = queryPublisher(line);
+        if(Publisher != null)
+            queryFinal.add(Publisher, BooleanClause.Occur.SHOULD);
+
+        BooleanQuery contributorsCreator = queryContributorsCreator(line);
+        if(contributorsCreator != null)
+            queryFinal.add(contributorsCreator, BooleanClause.Occur.SHOULD);
 
         BoostQuery subject = new BoostQuery(new QueryParser("subject", analyzer).parse(line),SUBJECT_WEIGHT);
 
@@ -105,19 +120,19 @@ public class LanguageParser {
         query = queryFinal.build();
 
     }
-    private BooleanQuery queryContributors(String line) throws FileNotFoundException {
-        try (InputStream modelIn = new FileInputStream("en-ner-person.bin")){
-            TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
-            NameFinderME nameFinder = new NameFinderME(model);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private BooleanQuery queryContributorsCreator(String line) {
+        String[] lineArray = line.split("");
+
+        nameFinder.find(lineArray);
+
+
+
         return null;
     }
     /*
-     *   Query for location field
+     *   Query for Publisher field
      */
-    private BooleanQuery queryLocation(String line) throws ParseException {
+    private BooleanQuery queryPublisher(String line) throws ParseException {
 
         Pattern pat = Pattern.compile("departamento?\\s*(de)?\\s*(.*?)(\\?|,|\\.|!|;)");
 
@@ -126,7 +141,7 @@ public class LanguageParser {
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
         if (mat.find()) {
-            BoostQuery queryLocation = new BoostQuery(new QueryParser("location", analyzer).parse(mat.group(2)), LOCATION_WEIGHT);
+            BoostQuery queryLocation = new BoostQuery(new QueryParser("publisher", analyzer).parse(mat.group(2)), LOCATION_WEIGHT);
 
             builder.add(queryLocation, BooleanClause.Occur.SHOULD);
 
