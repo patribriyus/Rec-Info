@@ -171,12 +171,7 @@ public class IndexFiles {
           AddTextField(doc, docTree, "dc:description", "description");
           AddTextField(doc, docTree, "dc:creator", "creator");
           AddTextField(doc, docTree, "dc:publisher", "publisher");
-          AddStringField(doc, docTree, "dc:format", "format");
           AddStringField(doc, docTree, "dc:language", "language");
-          AddStringField(doc, docTree, "dcterms:issued", "issued");
-          AddStringField(doc, docTree, "dcterms:created", "created");
-          AddDoublePointField(doc, docTree, "ows:LowerCorner");
-          AddDoublePointField(doc, docTree, "ows:UpperCorner");
           AddDateField(doc, docTree, "dc:date");
 
 
