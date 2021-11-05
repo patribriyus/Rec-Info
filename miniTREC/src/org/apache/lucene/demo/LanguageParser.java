@@ -33,16 +33,17 @@ import org.xml.sax.SAXException;
 
 import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.TokenNameFinderModel;
+import opennlp.tools.util.Span;
 
 public class LanguageParser {
 
     private static final int TYPE_WEIGHT = 10;
     private static final int LANGUAGE_WEIGHT = 10;
-    private static final int DATE_WEIGHT = 10;
     private static final int DESCRIPTION_WEIGHT = 4;
     private static final int TITLE_WEIGHT = 4;
     private static final int SUBJECT_WEIGHT = 4;
     private static final int LOCATION_WEIGHT = 10;
+    private static final int CONTRIBUTOR_CREATOR_WEIGHT = 10;
     private static final int CURRENT_YEAR = 2021;
 
     private FileWriter fileWriter = null;
@@ -52,7 +53,7 @@ public class LanguageParser {
     private org.w3c.dom.Document docTree = null;
     private BooleanQuery query = null;    
     private String idNeed = null;
-    private int iterator = 0;    
+    private int iterator = 0;
 
     LanguageParser(String needsPath, String resultsPath) throws IOException, SAXException, ParserConfigurationException{
 
@@ -248,7 +249,7 @@ public class LanguageParser {
     private BooleanQuery queryPublisher(String line) throws ParseException {
 
         Pattern patDEP = Pattern.compile("departamento?\\s*(de)?\\s*(.*?)(\\?|,|\\.|!|;)"),
-                patUNI = Pattern.compile("universidad\\sde");
+                patUNI = Pattern.compile("universidad\\sde\\s[^\\s]+");
         Matcher matDEP = patDEP.matcher(line),
                 matUNI = patUNI.matcher(line);
 
@@ -271,12 +272,27 @@ public class LanguageParser {
     /*
      *   Query for contributor and creator field
      */
-    private BooleanQuery queryContributorsCreator(String line) {
+    private BooleanQuery queryContributorsCreator(String line) throws ParseException {
         String[] lineArray = line.split("");
 
-        nameFinder.find(lineArray);
+        Span nameSpans[] = nameFinder.find(lineArray);
+        BoostQuery queryCreator = null;
+        BoostQuery queryContributor = null;
+        BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
-        return null;
+
+        if(nameSpans.length > 0)
+        {
+            for (Span name: nameSpans) {
+                queryCreator = new BoostQuery(new QueryParser("creator", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
+                queryContributor = new BoostQuery(new QueryParser("contributor", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
+                builder.add(queryContributor, BooleanClause.Occur.SHOULD);
+                builder.add(queryCreator, BooleanClause.Occur.SHOULD);
+            }
+            return builder.build();
+        }else{
+            return null;
+        }
     }
 
     public void writeResults(IndexSearcher searcher, ScoreDoc[] hits) throws IOException{
