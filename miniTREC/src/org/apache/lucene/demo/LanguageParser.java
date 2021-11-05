@@ -5,9 +5,7 @@
  */
 package org.apache.lucene.demo;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,11 +19,7 @@ import org.apache.lucene.document.DoublePoint;
 import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.*;
 import org.xml.sax.SAXException;
 
 public class LanguageParser {
@@ -36,6 +30,15 @@ public class LanguageParser {
     private BooleanQuery query = null;    
     private String idNeed = null;
     private int iterator = 0;
+
+    private final int TYPE_WEIGHT = 10;
+    private final int LANGUAGE_WEIGHT = 10;
+    private final int DATE_WEIGHT = 10;
+    private final int DESCRIPTION_WEIGHT = 4;
+    private final int TITLE_WEIGHT = 4;
+    private final int SUBJECT_WEIGHT = 4;
+    private final int LOCATION_WEIGHT = 10;
+    private final int CURRENT_YEAR = 2021;
 
     LanguageParser(String needsPath, String resultsPath) throws IOException, SAXException, ParserConfigurationException{
 
@@ -51,10 +54,10 @@ public class LanguageParser {
         fileWriter = new FileWriter(resultsPath);
     }
 
-    public Boolean nextNeed() throws ParseException, IOException{
+    public Boolean nextNeed(Analyzer analyzer) throws ParseException, IOException{
         if(docTree.getElementsByTagName("informationNeed").item(iterator) != null){
             String need = docTree.getElementsByTagName("text").item(iterator).getTextContent();
-            parsear(need);
+            parsear(need, analyzer);
 
             setIdNeed(docTree.getElementsByTagName("identifier").item(iterator).getTextContent());
             iterator++;
@@ -69,101 +72,155 @@ public class LanguageParser {
         }
     }
 
-    private void parsear(String line) throws ParseException{
-        // TODO: Modifica el this.query
+    private void parsear(String line, Analyzer analyzer) throws ParseException{
 
         BooleanQuery.Builder queryFinal = new BooleanQuery.Builder(); // consulta final
 
-        // spatial:<west>,<east>,<south>,<north>
-        Pattern pat = Pattern.compile("spatial\\:(\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?\\s*,){3}" +
-                                        "\\s*\\-?\\s*\\d{1,3}(\\.\\d+)?");
+        BoostQuery description = new BoostQuery(new QueryParser("description", analyzer).parse(line),DESCRIPTION_WEIGHT);
+        BoostQuery title = new BoostQuery(new QueryParser("title", analyzer).parse(line),TITLE_WEIGHT);
+
+        BooleanQuery type = queryType(line, analyzer);
+        if(type != null)
+            queryFinal.add(type, BooleanClause.Occur.SHOULD);
+
+        BooleanQuery language = queryLanguage(line, analyzer);
+        if(language != null)
+            queryFinal.add(language, BooleanClause.Occur.SHOULD);
+
+        BooleanQuery date = queryDate(line, analyzer);
+        if(date != null)
+            queryFinal.add(date, BooleanClause.Occur.SHOULD);
+
+        BooleanQuery location = queryLocation(line, analyzer);
+        if(location != null)
+            queryFinal.add(location, BooleanClause.Occur.SHOULD);
+
+        BoostQuery subject = new BoostQuery(new QueryParser("subject", analyzer).parse(line),SUBJECT_WEIGHT);
+
+        queryFinal.add(description, BooleanClause.Occur.SHOULD);
+        queryFinal.add(title, BooleanClause.Occur.SHOULD);
+        queryFinal.add(subject, BooleanClause.Occur.SHOULD);
+
+        query = queryFinal.build();
+
+    }
+    private BooleanQuery queryContributors(String line, Analyzer analyzer) throws FileNotFoundException {
+        try (InputStream modelIn = new FileInputStream("en-ner-person.bin")){
+            TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
+            NameFinderME nameFinder = new NameFinderME(model);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    /*
+     *   Query for location field
+     */
+    private BooleanQuery queryLocation(String line, Analyzer analyzer) throws ParseException {
+
+        Pattern pat = Pattern.compile("departamento?\\s*(de)?\\s*(.*?)(\\?|,|\\.|!|;)");
+
         Matcher mat = pat.matcher(line.toLowerCase());
-        if(mat.find()){
 
-            // Se coge solo la restriccion de spatial
-            String spatialLine = mat.group(0).replaceAll("\\s+", "");
+        BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
-            Double west = Double.valueOf(spatialLine.split(":")[1].split(",")[0]),
-                east = Double.valueOf(spatialLine.split(":")[1].split(",")[1]),
-                south = Double.valueOf(spatialLine.split(":")[1].split(",")[2]),
-                north = Double.valueOf(spatialLine.split(":")[1].split(",")[3]);
-
-            // Xmin <= east
-            Query westRangeQuery = DoublePoint.newRangeQuery("west",
-                    Double.NEGATIVE_INFINITY, east);
-            // Xmax ≥ West
-            Query eastRangeQuery = DoublePoint.newRangeQuery("east", 
-                    west, Double.POSITIVE_INFINITY );
-            // Ymin ≤ North
-            Query southRangeQuery = DoublePoint.newRangeQuery("south", 
-                    Double.NEGATIVE_INFINITY, north);
-            // Ymax ≥ South
-            Query northRangeQuery = DoublePoint.newRangeQuery("north", 
-                    south, Double.POSITIVE_INFINITY);
-            
-            BooleanQuery query = new BooleanQuery.Builder()
-                .add(westRangeQuery, BooleanClause.Occur.MUST)
-                .add(eastRangeQuery, BooleanClause.Occur.MUST)
-                .add(northRangeQuery, BooleanClause.Occur.MUST)
-                .add(southRangeQuery, BooleanClause.Occur.MUST).build();
-
-            // Disyuncion
-            line = line.replace(spatialLine, "");
-
-            // Se añade la restricción de spatial
-            queryFinal.add(query, BooleanClause.Occur.SHOULD);
-        }
-
-        // date:[<fecha inicio> TO <fecha fin>]
-        pat = Pattern.compile("date\\:\\s*\\[\\s*\\d{4,8}\\s*to\\s*\\d{4,8}\\s*\\]");
-        mat = pat.matcher(line.toLowerCase());
         if (mat.find()) {
-            // Se coge solo la restriccion de date
-            String datelLine = mat.group(0);
-            
-            String[] date = new String[2];
-            pat = Pattern.compile("\\d{4,8}");
-            mat = pat.matcher(datelLine);
-            mat.find(); date[0] = mat.group(0);
-            mat.find(); date[1] = mat.group(0);
+            BoostQuery queryLocation = new BoostQuery(new QueryParser("location", analyzer).parse(mat.group(2)), LOCATION_WEIGHT);
 
-            // En caso de faltar el mes o el día se añade predeterminadamente
-            // YYYY/01/01 para begin y YYYY/12/31 para end
-            for(int i=0; i<2; i++){
-            if(date[i].length() < 6){
-                // no tiene mes
-                if(i==0) date[i] += "01"; else date[i] += "12";
-                if(date[i].length() < 8){
-                // no tiene día
-                if(i==0) date[i] += "01"; else date[i] += "31";
-                }
-            }
-            }
+            builder.add(queryLocation, BooleanClause.Occur.SHOULD);
 
-            // begin <= fecha fin
-            Query beginRangeQuery = LongPoint.newRangeQuery("begin", 
-                    Long.parseLong(date[0]), Long.MAX_VALUE);
-            // end ≥ fecha inicio
-            Query endRangeQuery = LongPoint.newRangeQuery("end", 
-                    Long.MIN_VALUE, Long.parseLong(date[1]));
-            
-            BooleanQuery query = new BooleanQuery.Builder()
-                .add(beginRangeQuery, BooleanClause.Occur.MUST)
-                .add(endRangeQuery, BooleanClause.Occur.MUST).build();
+            line.replace("departamento " + mat.group(1) + mat.group(2), "");
 
-            // Disyuncion
-            line = line.replace(datelLine, "");
-
-            // Se añade la restricción de date
-            queryFinal.add(query, BooleanClause.Occur.SHOULD);
-
-            // TODO: importante usar el parser
-            Query q = parser.parse(line);
         }
-        
-        //resto de queries
 
-        this.query = queryFinal.build();
+        return builder.build();
+    }
+    /*
+     *   Query for date field
+     */
+    private BooleanQuery queryDate(String line, Analyzer analyzer) throws ParseException {
+
+        Pattern pat = Pattern.compile("[ú|u]ltimos (\\d*) años");
+
+        Pattern pat2 = Pattern.compile("entre (\\d*) y (\\d*)");
+
+        Matcher mat = pat.matcher(line.toLowerCase());
+
+        Matcher mat2 = pat2.matcher(line.toLowerCase());
+        BooleanQuery.Builder builder = new BooleanQuery.Builder();
+
+        if (mat.find()) {
+            Query rangeQuery = LongPoint.newRangeQuery("begin",
+                    CURRENT_YEAR-Long.parseLong(mat.group(1)), CURRENT_YEAR);
+
+
+            builder.add(rangeQuery, BooleanClause.Occur.SHOULD);
+
+            line.replace("últimos " + mat.group(1) + " años", "");
+
+        }
+
+        if (mat2.find()) {
+            Query beginRangeQuery = LongPoint.newRangeQuery("begin",
+                    Long.parseLong(mat2.group(1)), Long.MAX_VALUE);
+            // end ≥ fecha inicio
+            Query endRangeQuery = LongPoint.newRangeQuery("end",
+                    Long.MIN_VALUE, Long.parseLong(mat2.group(2)));
+
+            builder.add(beginRangeQuery, BooleanClause.Occur.SHOULD);
+            builder.add(endRangeQuery, BooleanClause.Occur.SHOULD);
+
+            line.replace("entre " + mat2.group(1) + " y " + mat2.group(2), "");
+
+        }
+
+        return builder.build();
+    }
+    /*
+     *   Query for type field
+     */
+    private BooleanQuery queryType(String line, Analyzer analyzer) throws ParseException {
+
+        Pattern pat = Pattern.compile("trabajos (de)?\\s*fin (de)?\\s*grado|trabajos (de)?\\s*fin (de)?\\s* m[a|á]ster" +
+                "\\s*([o,y]\\s*((trabajos (de)?\\s*fin (de)?\\s*)?grado|\\s*(trabajos (de)?\\s*fin (de)?\\s*)?m[a|á]ster))*");
+        Matcher mat = pat.matcher(line.toLowerCase());
+
+        if (mat.find()) {
+            BoostQuery queryTypeTFG = new BoostQuery(new QueryParser("type", analyzer).parse("TFG"), TYPE_WEIGHT);
+            BoostQuery queryTypeTFM = new BoostQuery(new QueryParser("type", analyzer).parse("TFM"), TYPE_WEIGHT);
+
+            BooleanQuery.Builder builder = new BooleanQuery.Builder();
+            builder.add(queryTypeTFG, BooleanClause.Occur.SHOULD);
+            builder.add(queryTypeTFM, BooleanClause.Occur.SHOULD);
+
+            return builder.build();
+
+        }else{
+            return null;
+        }
+
+    }
+    /*
+     *   Query for language field
+     */
+    private BooleanQuery queryLanguage(String line, Analyzer analyzer) throws ParseException {
+        Pattern pat = Pattern.compile("lenguaje ([a-z]*)");
+        Matcher mat = pat.matcher(line.toLowerCase());
+
+        if (mat.find()) {
+            BoostQuery queryLanguage = new BoostQuery(new QueryParser("language", analyzer)
+                    .parse(mat.group(1).equals("espa") ? "spa":"eng"), LANGUAGE_WEIGHT);
+
+            BooleanQuery.Builder builder = new BooleanQuery.Builder();
+            builder.add(queryLanguage, BooleanClause.Occur.SHOULD);
+
+            line.replace("lenguaje " + mat.group(1), "");
+
+            return builder.build();
+
+        }else{
+            return null;
+        }
     }
 
     public void writeResults(IndexSearcher searcher, ScoreDoc[] hits) throws IOException{

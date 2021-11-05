@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.Date;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
@@ -49,10 +50,10 @@ public class SearchFiles {
 
     IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
     IndexSearcher searcher = new IndexSearcher(reader);
-
+    Analyzer analyzer = new SpanishAnalyzer2();
     LanguageParser languageParser = new LanguageParser(infoNeeds, output);
 
-    while(languageParser.nextNeed()){
+    while(languageParser.nextNeed(analyzer)){
       System.out.println("Buscando necesidad '" + languageParser.getIdNeed() + "'': " 
                           + languageParser.getStringQuery());
       Date start = new Date();
