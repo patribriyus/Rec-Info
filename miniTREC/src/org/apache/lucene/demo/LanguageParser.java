@@ -15,6 +15,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.TokenNameFinderModel;
+import opennlp.tools.util.Span;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.DoublePoint;
@@ -38,11 +39,11 @@ public class LanguageParser {
 
     private final int TYPE_WEIGHT = 10;
     private final int LANGUAGE_WEIGHT = 10;
-    private final int DATE_WEIGHT = 10;
     private final int DESCRIPTION_WEIGHT = 4;
     private final int TITLE_WEIGHT = 4;
     private final int SUBJECT_WEIGHT = 4;
     private final int LOCATION_WEIGHT = 10;
+    private final int CONTRIBUTOR_CREATOR_WEIGHT = 10;
     private final int CURRENT_YEAR = 2021;
 
     LanguageParser(String needsPath, String resultsPath) throws IOException, SAXException, ParserConfigurationException{
@@ -120,14 +121,29 @@ public class LanguageParser {
         query = queryFinal.build();
 
     }
-    private BooleanQuery queryContributorsCreator(String line) {
+    private BooleanQuery queryContributorsCreator(String line) throws ParseException {
         String[] lineArray = line.split("");
 
-        nameFinder.find(lineArray);
+        Span nameSpans[] = nameFinder.find(lineArray);
+        BoostQuery queryCreator = null;
+        BoostQuery queryContributor = null;
+        BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
 
+        if(nameSpans.length > 0)
+        {
+            for (Span name: nameSpans) {
+                queryCreator = new BoostQuery(new QueryParser("creator", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
+                queryContributor = new BoostQuery(new QueryParser("contributor", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
+                builder.add(queryContributor, BooleanClause.Occur.SHOULD);
+                builder.add(queryCreator, BooleanClause.Occur.SHOULD);
+            }
+            return builder.build();
+        }else{
+            return null;
+        }
 
-        return null;
+
     }
     /*
      *   Query for Publisher field
