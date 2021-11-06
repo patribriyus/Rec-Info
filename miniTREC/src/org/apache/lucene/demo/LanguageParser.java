@@ -117,7 +117,7 @@ public class LanguageParser {
 
         BooleanQuery Publisher = queryPublisher(needLeft);
         if(Publisher != null)
-            queryFinal.add(Publisher, BooleanClause.Occur.SHOULD);
+            queryFinal.add(Publisher, BooleanClause.Occur.MUST);
 
         BooleanQuery contributorsCreator = queryContributorsCreator(needLeft);
         if(contributorsCreator != null)
@@ -125,7 +125,7 @@ public class LanguageParser {
         
         BoostQuery subject = new BoostQuery(new QueryParser("subject", analyzer).parse(needLeft), SUBJECT_WEIGHT);
 
-        queryFinal.add(description, BooleanClause.Occur.MUST);
+        queryFinal.add(description, BooleanClause.Occur.SHOULD);
         queryFinal.add(title, BooleanClause.Occur.SHOULD);
         queryFinal.add(subject, BooleanClause.Occur.SHOULD);
 
@@ -163,7 +163,7 @@ public class LanguageParser {
             needLeft = needLeft.replace(matTFM.group(0), "");
         }
         if(matTESIS.find(0)){
-            queryTypeTFM = new BoostQuery(new QueryParser("type", analyzer).parse("tesis"), TYPE_WEIGHT);
+            queryTypeTESIS = new BoostQuery(new QueryParser("type", analyzer).parse("tesis"), TYPE_WEIGHT);
             builder.add(queryTypeTESIS, BooleanClause.Occur.SHOULD);
             needLeft = needLeft.replace(matTESIS.group(0), "");
         }
@@ -285,7 +285,6 @@ public class LanguageParser {
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
         for (Span name: nameSpans) {
-            String x = String.valueOf(name);
             queryCreator = new BoostQuery(new QueryParser("creator", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
             queryContributor = new BoostQuery(new QueryParser("contributor", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
             builder.add(queryCreator, BooleanClause.Occur.SHOULD);

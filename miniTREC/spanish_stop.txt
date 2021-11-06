@@ -43,7 +43,7 @@ pero           |  pero
 sus            |  su plural
 le             |  to him, her
 ya             |  already
-|o              |  or
+o              |  or
   | fue        from SER
 este           |  this
   | ha         from HABER
@@ -85,7 +85,7 @@ eso            |  that
   | había      from HABER
 ante           |  before
 ellos          |  they
-  | e          |  and (variant of y)
+e          |  and (variant of y)
 esto           |  this
 mí             |  me
 antes          |  before
