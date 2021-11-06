@@ -20,7 +20,7 @@ package org.apache.lucene.demo;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.LowerCaseFilter;
@@ -33,7 +33,6 @@ import org.apache.lucene.analysis.es.SpanishLightStemFilter;
 import org.apache.lucene.analysis.miscellaneous.SetKeywordMarkerFilter;
 import org.apache.lucene.analysis.snowball.SnowballFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
-import org.apache.lucene.util.IOUtils;
 
 /**
  * {@link Analyzer} for Spanish.
@@ -68,25 +67,6 @@ public final class SpanishAnalyzer2 extends StopwordAnalyzerBase {
             return stopSet;
         } catch (IOException ex) {
             throw new RuntimeException("Unable to load default stopword set");
-        }
-    }
-
-    /**
-     * Atomically loads the DEFAULT_STOP_SET in a lazy fashion once the outer class
-     * accesses the static final set the first time.;
-     */
-    private static class DefaultSetHolder {
-        static final CharArraySet DEFAULT_STOP_SET;
-
-        static {
-            try {
-                DEFAULT_STOP_SET = WordlistLoader.getSnowballWordSet(IOUtils.getDecodingReader(SnowballFilter.class,
-                        DEFAULT_STOPWORD_FILE, StandardCharsets.UTF_8));
-            } catch (IOException ex) {
-                // default set should always be present as it is part of the
-                // distribution (JAR)
-                throw new RuntimeException("Unable to load default stopword set");
-            }
         }
     }
 

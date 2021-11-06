@@ -54,6 +54,7 @@ public class LanguageParser {
     private BooleanQuery query = null;    
     private String idNeed = null;
     private int iterator = 0;
+    private String needLeft = null;
 
     LanguageParser(String needsPath, String resultsPath) throws IOException, SAXException, ParserConfigurationException{
 
@@ -93,37 +94,37 @@ public class LanguageParser {
         }
     }
 
-    private void parsear(String line) throws ParseException, FileNotFoundException {
-        line = line.toLowerCase();
+    private void parsear(String n) throws ParseException, FileNotFoundException {
+        needLeft = n.toLowerCase().replaceAll("[?|¿|*]","");
 
         BooleanQuery.Builder queryFinal = new BooleanQuery.Builder(); // consulta final
 
-        BoostQuery description = new BoostQuery(new QueryParser("description", analyzer).parse(line), DESCRIPTION_WEIGHT);
-        BoostQuery title = new BoostQuery(new QueryParser("title", analyzer).parse(line), TITLE_WEIGHT);
-
-        BooleanQuery type = queryType(line);
+        BooleanQuery type = queryType(needLeft);
         if(type != null)
             queryFinal.add(type, BooleanClause.Occur.SHOULD);
 
-        BooleanQuery language = queryLanguage(line);
+        BooleanQuery language = queryLanguage(needLeft);
         if(language != null)
             queryFinal.add(language, BooleanClause.Occur.MUST);
 
-        BooleanQuery date = queryDate(line);
+        BooleanQuery date = queryDate(needLeft);
         if(date != null)
             queryFinal.add(date, BooleanClause.Occur.MUST);
 
-        BooleanQuery Publisher = queryPublisher(line);
+        BoostQuery description = new BoostQuery(new QueryParser("description", analyzer).parse(needLeft), DESCRIPTION_WEIGHT);
+        BoostQuery title = new BoostQuery(new QueryParser("title", analyzer).parse(needLeft), TITLE_WEIGHT);
+
+        BooleanQuery Publisher = queryPublisher(needLeft);
         if(Publisher != null)
             queryFinal.add(Publisher, BooleanClause.Occur.SHOULD);
 
-        BooleanQuery contributorsCreator = queryContributorsCreator(line);
+        BooleanQuery contributorsCreator = queryContributorsCreator(needLeft);
         if(contributorsCreator != null)
             queryFinal.add(contributorsCreator, BooleanClause.Occur.SHOULD);
+        
+        BoostQuery subject = new BoostQuery(new QueryParser("subject", analyzer).parse(needLeft), SUBJECT_WEIGHT);
 
-        BoostQuery subject = new BoostQuery(new QueryParser("subject", analyzer).parse(line), SUBJECT_WEIGHT);
-
-        queryFinal.add(description, BooleanClause.Occur.SHOULD);
+        queryFinal.add(description, BooleanClause.Occur.MUST);
         queryFinal.add(title, BooleanClause.Occur.SHOULD);
         queryFinal.add(subject, BooleanClause.Occur.SHOULD);
 
@@ -134,36 +135,36 @@ public class LanguageParser {
     /*
      *   Query for type field
      */
-    private BooleanQuery queryType(String line) throws ParseException {
+    private BooleanQuery queryType(String n) throws ParseException {
 
-        Pattern patTFG = Pattern.compile("trabajos? (de)?\\s*fin (de)?\\s*grado|TFGs?"),
-                patTFM = Pattern.compile("trabajos? (de)?\\s*fin (de)?\\s* m[a|á]ster|TFMs?"),
+        Pattern patTFG = Pattern.compile("(trabajos? (de)? (fin)? de grado)|(tfgs?)"),
+                patTFM = Pattern.compile("(trabajos? (de)? (fin)? de m[a|á]ster)|(tfms?)"),
                 patTESIS = Pattern.compile("tesis");
-        Matcher matTFG = patTFG.matcher(line),
-                matTFM = patTFM.matcher(line),
-                matTESIS = patTESIS.matcher(line);
+        Matcher matTFG = patTFG.matcher(needLeft),
+                matTFM = patTFM.matcher(needLeft),
+                matTESIS = patTESIS.matcher(needLeft);
 
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
         BoostQuery queryTypeTFG = null, 
                    queryTypeTFM = null,
                    queryTypeTESIS = null;
 
-        if(!matTFG.matches() && !matTFM.matches() && !matTESIS.matches()) return null;
+        if(!matTFG.find(0) && matTFM.find(0) && !matTESIS.find(0)) return null;
 
-        if(matTFG.find()){
-            queryTypeTFG = new BoostQuery(new QueryParser("type", analyzer).parse("TFG"), TYPE_WEIGHT);
+        if(matTFG.find(0)){
+            queryTypeTFG = new BoostQuery(new QueryParser("type", analyzer).parse("taztfg"), TYPE_WEIGHT);
             builder.add(queryTypeTFG, BooleanClause.Occur.SHOULD);
-            line = line.replace(matTFG.group(0), "");
+            needLeft = needLeft.replace(matTFG.group(0), "");
         }
-        if(matTFM.find()){
-            queryTypeTFM = new BoostQuery(new QueryParser("type", analyzer).parse("TFM"), TYPE_WEIGHT);
+        if(matTFM.find(0)){
+            queryTypeTFM = new BoostQuery(new QueryParser("type", analyzer).parse("taztfm"), TYPE_WEIGHT);
             builder.add(queryTypeTFM, BooleanClause.Occur.SHOULD);
-            line = line.replace(matTFM.group(0), "");
+            needLeft = needLeft.replace(matTFM.group(0), "");
         }
-        if(matTESIS.find()){
-            queryTypeTFM = new BoostQuery(new QueryParser("type", analyzer).parse("TESIS"), TYPE_WEIGHT);
+        if(matTESIS.find(0)){
+            queryTypeTFM = new BoostQuery(new QueryParser("type", analyzer).parse("tesis"), TYPE_WEIGHT);
             builder.add(queryTypeTESIS, BooleanClause.Occur.SHOULD);
-            line = line.replace(matTESIS.group(0), "");
+            needLeft = needLeft.replace(matTESIS.group(0), "");
         }
         
         return builder.build();
@@ -172,20 +173,20 @@ public class LanguageParser {
     /*
      *   Query for language field
      */
-    private BooleanQuery queryLanguage(String line) throws ParseException {
+    private BooleanQuery queryLanguage(String n) throws ParseException {
 
-        Pattern pat = Pattern.compile("(lenguaje ([a-z]*)) | en\\s[ingl[e|é]s|español]");
-        Matcher mat = pat.matcher(line);
+        Pattern pat = Pattern.compile("en (lenguaje)? (español)|(ingles)");
+        Matcher mat = pat.matcher(needLeft);
 
-        if (!mat.find()) return null;
+        if (!mat.find(0)) return null;
 
         BoostQuery queryLanguage = new BoostQuery(new QueryParser("language", analyzer)
-                .parse(mat.group(0).matches("espa.*") ? "spa" : "eng"), LANGUAGE_WEIGHT);
+                .parse(mat.group(0).contains("español") ? "spa" : "eng"), LANGUAGE_WEIGHT);
 
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
         builder.add(queryLanguage, BooleanClause.Occur.SHOULD);
 
-        line = line.replace(mat.group(0), "");
+        needLeft = needLeft.replace(mat.group(0), "");
 
         return builder.build();
     }
@@ -193,30 +194,30 @@ public class LanguageParser {
     /*
      *   Query for date field
      */
-    private BooleanQuery queryDate(String line) throws ParseException {
+    private BooleanQuery queryDate(String n) throws ParseException {
 
         Pattern pat1 = Pattern.compile("[ú|u]ltimos? \\d+ años?"),
                 pat2 = Pattern.compile("entre \\d{4} y \\d{4}"),
-                patAnyo = Pattern.compile("\\d{1,3}");
-        Matcher mat1 = pat1.matcher(line),
-                mat2 = pat2.matcher(line);
+                patAnyo = Pattern.compile("\\d{1,4}");
+        Matcher mat1 = pat1.matcher(needLeft),
+                mat2 = pat2.matcher(needLeft);
 
-        if(!mat1.matches() && !mat2.matches()) return null;
+        if(!mat1.find(0) && !mat2.find(0)) return null;
 
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
-        String dateLine = null;
+        String dateneedLeft = null;
         String[] date = new String[2];
-        if (mat1.find()) {
-            dateLine = mat1.group(0);
-            Matcher mat = patAnyo.matcher(dateLine);
+        if (mat1.find(0)) {
+            dateneedLeft = mat1.group(0);
+            Matcher mat = patAnyo.matcher(dateneedLeft);
             
             mat.find(); date[0] = Long.toString(CURRENT_YEAR - Long.parseLong(mat.group(0))); // begin
             date[1] = Long.toString(CURRENT_YEAR); // end
         }
-        else if (mat2.find()) {
-            dateLine = mat1.group(0);
-            Matcher mat = patAnyo.matcher(dateLine);
+        else if (mat2.find(0)) {
+            dateneedLeft = mat2.group(0);
+            Matcher mat = patAnyo.matcher(dateneedLeft);
             
             // Se asume que la fecha introducida inicial será menor que la final
             mat.find(); date[0] = mat.group(0);
@@ -238,7 +239,7 @@ public class LanguageParser {
 
         builder.add(rangeQuery, BooleanClause.Occur.SHOULD);
 
-        line.replace(dateLine, "");
+        needLeft.replace(dateneedLeft, "");
 
         return builder.build();
     }
@@ -246,25 +247,25 @@ public class LanguageParser {
     /*
      *   Query for Publisher field
      */
-    private BooleanQuery queryPublisher(String line) throws ParseException {
+    private BooleanQuery queryPublisher(String n) throws ParseException {
 
         Pattern patDEP = Pattern.compile("departamento?\\s*(de)?\\s*(.*?)(\\?|,|\\.|!|;)"),
                 patUNI = Pattern.compile("universidad\\sde\\s[^\\s]+");
-        Matcher matDEP = patDEP.matcher(line),
-                matUNI = patUNI.matcher(line);
+        Matcher matDEP = patDEP.matcher(needLeft),
+                matUNI = patUNI.matcher(needLeft);
 
-        if(!matDEP.matches() && !matUNI.matches()) return null;
+        if(!matDEP.find(0) && !matUNI.find(0)) return null;
 
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
         String publisher = null;
-        if (matDEP.find()) publisher = matDEP.group(0);
-        else if(matUNI.find()) publisher = matUNI.group(0);
+        if (matDEP.find(0)) publisher = matDEP.group(0);
+        else if(matUNI.find(0)) publisher = matUNI.group(0);
 
         BoostQuery queryLocation = new BoostQuery(new QueryParser("publisher", analyzer).parse(publisher), LOCATION_WEIGHT);
         builder.add(queryLocation, BooleanClause.Occur.SHOULD);
 
-        line = line.replace(publisher, "");
+        needLeft = needLeft.replace(publisher, "");
 
         return builder.build();
     }
@@ -272,27 +273,24 @@ public class LanguageParser {
     /*
      *   Query for contributor and creator field
      */
-    private BooleanQuery queryContributorsCreator(String line) throws ParseException {
-        String[] lineArray = line.split("");
+    private BooleanQuery queryContributorsCreator(String n) throws ParseException {
+        String[] lineArray = needLeft.split("");
 
         Span nameSpans[] = nameFinder.find(lineArray);
         BoostQuery queryCreator = null;
         BoostQuery queryContributor = null;
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
+        if(nameSpans.length <= 0) return null;
 
-        if(nameSpans.length > 0)
-        {
-            for (Span name: nameSpans) {
-                queryCreator = new BoostQuery(new QueryParser("creator", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
-                queryContributor = new BoostQuery(new QueryParser("contributor", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
-                builder.add(queryContributor, BooleanClause.Occur.SHOULD);
-                builder.add(queryCreator, BooleanClause.Occur.SHOULD);
-            }
-            return builder.build();
-        }else{
-            return null;
+        for (Span name: nameSpans) {
+            queryCreator = new BoostQuery(new QueryParser("creator", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
+            queryContributor = new BoostQuery(new QueryParser("contributor", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
+            builder.add(queryContributor, BooleanClause.Occur.SHOULD);
+            builder.add(queryCreator, BooleanClause.Occur.SHOULD);
         }
+
+        return builder.build();
     }
 
     public void writeResults(IndexSearcher searcher, ScoreDoc[] hits) throws IOException{
