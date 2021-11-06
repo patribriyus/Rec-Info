@@ -33,6 +33,7 @@ import org.xml.sax.SAXException;
 
 import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.TokenNameFinderModel;
+import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.util.Span;
 
 public class LanguageParser {
@@ -48,7 +49,7 @@ public class LanguageParser {
 
     private FileWriter fileWriter = null;
     private Analyzer analyzer = null;
-    NameFinderME nameFinder = null;
+    private NameFinderME nameFinder = null;
 
     private org.w3c.dom.Document docTree = null;
     private BooleanQuery query = null;    
@@ -58,7 +59,7 @@ public class LanguageParser {
 
     LanguageParser(String needsPath, String resultsPath) throws IOException, SAXException, ParserConfigurationException{
 
-        try (InputStream modelIn = new FileInputStream("es-ner-person.bin")){
+        try (InputStream modelIn = new FileInputStream("en-ner-person.bin")){
             TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
             this.nameFinder = new NameFinderME(model);
         } catch (IOException e) {
@@ -94,14 +95,14 @@ public class LanguageParser {
         }
     }
 
-    private void parsear(String n) throws ParseException, FileNotFoundException {
-        needLeft = n.toLowerCase().replaceAll("[?|¿|*]","");
+    private void parsear(String need) throws ParseException, FileNotFoundException {
+        needLeft = need.toLowerCase().replaceAll("[?|¿|*]","");
 
         BooleanQuery.Builder queryFinal = new BooleanQuery.Builder(); // consulta final
 
         BooleanQuery type = queryType(needLeft);
         if(type != null)
-            queryFinal.add(type, BooleanClause.Occur.SHOULD);
+            queryFinal.add(type, BooleanClause.Occur.MUST);
 
         BooleanQuery language = queryLanguage(needLeft);
         if(language != null)
@@ -120,7 +121,7 @@ public class LanguageParser {
 
         BooleanQuery contributorsCreator = queryContributorsCreator(needLeft);
         if(contributorsCreator != null)
-            queryFinal.add(contributorsCreator, BooleanClause.Occur.SHOULD);
+            queryFinal.add(contributorsCreator, BooleanClause.Occur.MUST);
         
         BoostQuery subject = new BoostQuery(new QueryParser("subject", analyzer).parse(needLeft), SUBJECT_WEIGHT);
 
@@ -149,7 +150,7 @@ public class LanguageParser {
                    queryTypeTFM = null,
                    queryTypeTESIS = null;
 
-        if(!matTFG.find(0) && matTFM.find(0) && !matTESIS.find(0)) return null;
+        if(!matTFG.find(0) && !matTFM.find(0) && !matTESIS.find(0)) return null;
 
         if(matTFG.find(0)){
             queryTypeTFG = new BoostQuery(new QueryParser("type", analyzer).parse("taztfg"), TYPE_WEIGHT);
@@ -277,17 +278,18 @@ public class LanguageParser {
         String[] lineArray = needLeft.split("");
 
         Span nameSpans[] = nameFinder.find(lineArray);
-        BoostQuery queryCreator = null;
-        BoostQuery queryContributor = null;
-        BooleanQuery.Builder builder = new BooleanQuery.Builder();
-
         if(nameSpans.length <= 0) return null;
 
+        BoostQuery queryCreator = null,
+                   queryContributor = null;
+        BooleanQuery.Builder builder = new BooleanQuery.Builder();
+
         for (Span name: nameSpans) {
+            String x = String.valueOf(name);
             queryCreator = new BoostQuery(new QueryParser("creator", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
             queryContributor = new BoostQuery(new QueryParser("contributor", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
-            builder.add(queryContributor, BooleanClause.Occur.SHOULD);
             builder.add(queryCreator, BooleanClause.Occur.SHOULD);
+            builder.add(queryContributor, BooleanClause.Occur.SHOULD);
         }
 
         return builder.build();
