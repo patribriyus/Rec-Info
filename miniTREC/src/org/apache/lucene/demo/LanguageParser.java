@@ -33,7 +33,6 @@ import org.xml.sax.SAXException;
 
 import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.TokenNameFinderModel;
-import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.util.Span;
 
 public class LanguageParser {
@@ -79,8 +78,9 @@ public class LanguageParser {
 
     public Boolean nextNeed() throws ParseException, IOException{
         if(docTree.getElementsByTagName("informationNeed").item(iterator) != null){
-            String need = docTree.getElementsByTagName("text").item(iterator).getTextContent();
-            parsear(need);
+            needLeft = docTree.getElementsByTagName("text").item(iterator).getTextContent()
+                        .toLowerCase().replaceAll("[?|¿|*]","");
+            parsear();
 
             setIdNeed(docTree.getElementsByTagName("identifier").item(iterator).getTextContent());
             iterator++;
@@ -95,31 +95,30 @@ public class LanguageParser {
         }
     }
 
-    private void parsear(String need) throws ParseException, FileNotFoundException {
-        needLeft = need.toLowerCase().replaceAll("[?|¿|*]","");
+    private void parsear() throws ParseException, FileNotFoundException {
 
         BooleanQuery.Builder queryFinal = new BooleanQuery.Builder(); // consulta final
 
-        BooleanQuery type = queryType(needLeft);
+        BooleanQuery type = queryType();
         if(type != null)
             queryFinal.add(type, BooleanClause.Occur.MUST);
 
-        BooleanQuery language = queryLanguage(needLeft);
+        BooleanQuery language = queryLanguage();
         if(language != null)
             queryFinal.add(language, BooleanClause.Occur.MUST);
 
-        BooleanQuery date = queryDate(needLeft);
+        BooleanQuery date = queryDate();
         if(date != null)
             queryFinal.add(date, BooleanClause.Occur.MUST);
 
         BoostQuery description = new BoostQuery(new QueryParser("description", analyzer).parse(needLeft), DESCRIPTION_WEIGHT);
         BoostQuery title = new BoostQuery(new QueryParser("title", analyzer).parse(needLeft), TITLE_WEIGHT);
 
-        BooleanQuery Publisher = queryPublisher(needLeft);
+        BooleanQuery Publisher = queryPublisher();
         if(Publisher != null)
             queryFinal.add(Publisher, BooleanClause.Occur.MUST);
 
-        BooleanQuery contributorsCreator = queryContributorsCreator(needLeft);
+        BooleanQuery contributorsCreator = queryContributorsCreator();
         if(contributorsCreator != null)
             queryFinal.add(contributorsCreator, BooleanClause.Occur.MUST);
         
@@ -136,7 +135,7 @@ public class LanguageParser {
     /*
      *   Query for type field
      */
-    private BooleanQuery queryType(String n) throws ParseException {
+    private BooleanQuery queryType() throws ParseException {
 
         Pattern patTFG = Pattern.compile("(trabajos? (de)? (fin)? de grado)|(tfgs?)"),
                 patTFM = Pattern.compile("(trabajos? (de)? (fin)? de m[a|á]ster)|(tfms?)"),
@@ -174,7 +173,7 @@ public class LanguageParser {
     /*
      *   Query for language field
      */
-    private BooleanQuery queryLanguage(String n) throws ParseException {
+    private BooleanQuery queryLanguage() throws ParseException {
 
         Pattern pat = Pattern.compile("en (lenguaje)? (español)|(ingles)");
         Matcher mat = pat.matcher(needLeft);
@@ -195,7 +194,7 @@ public class LanguageParser {
     /*
      *   Query for date field
      */
-    private BooleanQuery queryDate(String n) throws ParseException {
+    private BooleanQuery queryDate() throws ParseException {
 
         Pattern pat1 = Pattern.compile("[ú|u]ltimos? \\d+ años?"),
                 pat2 = Pattern.compile("entre \\d{4} y \\d{4}"),
@@ -248,7 +247,7 @@ public class LanguageParser {
     /*
      *   Query for Publisher field
      */
-    private BooleanQuery queryPublisher(String n) throws ParseException {
+    private BooleanQuery queryPublisher() throws ParseException {
 
         Pattern patDEP = Pattern.compile("departamento?\\s*(de)?\\s*(.*?)(\\?|,|\\.|!|;)"),
                 patUNI = Pattern.compile("universidad\\sde\\s[^\\s]+");
@@ -274,8 +273,8 @@ public class LanguageParser {
     /*
      *   Query for contributor and creator field
      */
-    private BooleanQuery queryContributorsCreator(String n) throws ParseException {
-        String[] lineArray = needLeft.split("");
+    private BooleanQuery queryContributorsCreator() throws ParseException {
+        String[] lineArray = needLeft.split(" ");
 
         Span nameSpans[] = nameFinder.find(lineArray);
         if(nameSpans.length <= 0) return null;
