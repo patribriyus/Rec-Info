@@ -119,16 +119,15 @@ public class LanguageParser {
         if(date != null)
             queryFinal.add(date, BooleanClause.Occur.MUST);
 
-        BoostQuery description = new BoostQuery(new QueryParser("description", analyzer).parse(needLeft), DESCRIPTION_WEIGHT);
-        BoostQuery title = new BoostQuery(new QueryParser("title", analyzer).parse(needLeft), TITLE_WEIGHT);
-
         BooleanQuery Publisher = queryPublisher();
         if(Publisher != null)
             queryFinal.add(Publisher, BooleanClause.Occur.MUST);
         
+        BoostQuery description = new BoostQuery(new QueryParser("description", analyzer).parse(needLeft), DESCRIPTION_WEIGHT);
+        BoostQuery title = new BoostQuery(new QueryParser("title", analyzer).parse(needLeft), TITLE_WEIGHT);
         BoostQuery subject = new BoostQuery(new QueryParser("subject", analyzer).parse(needLeft), SUBJECT_WEIGHT);
 
-        queryFinal.add(description, BooleanClause.Occur.SHOULD);
+        queryFinal.add(description, BooleanClause.Occur.MUST);
         queryFinal.add(title, BooleanClause.Occur.SHOULD);
         queryFinal.add(subject, BooleanClause.Occur.SHOULD);
 
