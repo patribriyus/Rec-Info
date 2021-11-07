@@ -33,6 +33,8 @@ import org.xml.sax.SAXException;
 
 import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.TokenNameFinderModel;
+import opennlp.tools.tokenize.SimpleTokenizer;
+import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.util.Span;
 
 public class LanguageParser {
@@ -58,7 +60,7 @@ public class LanguageParser {
 
     LanguageParser(String needsPath, String resultsPath) throws IOException, SAXException, ParserConfigurationException{
 
-        try (InputStream modelIn = new FileInputStream("en-ner-person.bin")){
+        try (InputStream modelIn = new FileInputStream("es-ner-person.bin")){
             TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
             this.nameFinder = new NameFinderME(model);
         } catch (IOException e) {
@@ -79,7 +81,7 @@ public class LanguageParser {
     public Boolean nextNeed() throws ParseException, IOException{
         if(docTree.getElementsByTagName("informationNeed").item(iterator) != null){
             needLeft = docTree.getElementsByTagName("text").item(iterator).getTextContent()
-                        .toLowerCase().replaceAll("[?|¿|*]","");
+                        .replaceAll("[?|¿|*]","");
             parsear();
 
             setIdNeed(docTree.getElementsByTagName("identifier").item(iterator).getTextContent());
@@ -99,6 +101,12 @@ public class LanguageParser {
 
         BooleanQuery.Builder queryFinal = new BooleanQuery.Builder(); // consulta final
 
+        BooleanQuery contributorsCreator = queryContributorsCreator();
+        if(contributorsCreator != null)
+            queryFinal.add(contributorsCreator, BooleanClause.Occur.SHOULD);
+
+        needLeft = needLeft.toLowerCase();
+
         BooleanQuery type = queryType();
         if(type != null)
             queryFinal.add(type, BooleanClause.Occur.MUST);
@@ -117,10 +125,6 @@ public class LanguageParser {
         BooleanQuery Publisher = queryPublisher();
         if(Publisher != null)
             queryFinal.add(Publisher, BooleanClause.Occur.MUST);
-
-        BooleanQuery contributorsCreator = queryContributorsCreator();
-        if(contributorsCreator != null)
-            queryFinal.add(contributorsCreator, BooleanClause.Occur.MUST);
         
         BoostQuery subject = new BoostQuery(new QueryParser("subject", analyzer).parse(needLeft), SUBJECT_WEIGHT);
 
@@ -274,20 +278,32 @@ public class LanguageParser {
      *   Query for contributor and creator field
      */
     private BooleanQuery queryContributorsCreator() throws ParseException {
-        String[] lineArray = needLeft.split(" ");
+        String[] lineArray = needLeft.split("\\s+");
 
         Span nameSpans[] = nameFinder.find(lineArray);
         if(nameSpans.length <= 0) return null;
-
+        
         BoostQuery queryCreator = null,
                    queryContributor = null;
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
-        for (Span name: nameSpans) {
-            queryCreator = new BoostQuery(new QueryParser("creator", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
-            queryContributor = new BoostQuery(new QueryParser("contributor", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
-            builder.add(queryCreator, BooleanClause.Occur.SHOULD);
-            builder.add(queryContributor, BooleanClause.Occur.SHOULD);
+        Tokenizer tokenizer = SimpleTokenizer.INSTANCE;
+        for (int si = 0; si < lineArray.length; si++) {
+            Span[] tokenSpans = tokenizer.tokenizePos(lineArray[si]);
+            String[] tokens = Span.spansToStrings(tokenSpans, lineArray[si]);
+            Span[] names = nameFinder.find(tokens);
+            for (int ni = 0; ni < names.length; ni++) {
+                Span startSpan = tokenSpans[names[ni].getStart()];
+                int nameStart = startSpan.getStart();
+                Span endSpan = tokenSpans[names[ni].getEnd() - 1];
+                int nameEnd = endSpan.getEnd();
+                String name = lineArray[si].substring(nameStart, nameEnd);
+
+                queryCreator = new BoostQuery(new QueryParser("creator", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
+                queryContributor = new BoostQuery(new QueryParser("contributor", analyzer).parse(String.valueOf(name)), CONTRIBUTOR_CREATOR_WEIGHT);
+                builder.add(queryCreator, BooleanClause.Occur.SHOULD);
+                builder.add(queryContributor, BooleanClause.Occur.SHOULD);
+            }
         }
 
         return builder.build();
