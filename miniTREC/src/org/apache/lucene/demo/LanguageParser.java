@@ -262,7 +262,7 @@ public class LanguageParser {
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
         String publisher = null;
-        if (matDEP.find(0)) publisher = matDEP.group(0);
+        if (matDEP.find(0)) publisher = matDEP.group(2);
         else if(matUNI.find(0)) publisher = matUNI.group(0);
 
         BoostQuery queryLocation = new BoostQuery(new QueryParser("publisher", analyzer).parse(publisher), LOCATION_WEIGHT);
