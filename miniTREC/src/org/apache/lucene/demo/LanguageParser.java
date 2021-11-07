@@ -280,8 +280,7 @@ public class LanguageParser {
     private BooleanQuery queryContributorsCreator() throws ParseException {
         String[] lineArray = needLeft.split("\\s+");
 
-        Span nameSpans[] = nameFinder.find(lineArray);
-        if(nameSpans.length <= 0) return null;
+        if(nameFinder.find(lineArray).length <= 0) return null;
         
         BoostQuery queryCreator = null,
                    queryContributor = null;
