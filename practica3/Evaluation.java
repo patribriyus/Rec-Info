@@ -15,9 +15,49 @@ import java.util.Map;
 
 public class Evaluation {
 
+    // <idNeed, <docId, relevancy>>
+    private static Map<Integer, HashMap<Integer, Integer>> judgments = null;
+    // <idNeed, docId[]>
+    private static Map<Integer, List<Integer>> results = null;
+
     private Evaluation() {}
 
     public static void main(String[] args) throws IOException {
+        checkInput(args);
+        
+        Double[] precision = new Double[judgments.size()],
+                  recall = new Double[judgments.size()],
+                  f1Balanceada = new Double[judgments.size()],
+                  precision10 = new Double[judgments.size()],
+                  average_precision = new Double[judgments.size()],
+                  recall_precision = new Double[judgments.size()],
+                  interpolated_recall_precision = new Double[judgments.size()];
+
+        for(var entry : judgments.entrySet()){
+            System.out.println("INFORMATION_NEED\t" + entry.getKey());
+            precision[entry.getKey()-1] = precision(entry.getKey());
+            recall[entry.getKey()-1] = recall(entry.getKey());
+            f1Balanceada[entry.getKey()-1] = f1Balanceada();
+            precision10[entry.getKey()-1] = precision10(entry.getKey());
+            average_precision[entry.getKey()-1] = average_precision();
+            recall_precision[entry.getKey()-1] = recall_precision();
+            interpolated_recall_precision[entry.getKey()-1] = interpolated_recall_precision();
+            
+            System.out.println(entry.getKey() + "/" + entry.getValue());
+        }
+
+        // Medidas globales
+
+        System.out.println("TOTAL");
+        precisionG();
+        recallG();
+        f1G();
+        precision10G();
+        MAPG();
+        interpolated_recall_precision();
+    }
+
+    private static void checkInput(String[] args) throws IOException {
         String usage = "Uso:\tjava Evaluation "
                  + "-qrels <qrelsFileName> "
                  + "-results <resultsFileName> "
@@ -54,46 +94,13 @@ public class Evaluation {
             System.exit(1);
         }
 
-        // <idNeed, <docId, relevancy>>
-        Map<Integer, HashMap<Integer, Integer>> judgments = processJudgments(qrelsFile);
-        // <idNeed, docId[]>
-        Map<Integer, List<Integer>> results = processResults(resultsFile);
-
-        Double[] precision = new Double[judgments.size()],
-                  recall = new Double[judgments.size()],
-                  f1Balanceada = new Double[judgments.size()],
-                  precision10 = new Double[judgments.size()],
-                  average_precision = new Double[judgments.size()],
-                  recall_precision = new Double[judgments.size()],
-                  interpolated_recall_precision = new Double[judgments.size()];
-
-        for(var entry : judgments.entrySet()){
-            System.out.println("INFORMATION_NEED\t" + entry.getKey());
-            precision[entry.getKey()-1] = precision(entry.getKey(), judgments, results);
-            recall[entry.getKey()-1] = recall(entry.getKey(), judgments, results);
-            f1Balanceada[entry.getKey()-1] = f1Balanceada();
-            precision10[entry.getKey()-1] = precision10(entry.getKey(), judgments, results);
-            average_precision[entry.getKey()-1] = average_precision();
-            recall_precision[entry.getKey()-1] = recall_precision();
-            interpolated_recall_precision[entry.getKey()-1] = interpolated_recall_precision();
-            
-            System.out.println(entry.getKey() + "/" + entry.getValue());
-        }
-
-        // Medidas globales
-
-        System.out.println("TOTAL");
-        precisionG();
-        recallG();
-        f1G();
-        precision10G();
-        MAPG();
-        interpolated_recall_precision();
+        processJudgments(qrelsFile);
+        processResults(resultsFile);
     }
 
-    private static Map<Integer, HashMap<Integer, Integer>> processJudgments(File qrelsPath) throws IOException{
+    private static void processJudgments(File qrelsPath) throws IOException{
         String[] line = new String[3];
-        Map<Integer, HashMap<Integer, Integer>> judgments = new HashMap<>();
+        judgments = new HashMap<>();
         HashMap<Integer, Integer> relevances = null;
 
         BufferedReader reader = new BufferedReader(new FileReader(qrelsPath));
@@ -110,12 +117,11 @@ public class Evaluation {
             }
         } catch (NullPointerException e) {}
         reader.close();
-        return judgments;
     }
 
-    private static Map<Integer, List<Integer>> processResults(File resultsPath) throws IOException{
+    private static void processResults(File resultsPath) throws IOException{
         String[] line = new String[2];
-        Map<Integer, List<Integer>> results = new HashMap<>();
+        results = new HashMap<>();
         List<Integer> docId = null;
 
         BufferedReader reader = new BufferedReader(new FileReader(resultsPath));
@@ -133,12 +139,11 @@ public class Evaluation {
             
         } catch (NullPointerException e) {}
         reader.close();
-        return results;
     }
 
     // Cálculos medidas de evaluación por necesidad
 
-    private static double precision(int idNeed, Map<Integer, HashMap<Integer, Integer>> judgments, Map<Integer, List<Integer>> results){
+    private static double precision(int idNeed){
         int tp = 0, fp = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
         List<Integer> sublist1 = results.get(idNeed);
@@ -156,7 +161,7 @@ public class Evaluation {
         return (double)tp / (tp + fp);
     }
 
-    private static double precision10(int idNeed, Map<Integer, HashMap<Integer, Integer>> judgments, Map<Integer, List<Integer>> results){
+    private static double precision10(int idNeed){
         int tp = 0, fp = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
         List<Integer> sublist1 = results.get(idNeed);
@@ -173,7 +178,7 @@ public class Evaluation {
         
         // fp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 0
         // si no aparece en 'judgments' su relevancy es 0
-        if(sublist2.size() < 10) return (double)tp / 10;
+        if(sublist1.size() < 10) return (double)tp / 10;
         else return (double)tp / (tp + fp);
     }
 
@@ -181,7 +186,7 @@ public class Evaluation {
         return 0.0;
     }
 
-    private static double recall(int idNeed, Map<Integer, HashMap<Integer, Integer>> judgments, Map<Integer, List<Integer>> results){
+    private static double recall(int idNeed){
         int tp = 0, fn = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
         List<Integer> sublist1 = results.get(idNeed);
