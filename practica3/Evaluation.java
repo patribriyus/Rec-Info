@@ -144,13 +144,14 @@ public class Evaluation {
         List<Integer> sublist1 = results.get(idNeed);
         HashMap<Integer, Integer> sublist2 = judgments.get(idNeed);
         for(var docId : sublist1){
-            if(sublist2.containsKey(docId)) tp += sublist2.get(docId);
+            if(sublist2.containsKey(docId)){
+                if(sublist2.get(docId)==1) tp ++;
+                else fp++;
+            }
         }
         
         // fp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 0
         // si no aparece en 'judgments' su relevancy es 0
-        
-        fp = sublist1.size() - tp; // TODO: revisar porque diría que no es así
 
         return (double)tp / (tp + fp);
     }
@@ -163,17 +164,17 @@ public class Evaluation {
         int i = 0;
         for(var docId : sublist1){
             if(i == 10) break;
-            if(sublist2.containsKey(docId)) tp += sublist2.get(docId);
+            if(sublist2.containsKey(docId)){
+                if(sublist2.get(docId)==1) tp ++;
+                else fp++;
+            }
             i++;
         }
         
         // fp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 0
         // si no aparece en 'judgments' su relevancy es 0
         if(sublist2.size() < 10) return (double)tp / 10;
-        else {
-            fp = 10 - tp; // TODO: revisar porque diría que no es así
-            return (double)tp / (tp + fp);
-        }
+        else return (double)tp / (tp + fp);
     }
 
     private static double average_precision(){
@@ -186,7 +187,7 @@ public class Evaluation {
         List<Integer> sublist1 = results.get(idNeed);
         HashMap<Integer, Integer> sublist2 = judgments.get(idNeed);
         for(var entry : sublist2.entrySet()){
-            if(entry.getValue()==1 && sublist1.contains(entry.getKey())) fn++;
+            if(entry.getValue()==1 && !sublist1.contains(entry.getKey())) fn++;
         }
                 
         fn = sublist1.size() - tp;// TODO: revisar porque diría que no es así
