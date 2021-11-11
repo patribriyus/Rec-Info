@@ -45,28 +45,28 @@ public class Evaluation {
         precision10 = new double[judgments.size()];
 
         for(var entry : judgments.entrySet()){
-            System.out.println("INFORMATION_NEED\t" + entry.getKey());
+            output.write("INFORMATION_NEED\t" + entry.getKey() + "\n");
             /*precision[entry.getKey()-1] = */ precision(entry.getKey());
             /*recall[entry.getKey()-1] = */ recall(entry.getKey());
             /*f1Balanceada[entry.getKey()-1] =*/ f1Balanceada();
-            output.write("prec@10\t" + precision10[entry.getKey()]);
+            output.write("prec@10\t" + precision10[entry.getKey()-1] + "\n");
             /*average_precision[entry.getKey()-1] =*/ average_precision(entry.getKey());
             output.write("recall_precision \n");
             /*recall_precision[entry.getKey()-1] =*/ recall_precision(entry.getKey());
             /*interpolated_recall_precision[entry.getKey()-1] =*/ interpolated_recall_precision();
-            
-            System.out.println(entry.getKey() + "/" + entry.getValue());
         }
 
         // Medidas globales
 
-        System.out.println("TOTAL");
+        output.write("TOTAL\n");
         precisionG();
         recallG();
         f1G();
         precision10G();
         MAPG();
         interpolated_recall_precision();
+
+        output.close();
     }
 
     private static void checkInput(String[] args) throws IOException {
@@ -161,16 +161,16 @@ public class Evaluation {
         int tp10 = 0; int fp10 = 0;
         int i = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
-        List<Integer> sublist1 = results.get(idNeed);
-        HashMap<Integer, Integer> sublist2 = judgments.get(idNeed);
-        for(var docId : sublist1){
-            if(sublist2.containsKey(docId)){
-                if(sublist2.get(docId)==1){
+        List<Integer> result = results.get(idNeed);
+        HashMap<Integer, Integer> qrels = judgments.get(idNeed);
+        for(var docId : result){
+            if(qrels.containsKey(docId)){
+                if(qrels.get(docId)==1){
                     tp[idNeed - 1] ++;
                     if(i < 10){
                         tp10++;
                     }
-                    precisionk.add((double) (tp[idNeed - 1]/fp[idNeed - 1]+tp[idNeed-1]));
+                    // precisionk.add((double) tp[idNeed - 1]/(fp[idNeed - 1]+tp[idNeed-1]));
                 }
                 else {
                     fp[idNeed - 1]++;
@@ -185,9 +185,9 @@ public class Evaluation {
         // fp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 0
         // si no aparece en 'judgments' su relevancy es 0
 
-        output.write("precision\t" + (double) tp[idNeed - 1] / (tp[idNeed - 1] + fp[idNeed - 1]));
+        output.write("precision\t" + (double) tp[idNeed - 1] / (tp[idNeed - 1] + fp[idNeed - 1]) + "\n");
 
-        if(sublist1.size() < 10) precision10[idNeed-1] = (double)tp10 / 10;
+        if(result.size() < 10) precision10[idNeed-1] = (double)tp10 / 10;
         else  precision10[idNeed-1] =  (double)tp10 / (tp10 + fp10);
     }
 
@@ -219,7 +219,7 @@ public class Evaluation {
         for(var entry : sublist2.entrySet()){
             if(entry.getValue()==1 && !sublist1.contains(entry.getKey())) fn[idNeed - 1]++;
         }
-        output.write("recall\t" + (double)tp[idNeed - 1] / (tp[idNeed - 1] + fn[idNeed - 1]));
+        output.write("recall\t" + (double)tp[idNeed - 1] / (tp[idNeed - 1] + fn[idNeed - 1]) + "\n");
     }
 
     private static void recall_precision(int idNeed) throws IOException {
@@ -239,7 +239,7 @@ public class Evaluation {
             if(qrels.containsKey(documentoDevuelto)){
                 if(qrels.get(documentoDevuelto)==1){
                     tp++;
-                    output.write(tp/totalDocRelevantes + "\t" + tp/tp+fp + "\n");
+                    output.write((double)tp/totalDocRelevantes + "\t" + (double)tp/(tp+fp) + "\n");
                 }else{
                     fp++;
                 }
