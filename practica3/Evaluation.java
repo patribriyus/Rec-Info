@@ -22,9 +22,25 @@ public class Evaluation {
 
     private static int fn[] = null;
 
+    private static double precision[] = null;
+
+    private static double recall[] = null;
+
     private static double precision10[] = null;
 
+    private static double f1[] = null;
+
     private static LinkedList<Double> precisionk = null;
+
+    private static int tpG = 0;
+
+    private static int fpG = 0;
+
+    private static int fnG = 0;
+
+    private static double precisionG = 0.0;
+
+    private static double precision10G = 0.0;
 
 
     private Evaluation() {}
@@ -43,17 +59,20 @@ public class Evaluation {
         fp = new int[judgments.size()];
         fn = new int[judgments.size()];
         precision10 = new double[judgments.size()];
+        precision = new double[judgments.size()];
+        recall = new double[judgments.size()];
+        f1 = new double[judgments.size()];
 
         for(var entry : judgments.entrySet()){
             output.write("INFORMATION_NEED\t" + entry.getKey() + "\n");
             /*precision[entry.getKey()-1] = */ precision(entry.getKey());
             /*recall[entry.getKey()-1] = */ recall(entry.getKey());
-            /*f1Balanceada[entry.getKey()-1] =*/ f1Balanceada();
+            /*f1Balanceada[entry.getKey()-1] =*/ f1Balanceada(entry.getKey());
             output.write("prec@10\t" + precision10[entry.getKey()-1] + "\n");
             /*average_precision[entry.getKey()-1] =*/ average_precision(entry.getKey());
             output.write("recall_precision \n");
             /*recall_precision[entry.getKey()-1] =*/ recall_precision(entry.getKey());
-            /*interpolated_recall_precision[entry.getKey()-1] =*/ interpolated_recall_precision();
+            /*interpolated_recall_precision[entry.getKey()-1] =*/ interpolated_recall_precision(entry.getKey());
         }
 
         // Medidas globales
@@ -64,7 +83,7 @@ public class Evaluation {
         f1G();
         precision10G();
         MAPG();
-        interpolated_recall_precision();
+        interpolated_recall_precisionG();
 
         output.close();
     }
@@ -185,7 +204,8 @@ public class Evaluation {
         // fp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 0
         // si no aparece en 'judgments' su relevancy es 0
 
-        output.write("precision\t" + (double) tp[idNeed - 1] / (tp[idNeed - 1] + fp[idNeed - 1]) + "\n");
+        precision[idNeed - 1] = (double) tp[idNeed - 1] / (tp[idNeed - 1] + fp[idNeed - 1]);
+        output.write("precision\t" + precision[idNeed - 1] + "\n");
 
         if(result.size() < 10) precision10[idNeed-1] = (double)tp10 / 10;
         else  precision10[idNeed-1] =  (double)tp10 / (tp10 + fp10);
@@ -214,12 +234,14 @@ public class Evaluation {
         //int tp = 0, fn = 0;
         fn[idNeed - 1] = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
-        List<Integer> sublist1 = results.get(idNeed);
-        HashMap<Integer, Integer> sublist2 = judgments.get(idNeed);
-        for(var entry : sublist2.entrySet()){
-            if(entry.getValue()==1 && !sublist1.contains(entry.getKey())) fn[idNeed - 1]++;
+        List<Integer> result = results.get(idNeed);
+        HashMap<Integer, Integer> qrels = judgments.get(idNeed);
+        for(var entry : qrels.entrySet()){
+            if(entry.getValue()==1 && !result.contains(entry.getKey())) fn[idNeed - 1]++;
         }
-        output.write("recall\t" + (double)tp[idNeed - 1] / (tp[idNeed - 1] + fn[idNeed - 1]) + "\n");
+
+        recall[idNeed - 1] = (double)tp[idNeed - 1] / (tp[idNeed - 1] + fn[idNeed - 1]);
+        output.write("recall\t" + recall[idNeed - 1] + "\n");
     }
 
     private static void recall_precision(int idNeed) throws IOException {
@@ -246,37 +268,143 @@ public class Evaluation {
             }
 
         }
-
     }
 
-    private static double interpolated_recall_precision(){
-        return 0.0;
+    private static void interpolated_recall_precision(int idNeed) throws IOException{
+        int tp = 0, fp = 0;
+        //recorremos qrels hasta que encontremos el total de documentos relevantes
+        List<Integer> result = results.get(idNeed);
+        HashMap<Integer, Integer> qrels = judgments.get(idNeed);
+        int totalDocRelevantes = 0;
+
+        for(var entry : qrels.entrySet()) {
+            if (entry.getValue() == 1) {
+                totalDocRelevantes++;
+            }
+        }
+
+        List<Double> precisionIRP = new ArrayList<>();
+        List<Double> recallIRP = new ArrayList<>();
+        //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
+        for(var documentoDevuelto : result){
+            if(qrels.containsKey(documentoDevuelto)){
+                if(qrels.get(documentoDevuelto)==1){
+                    tp++;
+                    precisionIRP.add((double)tp/(tp+fp));
+                    recallIRP.add((double)tp/totalDocRelevantes);
+                }else{
+                    fp++;
+                }
+            }
+        }
+
+        output.write("interpolated_recall_precision\n");
+
+        for(double recall = 0.0; recall <= 1.0; recall+=0.1){
+            int index = -1; // índice del valor de recall más cercano a rec
+            for(Double valor : recallIRP){
+                if(valor >= recall) {
+                    index = recallIRP.indexOf(valor);
+                    break;
+                }
+            }
+
+            double interpolated_precision = 0.0;
+            if(index == -1) interpolated_precision = 0.0;
+            else interpolated_precision = Collections.max(precisionIRP.subList(index, precisionIRP.size()), null);
+            output.write(recall + "\t" + interpolated_precision + "\n");
+        }
     }
 
-    private static double f1Balanceada(){
-        return 0.0;
+    private static void f1Balanceada(int idNeed) throws IOException{
+        f1[idNeed - 1] = (2*precision[idNeed - 1]*recall[idNeed - 1]) / (precision[idNeed - 1]+recall[idNeed - 1]);
+        output.write("F1\t" + f1[idNeed - 1] + "\n");
     }
 
     // Medidas globales
 
-    private static double precisionG(){
-        return 0.0;
+    private static void precisionG() throws IOException{
+        double precisionTotal = 0.0;
+        for(int i=0; i<judgments.size(); i++){
+            precisionTotal += precision[i];
+        }
+        output.write("precision\t" + precisionTotal/judgments.size() + "\n");
     }
 
-    private static double recallG(){
-        return 0.0;
+    private static void recallG() throws IOException{
+        double recallTotal = 0.0;
+        for(int i=0; i<judgments.size(); i++){
+            recallTotal += recall[i];
+        }
+        output.write("recall\t" + recallTotal/judgments.size() + "\n");
     }
 
-    private static double f1G(){
-        return 0.0;
+    private static void f1G() throws IOException{
+        double f1Total = 0.0;
+        for(int i=0; i<judgments.size(); i++){
+            f1Total += f1[i];
+        }
+        output.write("F1\t" + f1Total/judgments.size() + "\n");
     }
 
     private static double precision10G(){
         return 0.0;
     }
 
-    private static double MAPG(){
-        return 0.0;
+    private static void MAPG() throws IOException{
+        double precisionk = 0.0;
+
+        for(int i=1; i<=judgments.size(); i++){
+            precisionk += average_precision(i);
+        }
+
+        double MAP = precisionk / 2.0;
+        output.write("MAP\t" + MAP + "\n");
     }
 
+    private static void interpolated_recall_precisionG(){
+        int tp = 0, fp = 0;
+        //recorremos qrels hasta que encontremos el total de documentos relevantes
+        List<Integer> result = results.get(idNeed);
+        HashMap<Integer, Integer> qrels = judgments.get(idNeed);
+        int totalDocRelevantes = 0;
+
+        for(var entry : qrels.entrySet()) {
+            if (entry.getValue() == 1) {
+                totalDocRelevantes++;
+            }
+        }
+
+        List<Double> precisionIRP = new ArrayList<>();
+        List<Double> recallIRP = new ArrayList<>();
+        //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
+        for(var documentoDevuelto : result){
+            if(qrels.containsKey(documentoDevuelto)){
+                if(qrels.get(documentoDevuelto)==1){
+                    tp++;
+                    precisionIRP.add((double)tp/(tp+fp));
+                    recallIRP.add((double)tp/totalDocRelevantes);
+                }else{
+                    fp++;
+                }
+            }
+        }
+
+        output.write("interpolated_recall_precision\n");
+
+        for(double recall = 0.0; recall <= 1.0; recall+=0.1){
+            int index = -1; // índice del valor de recall más cercano a rec
+            for(Double valor : recallIRP){
+                if(valor >= recall) {
+                    index = recallIRP.indexOf(valor);
+                    break;
+                }
+            }
+
+            double interpolated_precision = 0.0;
+            if(index == -1) interpolated_precision = 0.0;
+            else interpolated_precision = Collections.max(precisionIRP.subList(index, precisionIRP.size()), null);
+            output.write(recall + "\t" + interpolated_precision + "\n");
+        }
+    }
 }
