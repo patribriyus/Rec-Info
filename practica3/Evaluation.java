@@ -63,7 +63,7 @@ public class Evaluation {
         recall = new double[judgments.size()];
         f1 = new double[judgments.size()];
 
-        for(var entry : judgments.entrySet()){
+        for(Map.Entry<Integer, HashMap<Integer, Integer>> entry : judgments.entrySet()){
             output.write("INFORMATION_NEED\t" + entry.getKey() + "\n");
             /*precision[entry.getKey()-1] = */ precision(entry.getKey());
             /*recall[entry.getKey()-1] = */ recall(entry.getKey());
@@ -182,7 +182,7 @@ public class Evaluation {
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
         List<Integer> result = results.get(idNeed);
         HashMap<Integer, Integer> qrels = judgments.get(idNeed);
-        for(var docId : result){
+        for(Integer docId : result){
             if(qrels.containsKey(docId)){
                 if(qrels.get(docId)==1){
                     tp[idNeed - 1] ++;
@@ -217,7 +217,7 @@ public class Evaluation {
         List<Integer> sublist1 = results.get(idNeed);
         HashMap<Integer, Integer> sublist2 = judgments.get(idNeed);
         double total_precision = 0;
-        for(var docId : sublist1){
+        for(Integer docId : sublist1){
             if(sublist2.containsKey(docId)){
                 if(sublist2.get(docId)==1) {
                     tp++;
@@ -236,7 +236,7 @@ public class Evaluation {
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
         List<Integer> result = results.get(idNeed);
         HashMap<Integer, Integer> qrels = judgments.get(idNeed);
-        for(var entry : qrels.entrySet()){
+        for(Map.Entry<Integer, Integer> entry : qrels.entrySet()){
             if(entry.getValue()==1 && !result.contains(entry.getKey())) fn[idNeed - 1]++;
         }
 
@@ -251,13 +251,13 @@ public class Evaluation {
         HashMap<Integer, Integer> qrels = judgments.get(idNeed);
         int totalDocRelevantes = 0;
 
-        for(var entry : qrels.entrySet()) {
+        for(Map.Entry<Integer, Integer> entry : qrels.entrySet()) {
             if (entry.getValue() == 1) {
                 totalDocRelevantes++;
             }
         }
         //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
-        for(var documentoDevuelto : result){
+        for(Integer documentoDevuelto : result){
             if(qrels.containsKey(documentoDevuelto)){
                 if(qrels.get(documentoDevuelto)==1){
                     tp++;
@@ -277,7 +277,7 @@ public class Evaluation {
         HashMap<Integer, Integer> qrels = judgments.get(idNeed);
         int totalDocRelevantes = 0;
 
-        for(var entry : qrels.entrySet()) {
+        for(Map.Entry<Integer, Integer> entry : qrels.entrySet()) {
             if (entry.getValue() == 1) {
                 totalDocRelevantes++;
             }
@@ -286,7 +286,7 @@ public class Evaluation {
         List<Double> precisionIRP = new ArrayList<>();
         List<Double> recallIRP = new ArrayList<>();
         //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
-        for(var documentoDevuelto : result){
+        for(Integer documentoDevuelto : result){
             if(qrels.containsKey(documentoDevuelto)){
                 if(qrels.get(documentoDevuelto)==1){
                     tp++;
@@ -362,14 +362,20 @@ public class Evaluation {
         output.write("MAP\t" + MAP + "\n");
     }
 
-    private static void interpolated_recall_precisionG(){
+    private static void interpolated_recall_precisionG() throws IOException {
         int tp = 0, fp = 0;
         //recorremos qrels hasta que encontremos el total de documentos relevantes
-        List<Integer> result = results.get(idNeed);
-        HashMap<Integer, Integer> qrels = judgments.get(idNeed);
+        List<Integer> result = results.get(1);
+        HashMap<Integer, Integer> qrels = judgments.get(1);
         int totalDocRelevantes = 0;
 
-        for(var entry : qrels.entrySet()) {
+        for(Map.Entry<Integer, Integer> entry : qrels.entrySet()) {
+            if (entry.getValue() == 1) {
+                totalDocRelevantes++;
+            }
+        }
+
+        for(Map.Entry<Integer, Integer> entry : judgments.get(2).entrySet()) {
             if (entry.getValue() == 1) {
                 totalDocRelevantes++;
             }
@@ -378,7 +384,21 @@ public class Evaluation {
         List<Double> precisionIRP = new ArrayList<>();
         List<Double> recallIRP = new ArrayList<>();
         //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
-        for(var documentoDevuelto : result){
+        for(Integer documentoDevuelto : result){
+            if(qrels.containsKey(documentoDevuelto)){
+                if(qrels.get(documentoDevuelto)==1){
+                    tp++;
+                    precisionIRP.add((double)tp/(tp+fp));
+                    recallIRP.add((double)tp/totalDocRelevantes);
+                }else{
+                    fp++;
+                }
+            }
+        }
+        result = results.get(2);
+        qrels = judgments.get(2);
+        //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
+        for(Integer documentoDevuelto : result){
             if(qrels.containsKey(documentoDevuelto)){
                 if(qrels.get(documentoDevuelto)==1){
                     tp++;
