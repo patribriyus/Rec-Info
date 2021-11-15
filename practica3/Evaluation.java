@@ -195,12 +195,12 @@ public class Evaluation {
     private static double average_precision(int idNeed){
         int tp = 0, fp = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
-        List<String> sublist1 = results.get(idNeed);
-        HashMap<String, Integer> sublist2 = judgments.get(idNeed);
+        List<String> result = results.get(idNeed);
+        HashMap<String, Integer> qrels = judgments.get(idNeed);
         double total_precision = 0;
-        for(String docId : sublist1){
-            if(sublist2.containsKey(docId)){
-                if(sublist2.get(docId)==1) {
+        for(String docId : result){
+            if(qrels.containsKey(docId)){
+                if(qrels.get(docId)==1) {
                     tp++;
                     total_precision += (double)tp / (tp + fp);
                 }
@@ -411,7 +411,7 @@ public class Evaluation {
         }
     }
 
-    static double round(double value){
+    private static double round(double value){
         return (double)Math.round(value * 1000d) / 1000d;
     }
 }
