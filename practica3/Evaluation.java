@@ -30,6 +30,8 @@ public class Evaluation {
 
     private static double f1[] = null;
 
+    private static double interpolated[][] = null;
+
 
     private Evaluation() {}
 
@@ -43,6 +45,7 @@ public class Evaluation {
         precision = new double[judgments.size()];
         recall = new double[judgments.size()];
         f1 = new double[judgments.size()];
+        interpolated = new double[judgments.size()][11];
 
         for(Map.Entry<Integer, HashMap<String, Integer>> entry : judgments.entrySet()){
             output.write("INFORMATION_NEED\t" + entry.getKey() + "\n");
@@ -283,6 +286,7 @@ public class Evaluation {
 
         output.write("interpolated_recall_precision\n");
 
+        int x = 0;
         for(double recall = 0.0; recall <= 1.0; recall+=0.1){
             int index = -1; // índice del valor de recall más cercano a rec
             for(Double valor : recallIRP){
@@ -296,6 +300,8 @@ public class Evaluation {
             if(index == -1) interpolated_precision = 0.0;
             else interpolated_precision = Collections.max(precisionIRP.subList(index, precisionIRP.size()), null);
             output.write(round(recall) + "\t" + round(interpolated_precision) + "\n");
+            interpolated[idNeed-1][x] = interpolated_precision;
+            x++;
         }
     }
 
@@ -330,8 +336,12 @@ public class Evaluation {
         output.write("F1\t" + round(f1Total/judgments.size()) + "\n");
     }
 
-    private static double precision10G(){
-        return 0.0;
+    private static void precision10G() throws IOException{
+        double precisionTotal = 0.0;
+        for(int i=0; i<judgments.size(); i++){
+            precisionTotal += precision10[i];
+        }
+        output.write("prec@10\t" + round(precisionTotal/judgments.size()) + "\n");
     }
 
     private static void MAPG() throws IOException{
@@ -346,68 +356,15 @@ public class Evaluation {
     }
 
     private static void interpolated_recall_precisionG() throws IOException {
-        int tp = 0, fp = 0;
-        //recorremos qrels hasta que encontremos el total de documentos relevantes
-        List<String> result = results.get(1);
-        HashMap<String, Integer> qrels = judgments.get(1);
-        int totalDocRelevantes = 0;
-
-        for(Map.Entry<String, Integer> entry : qrels.entrySet()) {
-            if (entry.getValue() == 1) {
-                totalDocRelevantes++;
-            }
-        }
-
-        for(Map.Entry<String, Integer> entry : judgments.get(2).entrySet()) {
-            if (entry.getValue() == 1) {
-                totalDocRelevantes++;
-            }
-        }
-
-        List<Double> precisionIRP = new ArrayList<>();
-        List<Double> recallIRP = new ArrayList<>();
-        //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
-        for(String documentoDevuelto : result){
-            if(qrels.containsKey(documentoDevuelto)){
-                if(qrels.get(documentoDevuelto)==1){
-                    tp++;
-                    precisionIRP.add((double)tp/(tp+fp));
-                    recallIRP.add((double)tp/totalDocRelevantes);
-                }else{
-                    fp++;
-                }
-            }
-        }
-        result = results.get(2);
-        qrels = judgments.get(2);
-        //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
-        for(String documentoDevuelto : result){
-            if(qrels.containsKey(documentoDevuelto)){
-                if(qrels.get(documentoDevuelto)==1){
-                    tp++;
-                    precisionIRP.add((double)tp/(tp+fp));
-                    recallIRP.add((double)tp/totalDocRelevantes);
-                }else{
-                    fp++;
-                }
-            }
-        }
-
         output.write("interpolated_recall_precision\n");
-
-        for(double recall = 0.0; recall <= 1.0; recall+=0.1){
-            int index = -1; // índice del valor de recall más cercano a rec
-            for(Double valor : recallIRP){
-                if(valor >= recall) {
-                    index = recallIRP.indexOf(valor);
-                    break;
-                }
+        int x = 0;
+        for(double recall=0.0; recall<=1.0; recall+=0.1){
+            double interpolatedTotal = 0.0;
+            for(int i=0; i<judgments.size(); i++){
+                interpolatedTotal += interpolated[i][x];
             }
-
-            double interpolated_precision = 0.0;
-            if(index == -1) interpolated_precision = 0.0;
-            else interpolated_precision = Collections.max(precisionIRP.subList(index, precisionIRP.size()), null);
-            output.write(round(recall) + "\t" + round(interpolated_precision) + "\n");
+            output.write(round(recall) + "\t" + round(interpolatedTotal/judgments.size()) + "\n");
+            x++;
         }
     }
 
