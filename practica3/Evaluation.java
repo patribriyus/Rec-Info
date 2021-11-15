@@ -32,10 +32,12 @@ public class Evaluation {
 
     private static double interpolated[][] = null;
 
+    private static double interpolatedGlobal[] = null;
+
 
     private Evaluation() {}
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         checkInput(args);
 
         tp = new int[judgments.size()];
@@ -46,6 +48,7 @@ public class Evaluation {
         recall = new double[judgments.size()];
         f1 = new double[judgments.size()];
         interpolated = new double[judgments.size()][11];
+        interpolatedGlobal = new double[11];
 
         for(Map.Entry<Integer, HashMap<String, Integer>> entry : judgments.entrySet()){
             output.write("INFORMATION_NEED\t" + entry.getKey() + "\n");
@@ -70,6 +73,10 @@ public class Evaluation {
         interpolated_recall_precisionG();
 
         output.close();
+
+        Graphic graphic = new Graphic();
+        graphic.precision_recall(interpolated, interpolatedGlobal, judgments.size());
+        graphic.graficoBarras(precision, recall, f1, judgments.size());
     }
 
     private static void checkInput(String[] args) throws IOException {
@@ -363,7 +370,8 @@ public class Evaluation {
             for(int i=0; i<judgments.size(); i++){
                 interpolatedTotal += interpolated[i][x];
             }
-            output.write(round(recall) + "\t" + round(interpolatedTotal/judgments.size()) + "\n");
+            interpolatedGlobal[x] = round(interpolatedTotal/judgments.size());
+            output.write(round(recall) + "\t" + interpolatedGlobal[x] + "\n");
             x++;
         }
     }
