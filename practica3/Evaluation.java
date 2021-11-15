@@ -10,9 +10,9 @@ import java.util.*;
 public class Evaluation {
 
     // <idNeed, <docId, relevancy>>
-    private static Map<Integer, HashMap<Integer, Integer>> judgments = null;
+    private static Map<Integer, HashMap<String, Integer>> judgments = null;
     // <idNeed, docId[]>
-    private static Map<Integer, List<Integer>> results = null;
+    private static Map<Integer, List<String>> results = null;
 
     private static FileWriter output = null;
 
@@ -30,31 +30,12 @@ public class Evaluation {
 
     private static double f1[] = null;
 
-    private static LinkedList<Double> precisionk = null;
-
-    private static int tpG = 0;
-
-    private static int fpG = 0;
-
-    private static int fnG = 0;
-
-    private static double precisionG = 0.0;
-
-    private static double precision10G = 0.0;
-
 
     private Evaluation() {}
 
     public static void main(String[] args) throws IOException {
         checkInput(args);
-        
-        /*Double[] precision = new Double[judgments.size()],
-                  recall = new Double[judgments.size()],
-                  f1Balanceada = new Double[judgments.size()],
-                  precision10 = new Double[judgments.size()],
-                  average_precision = new Double[judgments.size()],
-                  recall_precision = new Double[judgments.size()],
-                  interpolated_recall_precision = new Double[judgments.size()];*/
+
         tp = new int[judgments.size()];
         fp = new int[judgments.size()];
         fn = new int[judgments.size()];
@@ -63,16 +44,16 @@ public class Evaluation {
         recall = new double[judgments.size()];
         f1 = new double[judgments.size()];
 
-        for(Map.Entry<Integer, HashMap<Integer, Integer>> entry : judgments.entrySet()){
+        for(Map.Entry<Integer, HashMap<String, Integer>> entry : judgments.entrySet()){
             output.write("INFORMATION_NEED\t" + entry.getKey() + "\n");
-            /*precision[entry.getKey()-1] = */ precision(entry.getKey());
-            /*recall[entry.getKey()-1] = */ recall(entry.getKey());
-            /*f1Balanceada[entry.getKey()-1] =*/ f1Balanceada(entry.getKey());
+            precision(entry.getKey());
+            recall(entry.getKey());
+            f1Balanceada(entry.getKey());
             output.write("prec@10\t" + precision10[entry.getKey()-1] + "\n");
-            /*average_precision[entry.getKey()-1] =*/ average_precision(entry.getKey());
-            output.write("recall_precision \n");
-            /*recall_precision[entry.getKey()-1] =*/ recall_precision(entry.getKey());
-            /*interpolated_recall_precision[entry.getKey()-1] =*/ interpolated_recall_precision(entry.getKey());
+            average_precision(entry.getKey());            
+            recall_precision(entry.getKey());
+            interpolated_recall_precision(entry.getKey());
+            output.write("\n");
         }
 
         // Medidas globales
@@ -133,7 +114,7 @@ public class Evaluation {
     private static void processJudgments(File qrelsPath) throws IOException{
         String[] line = new String[3];
         judgments = new HashMap<>();
-        HashMap<Integer, Integer> relevances = null;
+        HashMap<String, Integer> relevances = null;
 
         BufferedReader reader = new BufferedReader(new FileReader(qrelsPath));
         try {
@@ -143,7 +124,7 @@ public class Evaluation {
                 }
                 
                 // añadir a sublista hashmap docId y relevancia
-                relevances.put(Integer.parseInt(line[1]), Integer.parseInt(line[2]));
+                relevances.put(line[1], Integer.parseInt(line[2]));
                 // añadir sublista hashmap al map de la necesidad idNeed
                 judgments.put(Integer.parseInt(line[0]), relevances);
             }
@@ -154,7 +135,7 @@ public class Evaluation {
     private static void processResults(File resultsPath) throws IOException{
         String[] line = new String[2];
         results = new HashMap<>();
-        List<Integer> docId = null;
+        List<String> docId = null;
 
         BufferedReader reader = new BufferedReader(new FileReader(resultsPath));
         try {
@@ -164,7 +145,7 @@ public class Evaluation {
                 }
 
                 // añadir a sublista List el docId
-                docId.add(Integer.parseInt(line[1]));
+                docId.add(line[1]);
                 // añadir sublista List al map de la necesidad idNeed
                 results.put(Integer.parseInt(line[0]), docId);
             }
@@ -180,9 +161,9 @@ public class Evaluation {
         int tp10 = 0; int fp10 = 0;
         int i = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
-        List<Integer> result = results.get(idNeed);
-        HashMap<Integer, Integer> qrels = judgments.get(idNeed);
-        for(Integer docId : result){
+        List<String> result = results.get(idNeed);
+        HashMap<String, Integer> qrels = judgments.get(idNeed);
+        for(String docId : result){
             if(qrels.containsKey(docId)){
                 if(qrels.get(docId)==1){
                     tp[idNeed - 1] ++;
@@ -202,10 +183,10 @@ public class Evaluation {
         }
         
         // fp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 0
-        // si no aparece en 'judgments' su relevancy es 0
+        // si no aparece en 'judgments' su relevancy es 0        
 
         precision[idNeed - 1] = (double) tp[idNeed - 1] / (tp[idNeed - 1] + fp[idNeed - 1]);
-        output.write("precision\t" + precision[idNeed - 1] + "\n");
+        output.write("precision\t" + round(precision[idNeed - 1]) + "\n");
 
         if(result.size() < 10) precision10[idNeed-1] = (double)tp10 / 10;
         else  precision10[idNeed-1] =  (double)tp10 / (tp10 + fp10);
@@ -214,10 +195,10 @@ public class Evaluation {
     private static double average_precision(int idNeed){
         int tp = 0, fp = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
-        List<Integer> sublist1 = results.get(idNeed);
-        HashMap<Integer, Integer> sublist2 = judgments.get(idNeed);
+        List<String> sublist1 = results.get(idNeed);
+        HashMap<String, Integer> sublist2 = judgments.get(idNeed);
         double total_precision = 0;
-        for(Integer docId : sublist1){
+        for(String docId : sublist1){
             if(sublist2.containsKey(docId)){
                 if(sublist2.get(docId)==1) {
                     tp++;
@@ -234,34 +215,36 @@ public class Evaluation {
         //int tp = 0, fn = 0;
         fn[idNeed - 1] = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
-        List<Integer> result = results.get(idNeed);
-        HashMap<Integer, Integer> qrels = judgments.get(idNeed);
-        for(Map.Entry<Integer, Integer> entry : qrels.entrySet()){
+        List<String> result = results.get(idNeed);
+        HashMap<String, Integer> qrels = judgments.get(idNeed);
+        for(Map.Entry<String, Integer> entry : qrels.entrySet()){
             if(entry.getValue()==1 && !result.contains(entry.getKey())) fn[idNeed - 1]++;
         }
 
         recall[idNeed - 1] = (double)tp[idNeed - 1] / (tp[idNeed - 1] + fn[idNeed - 1]);
-        output.write("recall\t" + recall[idNeed - 1] + "\n");
+        output.write("recall\t" + round(recall[idNeed - 1]) + "\n");
     }
 
     private static void recall_precision(int idNeed) throws IOException {
+        output.write("recall_precision \n");
         int tp = 0, fp = 0;
         //recorremos qrels hasta que encontremos el total de documentos relevantes
-        List<Integer> result = results.get(idNeed);
-        HashMap<Integer, Integer> qrels = judgments.get(idNeed);
+        List<String> result = results.get(idNeed);
+        HashMap<String, Integer> qrels = judgments.get(idNeed);
         int totalDocRelevantes = 0;
 
-        for(Map.Entry<Integer, Integer> entry : qrels.entrySet()) {
+        for(Map.Entry<String, Integer> entry : qrels.entrySet()) {
             if (entry.getValue() == 1) {
                 totalDocRelevantes++;
             }
         }
         //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
-        for(Integer documentoDevuelto : result){
+        for(String documentoDevuelto : result){
             if(qrels.containsKey(documentoDevuelto)){
                 if(qrels.get(documentoDevuelto)==1){
                     tp++;
-                    output.write((double)tp/totalDocRelevantes + "\t" + (double)tp/(tp+fp) + "\n");
+                    output.write(round((double)tp/totalDocRelevantes) + "\t" 
+                                + round((double)tp/(tp+fp)) + "\n");
                 }else{
                     fp++;
                 }
@@ -273,11 +256,11 @@ public class Evaluation {
     private static void interpolated_recall_precision(int idNeed) throws IOException{
         int tp = 0, fp = 0;
         //recorremos qrels hasta que encontremos el total de documentos relevantes
-        List<Integer> result = results.get(idNeed);
-        HashMap<Integer, Integer> qrels = judgments.get(idNeed);
+        List<String> result = results.get(idNeed);
+        HashMap<String, Integer> qrels = judgments.get(idNeed);
         int totalDocRelevantes = 0;
 
-        for(Map.Entry<Integer, Integer> entry : qrels.entrySet()) {
+        for(Map.Entry<String, Integer> entry : qrels.entrySet()) {
             if (entry.getValue() == 1) {
                 totalDocRelevantes++;
             }
@@ -286,7 +269,7 @@ public class Evaluation {
         List<Double> precisionIRP = new ArrayList<>();
         List<Double> recallIRP = new ArrayList<>();
         //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
-        for(Integer documentoDevuelto : result){
+        for(String documentoDevuelto : result){
             if(qrels.containsKey(documentoDevuelto)){
                 if(qrels.get(documentoDevuelto)==1){
                     tp++;
@@ -312,13 +295,13 @@ public class Evaluation {
             double interpolated_precision = 0.0;
             if(index == -1) interpolated_precision = 0.0;
             else interpolated_precision = Collections.max(precisionIRP.subList(index, precisionIRP.size()), null);
-            output.write(recall + "\t" + interpolated_precision + "\n");
+            output.write(round(recall) + "\t" + round(interpolated_precision) + "\n");
         }
     }
 
     private static void f1Balanceada(int idNeed) throws IOException{
         f1[idNeed - 1] = (2*precision[idNeed - 1]*recall[idNeed - 1]) / (precision[idNeed - 1]+recall[idNeed - 1]);
-        output.write("F1\t" + f1[idNeed - 1] + "\n");
+        output.write("F1\t" + round(f1[idNeed - 1]) + "\n");
     }
 
     // Medidas globales
@@ -328,7 +311,7 @@ public class Evaluation {
         for(int i=0; i<judgments.size(); i++){
             precisionTotal += precision[i];
         }
-        output.write("precision\t" + precisionTotal/judgments.size() + "\n");
+        output.write("precision\t" + round(precisionTotal/judgments.size()) + "\n");
     }
 
     private static void recallG() throws IOException{
@@ -336,7 +319,7 @@ public class Evaluation {
         for(int i=0; i<judgments.size(); i++){
             recallTotal += recall[i];
         }
-        output.write("recall\t" + recallTotal/judgments.size() + "\n");
+        output.write("recall\t" + round(recallTotal/judgments.size()) + "\n");
     }
 
     private static void f1G() throws IOException{
@@ -344,7 +327,7 @@ public class Evaluation {
         for(int i=0; i<judgments.size(); i++){
             f1Total += f1[i];
         }
-        output.write("F1\t" + f1Total/judgments.size() + "\n");
+        output.write("F1\t" + round(f1Total/judgments.size()) + "\n");
     }
 
     private static double precision10G(){
@@ -359,23 +342,23 @@ public class Evaluation {
         }
 
         double MAP = precisionk / 2.0;
-        output.write("MAP\t" + MAP + "\n");
+        output.write("MAP\t" + round(MAP) + "\n");
     }
 
     private static void interpolated_recall_precisionG() throws IOException {
         int tp = 0, fp = 0;
         //recorremos qrels hasta que encontremos el total de documentos relevantes
-        List<Integer> result = results.get(1);
-        HashMap<Integer, Integer> qrels = judgments.get(1);
+        List<String> result = results.get(1);
+        HashMap<String, Integer> qrels = judgments.get(1);
         int totalDocRelevantes = 0;
 
-        for(Map.Entry<Integer, Integer> entry : qrels.entrySet()) {
+        for(Map.Entry<String, Integer> entry : qrels.entrySet()) {
             if (entry.getValue() == 1) {
                 totalDocRelevantes++;
             }
         }
 
-        for(Map.Entry<Integer, Integer> entry : judgments.get(2).entrySet()) {
+        for(Map.Entry<String, Integer> entry : judgments.get(2).entrySet()) {
             if (entry.getValue() == 1) {
                 totalDocRelevantes++;
             }
@@ -384,7 +367,7 @@ public class Evaluation {
         List<Double> precisionIRP = new ArrayList<>();
         List<Double> recallIRP = new ArrayList<>();
         //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
-        for(Integer documentoDevuelto : result){
+        for(String documentoDevuelto : result){
             if(qrels.containsKey(documentoDevuelto)){
                 if(qrels.get(documentoDevuelto)==1){
                     tp++;
@@ -398,7 +381,7 @@ public class Evaluation {
         result = results.get(2);
         qrels = judgments.get(2);
         //iteramos como en preccision y en cada documento relevante calculamos tp/totalDocRelevantes y prec@k
-        for(Integer documentoDevuelto : result){
+        for(String documentoDevuelto : result){
             if(qrels.containsKey(documentoDevuelto)){
                 if(qrels.get(documentoDevuelto)==1){
                     tp++;
@@ -424,7 +407,11 @@ public class Evaluation {
             double interpolated_precision = 0.0;
             if(index == -1) interpolated_precision = 0.0;
             else interpolated_precision = Collections.max(precisionIRP.subList(index, precisionIRP.size()), null);
-            output.write(recall + "\t" + interpolated_precision + "\n");
+            output.write(round(recall) + "\t" + round(interpolated_precision) + "\n");
         }
+    }
+
+    static double round(double value){
+        return (double)Math.round(value * 1000d) / 1000d;
     }
 }
