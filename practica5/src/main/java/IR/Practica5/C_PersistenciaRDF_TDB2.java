@@ -3,9 +3,11 @@ package IR.Practica5;
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.jena.atlas.web.TypedInputStream;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.tdb2.TDB2Factory;
 
 /**
@@ -31,11 +33,19 @@ public class C_PersistenciaRDF_TDB2 {
 		data.commit();
 		data.end();
 		
+		
 		//hacemos una transacción de lectura y mostramos el modelo recuperado del disco
 		data.begin(ReadWrite.READ) ;
 		Model modelo2 = data.getDefaultModel();
-		modelo2.write(System.out);
+//		modelo2.write(System.out);
 		data.end();
+		
+		// Opción para importar directamente el fichero
+		Dataset data2 = RDFDataMgr.loadDataset(RDFDataMgr.open("nombre.rdf").getBaseURI());
+		data2.begin(ReadWrite.READ) ;
+		Model modelo3 = data2.getDefaultModel();
+		modelo3.write(System.out);
+		data2.end();	
 		
 	}
 	

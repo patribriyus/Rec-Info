@@ -1,0 +1,35 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#"
+    xmlns:j.0="http://xmlns.com/foaf/0.1/">
+  <rdf:Description rdf:about="http://somewhere/DiegoCaballe">
+    <j.0:knows>
+      <rdf:Description rdf:about="http://somewhere/PatriciaBriones">
+        <j.0:knows>
+          <rdf:Description rdf:about="http://somewhere/JohnSmith">
+            <j.0:knows rdf:resource="http://somewhere/DiegoCaballe"/>
+            <rdf:type>http://xmlns.com/foaf/0.1/person</rdf:type>
+            <vcard:N rdf:parseType="Resource">
+              <vcard:Family>Smith</vcard:Family>
+              <vcard:Given>John</vcard:Given>
+            </vcard:N>
+            <vcard:FN>John Smith</vcard:FN>
+          </rdf:Description>
+        </j.0:knows>
+        <j.0:knows rdf:resource="http://somewhere/DiegoCaballe"/>
+        <rdf:type>http://xmlns.com/foaf/0.1/person</rdf:type>
+        <vcard:N rdf:parseType="Resource">
+          <vcard:Family>Briones</vcard:Family>
+          <vcard:Given>Patricia</vcard:Given>
+        </vcard:N>
+        <vcard:FN>Patricia Briones</vcard:FN>
+      </rdf:Description>
+    </j.0:knows>
+    <rdf:type>http://xmlns.com/foaf/0.1/person</rdf:type>
+    <vcard:N rdf:parseType="Resource">
+      <vcard:Family>Caballe</vcard:Family>
+      <vcard:Given>Diego</vcard:Given>
+    </vcard:N>
+    <vcard:FN>Diego Caballe</vcard:FN>
+  </rdf:Description>
+</rdf:RDF>
