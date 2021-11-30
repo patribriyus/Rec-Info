@@ -29,6 +29,8 @@ public class A_CreacionRDF {
         String givenName    = "John";
         String familyName   = "Smith";
         String fullName     = givenName + " " + familyName;
+        String uriType		= "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+        String valueType	= "http://xmlns.com/foaf/0.1/person";
 
         // crea un modelo vacio
         Model model = ModelFactory.createDefaultModel();
@@ -39,7 +41,32 @@ public class A_CreacionRDF {
              .addProperty(VCARD.N, 
                       model.createResource()
                            .addProperty(VCARD.Given, givenName)
-                           .addProperty(VCARD.Family, familyName));
+                           .addProperty(VCARD.Family, familyName))
+             .addProperty(model.createProperty(uriType), valueType);
+        
+        Resource diegoCaballe = model.createResource("http://somewhere/DiegoCaballe")
+                .addProperty(VCARD.FN, "Diego Caballe")
+                .addProperty(VCARD.N, 
+                         model.createResource()
+                              .addProperty(VCARD.Given, "Diego")
+                              .addProperty(VCARD.Family, "Caballe"))
+                .addProperty(model.createProperty(uriType), valueType);
+                
+        Resource patriciaBriones = model.createResource("http://somewhere/PatriciaBriones")
+                .addProperty(VCARD.FN, "Patricia Briones")
+                .addProperty(VCARD.N, 
+                         model.createResource()
+                              .addProperty(VCARD.Given, "Patricia")
+                              .addProperty(VCARD.Family, "Briones"))
+                .addProperty(model.createProperty(uriType), valueType)
+                .addProperty(model.createProperty("http://xmlns.com/foaf/0.1/knows"), diegoCaballe)
+                .addProperty(model.createProperty("http://xmlns.com/foaf/0.1/knows"), johnSmith);
+        
+        diegoCaballe.addProperty(model.createProperty("http://xmlns.com/foaf/0.1/knows"), patriciaBriones);
+        
+        // Tripleta --> John conoce a Diego
+        model.add(johnSmith, model.createProperty("http://xmlns.com/foaf/0.1/knows"), diegoCaballe);
+        
         return model;
 	}
 	
