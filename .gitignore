@@ -12,3 +12,9 @@ apache-opennlp-1.9.3-bin
 jfreechart-1.5.3
 practica3/precision-exhaustividad.png
 practica3/barras-medidas.png
+workspace-p5
+.settings
+practica5/pom.xml
+practica5/card.rdf
+practica5/.project
+practica5/.classpath
