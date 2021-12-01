@@ -340,44 +340,44 @@ public class Evaluation {
 
     private static void precisionG() throws IOException{
         double precisionTotal = 0.0;
-        for(int i=0; i<judgments.size(); i++){
+        for(int i=0; i<needsId.size(); i++){
             precisionTotal += precision[i];
         }
-        output.write("precision\t" + round(precisionTotal/judgments.size()) + "\n");
+        output.write("precision\t" + round(precisionTotal/needsId.size()) + "\n");
     }
 
     private static void recallG() throws IOException{
         double recallTotal = 0.0;
-        for(int i=0; i<judgments.size(); i++){
+        for(int i=0; i<needsId.size(); i++){
             recallTotal += recall[i];
         }
-        output.write("recall\t" + round(recallTotal/judgments.size()) + "\n");
+        output.write("recall\t" + round(recallTotal/needsId.size()) + "\n");
     }
 
     private static void f1G() throws IOException{
         double f1Total = 0.0;
-        for(int i=0; i<judgments.size(); i++){
+        for(int i=0; i<needsId.size(); i++){
             f1Total += f1[i];
         }
-        output.write("F1\t" + round(f1Total/judgments.size()) + "\n");
+        output.write("F1\t" + round(f1Total/needsId.size()) + "\n");
     }
 
     private static void precision10G() throws IOException{
         double precisionTotal = 0.0;
-        for(int i=0; i<judgments.size(); i++){
+        for(int i=0; i<needsId.size(); i++){
             precisionTotal += precision10[i];
         }
-        output.write("prec@10\t" + round(precisionTotal/judgments.size()) + "\n");
+        output.write("prec@10\t" + round(precisionTotal/needsId.size()) + "\n");
     }
 
     private static void MAPG() throws IOException{
         double precisionk = 0.0;
 
-        for(int i=1; i<=judgments.size(); i++){
+        for(int i=1; i<=needsId.size(); i++){
             precisionk += average_precision(getSingleKeyFromValue(i));
         }
 
-        double MAP = precisionk / 2.0;
+        double MAP = precisionk / needsId.size();
         output.write("MAP\t" + round(MAP) + "\n");
     }
 
@@ -386,10 +386,10 @@ public class Evaluation {
         int x = 0;
         for(double recall=0.0; recall<=1.0; recall+=0.1){
             double interpolatedTotal = 0.0;
-            for(int i=0; i<judgments.size(); i++){
+            for(int i=0; i<needsId.size(); i++){
                 interpolatedTotal += interpolated[i][x];
             }
-            interpolatedGlobal[x] = round(interpolatedTotal/judgments.size());
+            interpolatedGlobal[x] = round(interpolatedTotal/needsId.size());
             output.write(round(recall) + "\t" + interpolatedGlobal[x] + "\n");
             x++;
         }
