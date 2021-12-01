@@ -54,7 +54,7 @@ public class Evaluation {
         interpolatedGlobal = new double[11];
 
         for(Map.Entry<String, HashMap<String, Integer>> entry : judgments.entrySet()){
-            output.write("INFORMATION_NEED\t" + getNumKey(entry.getKey()) + "\n");
+            output.write("INFORMATION_NEED\t" + entry.getKey() + "\n");
             precision(entry.getKey());
             recall(entry.getKey());
             f1Balanceada(entry.getKey());
