@@ -43,14 +43,14 @@ public class Evaluation {
     public static void main(String[] args) throws Exception {
         checkInput(args);
 
-        tp = new int[judgments.size()];
-        fp = new int[judgments.size()];
-        fn = new int[judgments.size()];
-        precision10 = new double[judgments.size()];
-        precision = new double[judgments.size()];
-        recall = new double[judgments.size()];
-        f1 = new double[judgments.size()];
-        interpolated = new double[judgments.size()][11];
+        tp = new int[needsId.size()];
+        fp = new int[needsId.size()];
+        fn = new int[needsId.size()];
+        precision10 = new double[needsId.size()];
+        precision = new double[needsId.size()];
+        recall = new double[needsId.size()];
+        f1 = new double[needsId.size()];
+        interpolated = new double[needsId.size()][11];
         interpolatedGlobal = new double[11];
 
         for(Map.Entry<String, HashMap<String, Integer>> entry : judgments.entrySet()){
