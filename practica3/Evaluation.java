@@ -10,9 +10,12 @@ import java.util.*;
 public class Evaluation {
 
     // <idNeed, <docId, relevancy>>
-    private static Map<Integer, HashMap<String, Integer>> judgments = null;
+    private static Map<String, HashMap<String, Integer>> judgments = null;
     // <idNeed, docId[]>
-    private static Map<Integer, List<String>> results = null;
+    private static Map<String, List<String>> results = null;
+
+    //empieza en el 1
+    private static Map<String, Integer> needsId = null;
 
     private static FileWriter output = null;
 
@@ -50,12 +53,12 @@ public class Evaluation {
         interpolated = new double[judgments.size()][11];
         interpolatedGlobal = new double[11];
 
-        for(Map.Entry<Integer, HashMap<String, Integer>> entry : judgments.entrySet()){
-            output.write("INFORMATION_NEED\t" + entry.getKey() + "\n");
+        for(Map.Entry<String, HashMap<String, Integer>> entry : judgments.entrySet()){
+            output.write("INFORMATION_NEED\t" + getNumKey(entry.getKey()) + "\n");
             precision(entry.getKey());
             recall(entry.getKey());
             f1Balanceada(entry.getKey());
-            output.write("prec@10\t" + precision10[entry.getKey()-1] + "\n");
+            output.write("prec@10\t" + precision10[getNumKey(entry.getKey())-1] + "\n");
             average_precision(entry.getKey());            
             recall_precision(entry.getKey());
             interpolated_recall_precision(entry.getKey());
@@ -74,11 +77,15 @@ public class Evaluation {
 
         output.close();
 
-        Graphic graphic = new Graphic();
-        graphic.precision_recall(interpolated, interpolatedGlobal, judgments.size());
-        graphic.graficoBarras(precision, recall, f1, judgments.size());
+        Graphic graphic = new Graphic(needsId);
+        graphic.precision_recall(interpolated, interpolatedGlobal);
+        graphic.graficoBarras(precision, recall, f1);
     }
 
+    private static Integer getNumKey(String key){
+        return needsId.get(key);
+    }
+    
     private static void checkInput(String[] args) throws IOException {
         String usage = "Uso:\tjava Evaluation "
                  + "-qrels <qrelsFileName> "
@@ -129,14 +136,14 @@ public class Evaluation {
         BufferedReader reader = new BufferedReader(new FileReader(qrelsPath));
         try {
             while((line = reader.readLine().split("\\t")) != null){
-                if(!judgments.containsKey(Integer.parseInt(line[0]))){
+                if(!judgments.containsKey(line[0])){
                     relevances = new HashMap<>();
                 }
                 
                 // añadir a sublista hashmap docId y relevancia
                 relevances.put(line[1], Integer.parseInt(line[2]));
                 // añadir sublista hashmap al map de la necesidad idNeed
-                judgments.put(Integer.parseInt(line[0]), relevances);
+                judgments.put(line[0], relevances);
             }
         } catch (NullPointerException e) {}
         reader.close();
@@ -145,19 +152,27 @@ public class Evaluation {
     private static void processResults(File resultsPath) throws IOException{
         String[] line = new String[2];
         results = new HashMap<>();
+        needsId = new HashMap<>();
         List<String> docId = null;
 
         BufferedReader reader = new BufferedReader(new FileReader(resultsPath));
         try {
+            int numResultados = 1,
+                idNeed = 1;
             while((line = reader.readLine().split("\\t")) != null){
-                if(!results.containsKey(Integer.parseInt(line[0]))){
+                if(!results.containsKey(line[0])){
                     docId = new ArrayList<>();
+                    numResultados = 1;
+                    needsId.put(line[0], idNeed++);
                 }
 
-                // añadir a sublista List el docId
-                docId.add(line[1]);
-                // añadir sublista List al map de la necesidad idNeed
-                results.put(Integer.parseInt(line[0]), docId);
+                if(numResultados <= 50){
+                    // añadir a sublista List el docId
+                    docId.add(line[1]);
+                    // añadir sublista List al map de la necesidad idNeed
+                    results.put(line[0], docId);
+                }
+                numResultados++;
             }
             
         } catch (NullPointerException e) {}
@@ -166,13 +181,14 @@ public class Evaluation {
 
     // Cálculos medidas de evaluación por necesidad
 
-    private static void precision(int idNeed) throws IOException {
+    private static void precision(String need) throws IOException {
+        int idNeed = getNumKey(need);
         tp[idNeed - 1] = 0; fp[idNeed - 1] = 0;
         int tp10 = 0; int fp10 = 0;
         int i = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
-        List<String> result = results.get(idNeed);
-        HashMap<String, Integer> qrels = judgments.get(idNeed);
+        List<String> result = results.get(need);
+        HashMap<String, Integer> qrels = judgments.get(need);
         for(String docId : result){
             if(qrels.containsKey(docId)){
                 if(qrels.get(docId)==1){
@@ -202,11 +218,11 @@ public class Evaluation {
         else  precision10[idNeed-1] =  (double)tp10 / (tp10 + fp10);
     }
 
-    private static double average_precision(int idNeed){
+    private static double average_precision(String need){
         int tp = 0, fp = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
-        List<String> result = results.get(idNeed);
-        HashMap<String, Integer> qrels = judgments.get(idNeed);
+        List<String> result = results.get(need);
+        HashMap<String, Integer> qrels = judgments.get(need);
         double total_precision = 0;
         for(String docId : result){
             if(qrels.containsKey(docId)){
@@ -221,12 +237,13 @@ public class Evaluation {
         return(total_precision/tp);
     }
 
-    private static void recall(int idNeed) throws IOException {
-        //int tp = 0, fn = 0;
+    private static void recall(String need) throws IOException {
+        int idNeed = getNumKey(need);
+
         fn[idNeed - 1] = 0;
         // tp --> todos los documentos de 'results' cuya relevancy en 'judgments' es 1
-        List<String> result = results.get(idNeed);
-        HashMap<String, Integer> qrels = judgments.get(idNeed);
+        List<String> result = results.get(need);
+        HashMap<String, Integer> qrels = judgments.get(need);
         for(Map.Entry<String, Integer> entry : qrels.entrySet()){
             if(entry.getValue()==1 && !result.contains(entry.getKey())) fn[idNeed - 1]++;
         }
@@ -235,12 +252,12 @@ public class Evaluation {
         output.write("recall\t" + round(recall[idNeed - 1]) + "\n");
     }
 
-    private static void recall_precision(int idNeed) throws IOException {
+    private static void recall_precision(String need) throws IOException {
         output.write("recall_precision \n");
         int tp = 0, fp = 0;
         //recorremos qrels hasta que encontremos el total de documentos relevantes
-        List<String> result = results.get(idNeed);
-        HashMap<String, Integer> qrels = judgments.get(idNeed);
+        List<String> result = results.get(need);
+        HashMap<String, Integer> qrels = judgments.get(need);
         int totalDocRelevantes = 0;
 
         for(Map.Entry<String, Integer> entry : qrels.entrySet()) {
@@ -263,11 +280,12 @@ public class Evaluation {
         }
     }
 
-    private static void interpolated_recall_precision(int idNeed) throws IOException{
+    private static void interpolated_recall_precision(String need) throws IOException{
+        int idNeed = getNumKey(need);
         int tp = 0, fp = 0;
         //recorremos qrels hasta que encontremos el total de documentos relevantes
-        List<String> result = results.get(idNeed);
-        HashMap<String, Integer> qrels = judgments.get(idNeed);
+        List<String> result = results.get(need);
+        HashMap<String, Integer> qrels = judgments.get(need);
         int totalDocRelevantes = 0;
 
         for(Map.Entry<String, Integer> entry : qrels.entrySet()) {
@@ -312,7 +330,8 @@ public class Evaluation {
         }
     }
 
-    private static void f1Balanceada(int idNeed) throws IOException{
+    private static void f1Balanceada(String need) throws IOException{
+        int idNeed = getNumKey(need);
         f1[idNeed - 1] = (2*precision[idNeed - 1]*recall[idNeed - 1]) / (precision[idNeed - 1]+recall[idNeed - 1]);
         output.write("F1\t" + round(f1[idNeed - 1]) + "\n");
     }
@@ -355,7 +374,7 @@ public class Evaluation {
         double precisionk = 0.0;
 
         for(int i=1; i<=judgments.size(); i++){
-            precisionk += average_precision(i);
+            precisionk += average_precision(getSingleKeyFromValue(i));
         }
 
         double MAP = precisionk / 2.0;
@@ -378,5 +397,14 @@ public class Evaluation {
 
     private static double round(double value){
         return (double)Math.round(value * 1000d) / 1000d;
+    }
+
+    public static String getSingleKeyFromValue(int idNeed) {
+        for(Map.Entry<String, Integer> entry : needsId.entrySet()){
+            if (Objects.equals(idNeed, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 }

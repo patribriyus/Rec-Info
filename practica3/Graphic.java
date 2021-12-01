@@ -8,6 +8,8 @@ import java.awt.BasicStroke;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
@@ -20,9 +22,15 @@ import org.jfree.data.xy.DefaultXYDataset;
 
 public class Graphic {
 
-    Graphic(){}
+    private Map<String, Integer> needsId = null;
+    private int numNeeds;
 
-    public void precision_recall(double[][] interpolated, double[] interpolatedGlobal, int numNeeds) throws Exception {
+    Graphic(Map<String, Integer> needsId){
+        this.needsId = needsId;
+        this.numNeeds = needsId.size();
+    }
+
+    public void precision_recall(double[][] interpolated, double[] interpolatedGlobal) throws Exception {
         double[] puntos = new double[11];
         for(int i=0; i<=10; i++){
             puntos[i] = i/10.0;
@@ -36,7 +44,7 @@ public class Graphic {
             for(int j=0; j<=10; j++){
                 aux[j] = interpolated[i][j];
             }
-            dataset.addSeries("Need_"+(i+1), new double[][] {puntos, aux});
+            dataset.addSeries("Need_"+ getSingleKeyFromValue(i+1), new double[][] {puntos, aux});
             renderer.setSeriesStroke(i, new BasicStroke(2));
         }
         dataset.addSeries("Total", new double[][] {puntos, interpolatedGlobal});
@@ -53,7 +61,7 @@ public class Graphic {
     }
 
     public void graficoBarras(double[] precisionData, double[] recallData, 
-                double[] f1Data, int numNeeds) throws IOException{
+                double[] f1Data) throws IOException{
         final String precision = "Precisión";
         final String recall = "Exhaustividad";
         final String f1 = "F1";
@@ -61,9 +69,9 @@ public class Graphic {
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
     
         for(int i=0; i<numNeeds; i++){
-            dataset.addValue(precisionData[i] , "Need_" + (i+1) , precision);
-            dataset.addValue(recallData[i] , "Need_" + (i+1) , recall);
-            dataset.addValue(f1Data[i] , "Need_" + (i+1) , f1);
+            dataset.addValue(precisionData[i] , "Need_" + getSingleKeyFromValue(i+1) , precision);
+            dataset.addValue(recallData[i] , "Need_" + getSingleKeyFromValue(i+1) , recall);
+            dataset.addValue(f1Data[i] , "Need_" + getSingleKeyFromValue(i+1) , f1);
         }
     
         JFreeChart chart = ChartFactory.createBarChart("Medidas de evaluación", 
@@ -71,5 +79,14 @@ public class Graphic {
 
         BufferedImage image = chart.createBufferedImage(600, 400);
         ImageIO.write(image, "png", new File("barras-medidas.png"));
+    }
+
+    public String getSingleKeyFromValue(int idNeed) {
+        for(Map.Entry<String, Integer> entry : needsId.entrySet()){
+            if (Objects.equals(idNeed, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 }
