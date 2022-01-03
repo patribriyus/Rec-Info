@@ -59,7 +59,8 @@ public class Evaluation {
             recall(entry.getKey());
             f1Balanceada(entry.getKey());
             output.write("prec@10\t" + precision10[getNumKey(entry.getKey())-1] + "\n");
-            average_precision(entry.getKey());            
+            double aver_prec = average_precision(entry.getKey());
+            output.write("average_precision\t" + round(aver_prec) + "\n");
             recall_precision(entry.getKey());
             interpolated_recall_precision(entry.getKey());
             output.write("\n");
@@ -190,19 +191,19 @@ public class Evaluation {
         List<String> result = results.get(need);
         HashMap<String, Integer> qrels = judgments.get(need);
         for(String docId : result){
-            if(qrels.containsKey(docId)){
-                if(qrels.get(docId)==1){
-                    tp[idNeed - 1] ++;
-                    if(i < 10){
-                        tp10++;
-                    }
-                    // precisionk.add((double) tp[idNeed - 1]/(fp[idNeed - 1]+tp[idNeed-1]));
+            if(qrels.containsKey(docId) && qrels.get(docId)==1){
+                tp[idNeed - 1] ++;
+                if(i < 10){
+                    tp10++;
                 }
-                else {
-                    fp[idNeed - 1]++;
-                    if(i < 10){
-                        fp10++;
-                    }
+                
+            }
+            else {
+                // Documento que se ha recuperado y existe juicio pero es 0, 
+                // o no existe en la lista de juicios
+                fp[idNeed - 1]++;
+                if(i < 10){
+                    fp10++;
                 }
             }
             i++;
@@ -234,7 +235,7 @@ public class Evaluation {
             }
         }
 
-        return(total_precision/tp);
+        return tp !=0 ? total_precision/tp : 0;
     }
 
     private static void recall(String need) throws IOException {
