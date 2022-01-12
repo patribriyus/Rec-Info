@@ -1,0 +1,64 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix mv: <http://www.example.org/#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+mv:university rdf:type rdfs:Class
+
+mv:document rdf:type rdfs:Class
+
+mv:tesis rdf:type rdfs:Class
+
+mv:tfm rdf:type rdfs:Class
+
+mv:tfg rdf:type rdfs:Class
+
+mv:person rdf:type rdfs:Class
+    rdfs:subClassOf foaf:Agent
+
+mv:tesis rdfs:subClassOf mv:document
+
+mv:tfm rdfs:subClassOf mv:document
+
+mv:tfg rdfs:subClassOf mv:document
+
+mv:publisher rdf:type rdf:Property
+    rdfs:domain mv:document
+    rdfs:range mv:university
+
+mv:language rdf:type rdf:Property
+    rdfs:domain mv:document
+    rdfs:range xsd:language
+
+mv:date rdf:type rdf:Property
+    rdfs:domain mv:municipio
+    rdfs:range xsd:date
+
+mv:description rdf:type rdf:Property
+    rdfs:domain mv:document
+    rdfs:range rdfs:Literal
+
+mv:title rdf:type rdf:Property
+    rdfs:domain mv:document
+    rdfs:range rdfs:Literal
+
+mv:rights rdf:type rdf:Property
+    rdfs:domain mv:document
+    rdfs:range rdfs:Literal
+
+mv:identifier rdf:type rdf:Property
+    rdfs:domain mv:document
+    rdfs:range xsd:anyURI
+
+mv:contributor rdf:type rdf:Property
+    rdfs:domain mv:document
+    rdfs:range mv:person
+
+mv:creator rdf:type rdf:Property
+    rdfs:domain mv:document
+    rdfs:range mv:person
+
+mv:subject rdf:type rdf:Property
+    rdfs:domain mv:document
+    rdfs:range skos:Concept
