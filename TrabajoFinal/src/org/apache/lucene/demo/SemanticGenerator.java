@@ -29,9 +29,9 @@ public class SemanticGenerator {
 	
 	public static void main(String[] args) throws IOException {
 		String usage = "Uso:\tjava SemanticGenerator "
-						 + "-rdf <rdfPath>" // rdfPath --> debería ser RDFS.ttl
-						 + "-skos <skosPath>"
-						 + "-owl <owlPath>"
+						 + "-rdf <rdfPath> " // rdfPath --> debería ser RDFS.ttl
+						 + "-skos <skosPath> "
+						 + "-owl <owlPath> "
 						 + "-docs <docsPath>\n";
 	                 
 	   String rdfPath = null, skosPath = null, owlPath = null, docsPath = null;
@@ -60,14 +60,15 @@ public class SemanticGenerator {
 		}
 
 		String[] aux = {skosPath, owlPath, docsPath};
-		for(String item : aux){
-			// Check paths
-			final File file = new File(item);
-			if (!file.exists() || !file.canRead()) {
-				System.out.println("El directorio o fichero '" +file.getAbsolutePath()+ "' no existe o no se puede leer.");
-				System.exit(1);
-			}
-		}		
+		// TODO: descomentar para cuando se metan los ficheros SKOS y OWL
+		// for(String item : aux){
+		// 	// Check paths
+		// 	final File file = new File(item);
+		// 	if (!file.exists() || !file.canRead()) {
+		// 		System.out.println("El directorio o fichero '" +file.getAbsolutePath()+ "' no existe o no se puede leer.");
+		// 		System.exit(1);
+		// 	}
+		// }		
 		
 		
 		Date start = new Date();
@@ -81,7 +82,8 @@ public class SemanticGenerator {
 		start = new Date();
 		
 		// Inferencia RDFS
-		inferenciaRDFS(rdfPath, owlPath, skosPath);
+		// TODO: descomentar para cuando se metan los ficheros SKOS y OWL
+		// inferenciaRDFS(rdfPath, owlPath, skosPath);
 		
 		end = new Date();
 		System.out.println((end.getTime() - start.getTime())/1000.0 + " seg");
@@ -132,18 +134,18 @@ public class SemanticGenerator {
 							// If that's not the case searching for special characters will fail.
 							AddAllFields(doc, docTree);
 									
-							String identifier = doc.get("dc:identifier");
-							String title = doc.get("dc:title");
+							String identifier = StringUtils.stripAccents(doc.get("dc:identifier"));
+							String title = StringUtils.stripAccents(doc.get("dc:title"));
 							String[] contributors = doc.getValues("dc:contributor");
 							String[] subjects = doc.getValues("dc:subject");
-							String type = doc.get("dc:type");
-							String description = doc.get("dc:description");
-							String creator = doc.get("dc:creator");
-							String publisher = doc.get("dc:publisher");
-							String language = doc.get("dc:language");
-							String date = doc.get("dc:date");
-							String relation = doc.get("dc:relation");
-							String rights = doc.get("dc:rights");
+							String type = StringUtils.stripAccents(doc.get("dc:type"));
+							String description = StringUtils.stripAccents(doc.get("dc:description"));
+							String creator = StringUtils.stripAccents(doc.get("dc:creator"));
+							String publisher = StringUtils.stripAccents(doc.get("dc:publisher"));
+							String language = StringUtils.stripAccents(doc.get("dc:language"));
+							String date = StringUtils.stripAccents(doc.get("dc:date"));
+							String relation = StringUtils.stripAccents(doc.get("dc:relation"));
+							String rights = StringUtils.stripAccents(doc.get("dc:rights"));
 							
 							/*
 							* Creación de propiedades
@@ -154,8 +156,7 @@ public class SemanticGenerator {
 							String prefix_mv = "http://www.example.org/#";
 							
 							// Identifier
-							Resource docResource = model.createResource(
-									StringUtils.stripAccents(identifier))
+							Resource docResource = model.createResource(identifier)
 									.addProperty(DCTerms.identifier, identifier);
 
 							// Title
@@ -163,19 +164,47 @@ public class SemanticGenerator {
 							docResource.addProperty(titleProperty, title);
 
 							// Contributor
+							try{
 							Property contributorProperty = model.createProperty(prefix_mv+"contributor");
 							for (String contributor : contributors) {
+								contributor = StringUtils.stripAccents(contributor);
 								Resource contributorResource = model.createResource(
-										StringUtils.stripAccents(contributor));
-									
-								contributorResource.addProperty(FOAF.firstName, contributor.split(",")[1].trim());
-								contributorResource.addProperty(FOAF.familyName, contributor.split(",")[0].trim());
+										StringUtils.stripAccents(contributor));								
+								// A veces el campo del nombre no está separado por ','
+								String firstName = "", familyName = "";
+								if(contributor.contains(",")){
+									firstName = contributor.split(",")[1].trim();
+									familyName = contributor.split(",")[0].trim();
+								}
+								else{
+									String[] nomCompleto = contributor.split("\\s");
+									switch(nomCompleto.length){
+										case 2:
+											firstName = nomCompleto[0];
+											familyName = nomCompleto[1];
+											break;
+										case 3:
+											firstName = nomCompleto[0];
+											familyName = nomCompleto[1] +""+ nomCompleto[2];
+											break;
+										case 4:
+											firstName = nomCompleto[0] +""+ nomCompleto[1];
+											familyName = nomCompleto[2] +""+ nomCompleto[3];
+											break;
+									}
+								}
+								contributorResource.addProperty(FOAF.firstName, firstName);
+								contributorResource.addProperty(FOAF.familyName, familyName);
 								docResource.addProperty(contributorProperty, contributorResource);
+							}
+							} catch(Exception e){
+								System.err.println("hola");
 							}
 
 							// Subject
 							Property subjectProperty = model.createProperty(prefix_mv+"subject");
 							for (String subject : subjects) {
+								subject = StringUtils.stripAccents(subject);
 								Resource subjectResource = model.createResource(
 										StringUtils.stripAccents(subject));
 
@@ -195,15 +224,39 @@ public class SemanticGenerator {
 							docResource.addProperty(typeProperty, typeResource);
 							
 							// Description
-							Property descriptionProperty = model.createProperty(prefix_mv+"description");
-							docResource.addProperty(descriptionProperty, description);
+							if(description != null){
+								Property descriptionProperty = model.createProperty(prefix_mv+"description");
+								docResource.addProperty(descriptionProperty, StringUtils.stripAccents(description));
+							}
 
 							// Creator
 							Property creatorProperty = model.createProperty(prefix_mv+"creator");
-							Resource creatorResource = model.createResource(
-									StringUtils.stripAccents(creator));
-							creatorResource.addProperty(FOAF.firstName, creator.split(",")[1].trim());
-							creatorResource.addProperty(FOAF.familyName, creator.split(",")[0].trim());
+							Resource creatorResource = model.createResource(creator);
+							// A veces el campo del nombre no está separado por ','
+							String firstName = "", familyName = "";
+							if(creator.contains(",")){
+								firstName = creator.split(",")[1].trim();
+								familyName = creator.split(",")[0].trim();
+							}
+							else{
+								String[] nomCompleto = creator.split("\\s");
+								switch(nomCompleto.length){
+									case 2:
+										firstName = nomCompleto[0];
+										familyName = nomCompleto[1];
+										break;
+									case 3:
+										firstName = nomCompleto[0];
+										familyName = nomCompleto[1] +""+ nomCompleto[2];
+										break;
+									case 4:
+										firstName = nomCompleto[0] +""+ nomCompleto[1];
+										familyName = nomCompleto[2] +""+ nomCompleto[3];
+										break;
+								}
+							}
+							creatorResource.addProperty(FOAF.firstName, firstName);
+							creatorResource.addProperty(FOAF.familyName, familyName);
 							docResource.addProperty(creatorProperty, creatorResource);
 
 							// Publisher
@@ -217,23 +270,26 @@ public class SemanticGenerator {
 							docResource.addProperty(languageProperty, languageResource);
 
 							// Date
-							Property dateProperty = model.createProperty(prefix_mv+"date");
-							Resource dateResource = model.createResource()
-									.addProperty(DCTerms.date, date);
-							docResource.addProperty(dateProperty, dateResource);
+							if(date != null){
+								Property dateProperty = model.createProperty(prefix_mv+"date");
+								Resource dateResource = model.createResource()
+										.addProperty(DCTerms.date, date); //*
+								docResource.addProperty(dateProperty, dateResource);
+							}
 
 							// Relation
 							Property relationProperty = model.createProperty(prefix_mv+"relation");
-							Resource relationResource = model.createResource(
-									StringUtils.stripAccents(relation));
+							Resource relationResource = model.createResource(relation);
 							relationResource.addProperty(DCTerms.relation, relation);
 							docResource.addProperty(relationProperty, relationResource);
 
 							// Rights
-							Property rightsProperty = model.createProperty(prefix_mv+"rights");
-							Resource rightsResource = model.createResource(StringUtils.stripAccents(rights).replace("\n", ""));
-							rightsResource.addProperty(DCTerms.rights, rights);
-							docResource.addProperty(rightsProperty, rightsResource);
+							if(rights != null){
+								Property rightsProperty = model.createProperty(prefix_mv+"rights");
+								Resource rightsResource = model.createResource(rights);
+								rightsResource.addProperty(DCTerms.rights, rights); // pasa algo aquí
+								docResource.addProperty(rightsProperty, rightsResource);
+							}
 
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -270,7 +326,7 @@ public class SemanticGenerator {
 		InfModel inf = ModelFactory.createRDFSModel(resultModel);
 		
 		FileWriter rdfs_file = new FileWriter(rdfPath);
-		inf.write(rdfs_file, "TURTLE"); // RDFS.ttl
+		inf.write(rdfs_file, "TURTLE"); // Creación del RDFS.ttl
 	}
 
 }
