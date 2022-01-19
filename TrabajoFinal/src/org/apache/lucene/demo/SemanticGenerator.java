@@ -273,7 +273,7 @@ public class SemanticGenerator {
 							if(date != null){
 								Property dateProperty = model.createProperty(prefix_mv+"date");
 								Resource dateResource = model.createResource()
-										.addProperty(DCTerms.date, date); //*
+										.addProperty(DCTerms.date, date);
 								docResource.addProperty(dateProperty, dateResource);
 							}
 
@@ -287,7 +287,7 @@ public class SemanticGenerator {
 							if(rights != null){
 								Property rightsProperty = model.createProperty(prefix_mv+"rights");
 								Resource rightsResource = model.createResource(rights);
-								rightsResource.addProperty(DCTerms.rights, rights); // pasa algo aquí
+								rightsResource.addProperty(DCTerms.rights, rights);
 								docResource.addProperty(rightsProperty, rightsResource);
 							}
 
