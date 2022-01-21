@@ -41,7 +41,7 @@ public class SemanticGenerator {
 	
 	public static void main(String[] args) throws IOException {
 		String usage = "Uso:\tjava SemanticGenerator "
-						 + "-rdf <rdfPath> " // rdfPath --> debería ser RDF.ttl
+						 + "-rdf <rdfPath> "
 						 + "-skos <skosPath> "
 						 + "-owl <owlPath> "
 						 + "-docs <docsPath>\n";
@@ -79,7 +79,7 @@ public class SemanticGenerator {
 				System.out.println("El directorio o fichero '" +file.getAbsolutePath()+ "' no existe o no se puede leer.");
 				System.exit(1);
 			}
-		}		
+		}
 		
 		Date start = new Date();
 		
