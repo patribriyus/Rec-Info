@@ -3,6 +3,9 @@ package org.apache.lucene.demo;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.jena.query.text.EntityDefinition;
+import org.apache.jena.rdf.model.ResourceFactory;
+
 public class SemanticSearcher {
    
    private SemanticSearcher() {}
@@ -44,7 +47,9 @@ public class SemanticSearcher {
 				System.exit(1);
 			}
 		}
-      
 
+      // Index
+      // EntityDefinition entDef = new EntityDefinition("uri", "tema",
+      //           ResourceFactory.createProperty("http://www.grupo202.com/model#","tema"));
    }
 }

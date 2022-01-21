@@ -1,0 +1,265 @@
+@prefix : <http://purl.obolibrary.org/obo/TEMP#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://purl.obolibrary.org/obo/TEMP> .
+
+<http://purl.obolibrary.org/obo/TEMP> rdf:type owl:Ontology .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://www.geneontology.org/formats/oboInOwl#mv
+<http://www.geneontology.org/formats/oboInOwl#mv> rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://purl.obolibrary.org/obo/TEMP#contributor
+:contributor rdf:type owl:ObjectProperty ;
+             rdfs:domain :document ;
+             rdfs:range :person ;
+             owl:propertyDisjointWith :creator ,
+                                      :publisher ,
+                                      :subject ;
+             <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :contributor ;
+   owl:annotatedProperty rdfs:domain ;
+   owl:annotatedTarget :document ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :contributor ;
+   owl:annotatedProperty rdfs:range ;
+   owl:annotatedTarget :person ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#creator
+:creator rdf:type owl:ObjectProperty ;
+         rdfs:domain :document ;
+         rdfs:range :person ;
+         owl:propertyDisjointWith :publisher ,
+                                  :subject ;
+         <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :creator ;
+   owl:annotatedProperty rdfs:domain ;
+   owl:annotatedTarget :document ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :creator ;
+   owl:annotatedProperty rdfs:range ;
+   owl:annotatedTarget :person ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#publisher
+:publisher rdf:type owl:ObjectProperty ;
+           rdfs:domain :document ;
+           rdfs:range :university ;
+           owl:propertyDisjointWith :subject ;
+           <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :publisher ;
+   owl:annotatedProperty rdfs:domain ;
+   owl:annotatedTarget :document ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :publisher ;
+   owl:annotatedProperty rdfs:range ;
+   owl:annotatedTarget :university ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#subject
+:subject rdf:type owl:ObjectProperty ;
+         rdfs:domain :document ;
+         rdfs:range <http://www.w3.org/2004/02/skos/core#Concept> .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :subject ;
+   owl:annotatedProperty rdfs:domain ;
+   owl:annotatedTarget :document ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://purl.obolibrary.org/obo/TEMP#date
+:date rdf:type owl:DatatypeProperty ;
+      rdfs:domain :document ;
+      rdfs:range xsd:dateTime ;
+      owl:propertyDisjointWith :description ,
+                               :identifier ,
+                               :language ,
+                               :rights ,
+                               :title ;
+      <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :date ;
+   owl:annotatedProperty rdfs:domain ;
+   owl:annotatedTarget :document ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#description
+:description rdf:type owl:DatatypeProperty ;
+             rdfs:domain :document ;
+             rdfs:range rdfs:Literal ;
+             owl:propertyDisjointWith :identifier ,
+                                      :language ,
+                                      :rights ,
+                                      :title ;
+             <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :description ;
+   owl:annotatedProperty rdfs:domain ;
+   owl:annotatedTarget :document ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#identifier
+:identifier rdf:type owl:DatatypeProperty ;
+            rdfs:domain :document ;
+            rdfs:range xsd:anyURI ;
+            owl:propertyDisjointWith :language ,
+                                     :rights ,
+                                     :title ;
+            <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :identifier ;
+   owl:annotatedProperty rdfs:domain ;
+   owl:annotatedTarget :document ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#language
+:language rdf:type owl:DatatypeProperty ;
+          rdfs:domain :document ;
+          rdfs:range xsd:language ;
+          owl:propertyDisjointWith :rights ,
+                                   :title ;
+          <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :language ;
+   owl:annotatedProperty rdfs:domain ;
+   owl:annotatedTarget :document ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#rights
+:rights rdf:type owl:DatatypeProperty ;
+        rdfs:domain :document ;
+        rdfs:range rdfs:Literal ;
+        owl:propertyDisjointWith :title ;
+        <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :rights ;
+   owl:annotatedProperty rdfs:domain ;
+   owl:annotatedTarget :document ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#title
+:title rdf:type owl:DatatypeProperty ;
+       rdfs:domain :document ;
+       rdfs:range rdfs:Literal ;
+       <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :title ;
+   owl:annotatedProperty rdfs:domain ;
+   owl:annotatedTarget :document ;
+   <http://www.geneontology.org/formats/oboInOwl#mv> ""
+ ] .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://purl.obolibrary.org/obo/TEMP#document
+:document rdf:type owl:Class ;
+          owl:disjointWith :person ,
+                           :university ,
+                           <http://www.w3.org/2004/02/skos/core#Concept> ;
+          <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#person
+:person rdf:type owl:Class ;
+        owl:disjointWith :university ,
+                         <http://www.w3.org/2004/02/skos/core#Concept> ;
+        <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#tesis
+:tesis rdf:type owl:Class ;
+       rdfs:subClassOf :document ;
+       owl:disjointWith :tfg ;
+       <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#tfg
+:tfg rdf:type owl:Class ;
+     rdfs:subClassOf :document ;
+     owl:disjointWith :tfm ;
+     <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#tfm
+:tfm rdf:type owl:Class ;
+     rdfs:subClassOf :document ;
+     <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+
+###  http://purl.obolibrary.org/obo/TEMP#university
+:university rdf:type owl:Class ;
+            owl:disjointWith <http://www.w3.org/2004/02/skos/core#Concept> ;
+            <http://www.geneontology.org/formats/oboInOwl#mv> "" .
+
+
+###  http://www.w3.org/2004/02/skos/core#Concept
+<http://www.w3.org/2004/02/skos/core#Concept> rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://purl.obolibrary.org/obo/TEMP#concept
+:concept rdf:type owl:NamedIndividual .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
