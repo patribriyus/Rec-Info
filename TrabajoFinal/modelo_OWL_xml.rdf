@@ -1,0 +1,346 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://purl.obolibrary.org/obo/TEMP#"
+     xml:base="http://purl.obolibrary.org/obo/TEMP"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:oboInOwl="http://www.geneontology.org/formats/oboInOwl#">
+    <owl:Ontology rdf:about="http://purl.obolibrary.org/obo/TEMP"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.geneontology.org/formats/oboInOwl#mv -->
+
+    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#mv"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#contributor -->
+
+    <owl:ObjectProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#contributor">
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/TEMP#person"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#creator"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#publisher"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#subject"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:ObjectProperty>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#contributor"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#contributor"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#range"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#person"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#creator -->
+
+    <owl:ObjectProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#creator">
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/TEMP#person"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#publisher"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#subject"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:ObjectProperty>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#creator"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#creator"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#range"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#person"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#publisher -->
+
+    <owl:ObjectProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#publisher">
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/TEMP#university"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#subject"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:ObjectProperty>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#publisher"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#publisher"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#range"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#university"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#subject -->
+
+    <owl:ObjectProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#subject">
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    </owl:ObjectProperty>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#subject"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#date -->
+
+    <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#date">
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#description"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#identifier"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#language"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#rights"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#title"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:DatatypeProperty>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#date"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#description -->
+
+    <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#description">
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#identifier"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#language"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#rights"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#title"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:DatatypeProperty>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#description"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#identifier -->
+
+    <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#identifier">
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#anyURI"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#language"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#rights"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#title"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:DatatypeProperty>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#identifier"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#language -->
+
+    <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#language">
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#language"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#rights"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#title"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:DatatypeProperty>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#language"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#rights -->
+
+    <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#rights">
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#title"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:DatatypeProperty>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#rights"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#title -->
+
+    <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#title">
+        <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:DatatypeProperty>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#title"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+        <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Axiom>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#document -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#document">
+        <owl:disjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#person"/>
+        <owl:disjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#university"/>
+        <owl:disjointWith rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#person -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#person">
+        <owl:disjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#university"/>
+        <owl:disjointWith rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#tesis -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#tesis">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <owl:disjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#tfg"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#tfg -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#tfg">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <owl:disjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#tfm"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#tfm -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#tfm">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#university -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#university">
+        <owl:disjointWith rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+        <oboInOwl:mv></oboInOwl:mv>
+    </owl:Class>
+    
+
+
+    <!-- http://www.w3.org/2004/02/skos/core#Concept -->
+
+    <owl:Class rdf:about="http://www.w3.org/2004/02/skos/core#Concept"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/TEMP#concept -->
+
+    <owl:NamedIndividual rdf:about="http://purl.obolibrary.org/obo/TEMP#concept"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

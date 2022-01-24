@@ -7,32 +7,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Node;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ReadWrite;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.vocabulary.FOAF;
-import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.SKOS; 
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
 
 // Clase que contiene el programa de transformación de la colección XML en RDF
 public class SemanticGenerator {
@@ -84,6 +69,7 @@ public class SemanticGenerator {
 		Date start = new Date();
 		
 		// Generar RDF de la coleccion
+		// Model ddddd = ModelFactory.createDefaultModel();
 		Model collectionModel = generateCollectionModel(docsPath);
 		
 		Date end = new Date();
@@ -91,13 +77,8 @@ public class SemanticGenerator {
 		
 		start = new Date();
 		
-		// Inferencia RDFS
 		Model owlModel = RDFDataMgr.loadDataset(RDFDataMgr.open(owlPath).getBaseURI()).getDefaultModel();
 		Model skosModel = RDFDataMgr.loadDataset(RDFDataMgr.open(skosPath).getBaseURI()).getDefaultModel();
-
-		// Estas funciones estan deprecated, no utilizar
-		// Model owlModel =  FileManager.get().loadModel(owlPath,"RDF/XML-ABBREV");
-		// Model skosModel = FileManager.get().loadModel(skosPath,"RDF/XML-ABBREV");
 
 		Model resultModel = ModelFactory.createUnion(ModelFactory.createUnion(collectionModel, owlModel), skosModel);
 		InfModel inf = ModelFactory.createRDFSModel(resultModel);
@@ -106,7 +87,7 @@ public class SemanticGenerator {
 		System.out.println((end.getTime() - start.getTime())/1000.0 + " seg");
 
 		FileWriter rdf_file = new FileWriter(rdfPath);
-		inf.write(rdf_file, "TURTLE"); // Creación del RDF.ttl
+		inf.write(rdf_file); // Creación del RDF.rdf
 	}
 
 	// Adaptación del fichero IndexFiles

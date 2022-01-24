@@ -1,10 +1,18 @@
 package org.apache.lucene.demo;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
-import org.apache.jena.query.text.EntityDefinition;
-import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.riot.RDFDataMgr;
 
 public class SemanticSearcher {
    
@@ -48,8 +56,29 @@ public class SemanticSearcher {
 			}
 		}
 
-      // Index
-      // EntityDefinition entDef = new EntityDefinition("uri", "tema",
-      //           ResourceFactory.createProperty("http://www.grupo202.com/model#","tema"));
+		Model collectionModel = RDFDataMgr.loadDataset(RDFDataMgr.open(rdfPath).getBaseURI()).getDefaultModel();
+
+		try (
+		// Si el fichero de resultados ya existe, lo reescribe
+		FileWriter fileWriter = new FileWriter(resultsFile)) {
+			Scanner scanner = new Scanner(new File(infoNeedsFile));
+			while(scanner.hasNextLine()){
+				String idNeed = scanner.nextLine().split("\\t")[0];
+				String infoNeed = scanner.nextLine().split("\\t")[1];
+
+				Query query = QueryFactory.create(infoNeed);
+				QueryExecution queryExecution = QueryExecutionFactory.create(query, collectionModel);
+				try{
+					ResultSet results = queryExecution.execSelect();
+					while (results.hasNext()) {
+						QuerySolution result = results.nextSolution();
+						String path = result.getResource("x").getURI();
+						// TODO: Debuggear para ver qué devuelve 
+							
+						fileWriter.write(idNeed + "\t" + path + "\n");
+					}
+				} finally { queryExecution.close(); }			
+			}
+		}
    }
 }
