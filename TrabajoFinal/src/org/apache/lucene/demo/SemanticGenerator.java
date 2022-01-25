@@ -86,8 +86,13 @@ public class SemanticGenerator {
 		end = new Date();
 		System.out.println((end.getTime() - start.getTime())/1000.0 + " seg");
 
+		start = new Date();
+
 		FileWriter rdf_file = new FileWriter(rdfPath);
 		inf.write(rdf_file); // Creación del RDF.rdf
+
+		end = new Date();
+		System.out.println((end.getTime() - start.getTime())/1000.0 + " seg");
 	}
 
 	// Adaptación del fichero IndexFiles
@@ -103,6 +108,7 @@ public class SemanticGenerator {
 				if (files != null) {
 					for (int i=0; i<files.length; i++) {
 						try {
+							// System.out.println(files[i]);
 							// make a new, empty document
 							Document doc = new Document();
 
@@ -133,23 +139,23 @@ public class SemanticGenerator {
 							// If that's not the case searching for special characters will fail.
 							AddAllFields(doc, docTree);
 									
-							String identifier = StringUtils.stripAccents(doc.get("dc:identifier"));
-							String title = StringUtils.stripAccents(doc.get("dc:title"));
+							String identifier = StringUtils.stripAccents(doc.get("dc:identifier")).trim();
+							String title = StringUtils.stripAccents(doc.get("dc:title")).trim();
 							String[] contributors = doc.getValues("dc:contributor");
 							String[] subjects = doc.getValues("dc:subject");
-							String type = StringUtils.stripAccents(doc.get("dc:type"));
+							String type = StringUtils.stripAccents(doc.get("dc:type")).trim();
 							String description = StringUtils.stripAccents(doc.get("dc:description"));
 							String creator = StringUtils.stripAccents(doc.get("dc:creator"));
-							String publisher = StringUtils.stripAccents(doc.get("dc:publisher"));
-							String language = StringUtils.stripAccents(doc.get("dc:language"));
+							String publisher = StringUtils.stripAccents(doc.get("dc:publisher")).trim();
+							String language = StringUtils.stripAccents(doc.get("dc:language")).trim();
 							String date = StringUtils.stripAccents(doc.get("dc:date"));
-							String relation = StringUtils.stripAccents(doc.get("dc:relation"));
+							String relation = StringUtils.stripAccents(doc.get("dc:relation")).trim();
 							String rights = StringUtils.stripAccents(doc.get("dc:rights"));
 							
 							/*
 							* Creación de propiedades
 							*/ 
-							
+							String prefix_skos = "http://www.w3.org/2004/02/skos/core#";
 							String prefix_mv = "http://www.example.org/#";
 							
 							// Identifier
@@ -161,12 +167,13 @@ public class SemanticGenerator {
 							docResource.addProperty(titleProperty, title);
 
 							// Contributor
-							try{
+							// try{
 							Property contributorProperty = collectionModel.createProperty(prefix_mv+"contributor");
 							for (String contributor : contributors) {
 								contributor = StringUtils.stripAccents(contributor);
-								Resource contributorResource = collectionModel.createResource(
-										StringUtils.stripAccents(contributor));								
+								// Resource contributorResource = collectionModel.createResource(
+								// 		StringUtils.stripAccents(contributor).replaceAll("\\s", "-"));								
+								Resource contributorResource = collectionModel.createResource(prefix_mv+"contributor");
 								// A veces el campo del nombre no está separado por ','
 								String firstName = "", familyName = "";
 								if(contributor.contains(",")){
@@ -194,18 +201,18 @@ public class SemanticGenerator {
 								contributorResource.addProperty(FOAF.familyName, familyName);
 								docResource.addProperty(contributorProperty, contributorResource);
 							}
-							} catch(Exception e){
-								System.err.println("hola");
-							}
+							// } catch(Exception e){
+							// 	System.err.println("hola");
+							// }
 
 							// Subject
 							Property subjectProperty = collectionModel.createProperty(prefix_mv+"subject");
 							for (String subject : subjects) {
-								subject = StringUtils.stripAccents(subject);
-								Resource subjectResource = collectionModel.createResource(
-										StringUtils.stripAccents(subject));
-
-								subjectResource.addProperty(SKOS.prefLabel, subject);
+								subject = StringUtils.stripAccents(subject).trim();
+								// Resource subjectResource = collectionModel.createResource(
+								// 		StringUtils.stripAccents(subject).replaceAll("\\s", "-"));
+								Resource subjectResource = collectionModel.createResource()
+									.addProperty(SKOS.prefLabel, subject);
 								docResource.addProperty(subjectProperty, subjectResource);
 
 								// insertSubject(docResource, NS, collectionModel, skosModel, subject);
@@ -229,7 +236,9 @@ public class SemanticGenerator {
 
 							// Creator
 							Property creatorProperty = collectionModel.createProperty(prefix_mv+"creator");
-							Resource creatorResource = collectionModel.createResource(creator);
+							// Resource creatorResource = collectionModel.createResource(creator.replaceAll("\\s", "-"));
+							// Resource creatorResource = FOAF.Person;
+							Resource creatorResource = collectionModel.createResource(prefix_mv+"creator");
 							// A veces el campo del nombre no está separado por ','
 							String firstName = "", familyName = "";
 							if(creator.contains(",")){
@@ -277,14 +286,14 @@ public class SemanticGenerator {
 
 							// Relation
 							Property relationProperty = collectionModel.createProperty(prefix_mv+"relation");
-							Resource relationResource = collectionModel.createResource(relation);
+							Resource relationResource = collectionModel.createResource(relation.replaceAll("\\s", "-"));
 							relationResource.addProperty(DCTerms.relation, relation);
 							docResource.addProperty(relationProperty, relationResource);
 
 							// Rights
 							if(rights != null){
 								Property rightsProperty = collectionModel.createProperty(prefix_mv+"rights");
-								Resource rightsResource = collectionModel.createResource(rights);
+								Resource rightsResource = collectionModel.createResource(rights.trim().replaceAll("\\s", "-"));
 								rightsResource.addProperty(DCTerms.rights, rights);
 								docResource.addProperty(rightsProperty, rightsResource);
 							}
