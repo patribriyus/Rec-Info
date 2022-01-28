@@ -1,6 +1,21 @@
  // TODO: cambiar frases por SPARQL
  101-4 ¿Hay trabajos de fin de grado o trabajos de fin de master que traten sobre la animación o visión por computador publicados en los últimos 20 años, en lenguaje español? 
- 106-4 Quiero buscar trabajos de veterinaria relacionados con especies felinas (gatos) o especies caninas (perros) entre 2012 y 2018. 
+ 101-4 
+ prefix mv: <...>
+ prefix xsd: <...>
+ SELECT DISTINCT ?x WHERE { 
+		?x mv:document ?y .
+		{?x mv:tfg|mv:tfm ?resul1} . 
+		**
+		TODO LO NECESARIO EN: DESCRIPTION, TITLE Y SUBJECT **
+		{animacion} UNION {vision computador} UNION {} . 
+		**
+		?x mv:language/text:query (rdfs:label 'sp') .
+		?x mv:date ?date 
+	} 
+	FILTER(?date >= 2001^^xsd:dateTime)
+ 
+ 106-4 Quiero buscar trabajos de veterinaria relacionados con especies felinas (gatos) o especies caninas (perros) entre 2012 y 2018.
  206-4 Trabajos de fin de grado o máster realizados o dirigidos por algún miembro de la familia López en el departamento de Informática. 
  209-2 ¿Qué trabajos hay sobre arte? Tienen que ser de arte aragonés, y que no traten temas posteriores al siglo XIX. 
  305-4 Estoy realizando un estudio sobre la aplicación de algoritmos de búsqueda en entornos relacionados con la medicina, por ejemplo encontrar cadenas de proteinas o hallar pacientes similares basándose en sus síntomas. 
