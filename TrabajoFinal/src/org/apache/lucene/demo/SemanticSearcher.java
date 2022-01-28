@@ -63,8 +63,9 @@ public class SemanticSearcher {
 		FileWriter fileWriter = new FileWriter(resultsFile)) {
 			Scanner scanner = new Scanner(new File(infoNeedsFile));
 			while(scanner.hasNextLine()){
-				String idNeed = scanner.nextLine().split("\\t")[0];
-				String infoNeed = scanner.nextLine().split("\\t")[1];
+				String need = scanner.nextLine();
+				String idNeed = need.split("\\t")[0];
+				String infoNeed = need.split("\\t")[1];
 
 				Query query = QueryFactory.create(infoNeed);
 				QueryExecution queryExecution = QueryExecutionFactory.create(query, collectionModel);
