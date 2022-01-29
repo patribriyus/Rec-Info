@@ -6,7 +6,7 @@
 	{?x a mv:tfg} UNION { ?x a mv:tfm } . 
 	{?x mv:title ?content} UNION {?x mv:description ?content} .
 	FILTER regex(?content, "vision por computador | visión por computador | visión por ordenador") .
-	FILTER regex(?content, "sustancias") .
+	FILTER regex(?content, "animacion 3d") .
 	OPTIONAL { ?x mv:subject/skos:prefLabel ?subject . FILTER contains(?subject, "visión por computador") . }
 	OPTIONAL { ?x mv:subject/skos:prefLabel ?subject . FILTER contains(?subject, "animacion") . }
 	?x mv:language/dcterms:language "spa" .
