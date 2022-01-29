@@ -74,9 +74,9 @@ public class SemanticSearcher {
 					while (results.hasNext()) {
 						QuerySolution result = results.nextSolution();
 						String path = result.getResource("x").getURI();
-						// TODO: Debuggear para ver qué devuelve 
+						String idFile = path.substring(path.lastIndexOf("/")+1);
 							
-						fileWriter.write(idNeed + "\t" + path + "\n");
+						fileWriter.write(idNeed + "\toai_zaguan.unizar.es_" + idFile + ".xml\n");
 					}
 				} finally { queryExecution.close(); }			
 			}
