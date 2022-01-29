@@ -143,7 +143,7 @@ public class SemanticGenerator {
 							String title = StringUtils.stripAccents(doc.get("dc:title")).trim();
 							String[] contributors = doc.getValues("dc:contributor");
 							String[] subjects = doc.getValues("dc:subject");
-							String type = StringUtils.stripAccents(doc.get("dc:type")).trim();
+							String type = StringUtils.stripAccents(doc.get("dc:type")).trim().toLowerCase();
 							String description = StringUtils.stripAccents(doc.get("dc:description"));
 							String creator = StringUtils.stripAccents(doc.get("dc:creator"));
 							String publisher = StringUtils.stripAccents(doc.get("dc:publisher")).trim();
@@ -279,9 +279,9 @@ public class SemanticGenerator {
 							// Date
 							if(date != null){
 								Property dateProperty = collectionModel.createProperty(prefix_mv+"date");
-								Resource dateResource = collectionModel.createResource()
-										.addProperty(DCTerms.date, date);
-								docResource.addProperty(dateProperty, dateResource);
+								// Resource dateResource = collectionModel.createResource()
+								// 		.addProperty(DCTerms.date, date);
+								docResource.addProperty(dateProperty, date);
 							}
 
 							// Relation

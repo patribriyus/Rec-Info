@@ -1,19 +1,18 @@
  // TODO: cambiar frases por SPARQL
  101-4 ¿Hay trabajos de fin de grado o trabajos de fin de master que traten sobre la animación o visión por computador publicados en los últimos 20 años, en lenguaje español? 
  101-4 
- prefix mv: <...>
- prefix xsd: <...>
- SELECT DISTINCT ?x WHERE { 
-		?x mv:document ?y .
-		{?x mv:tfg|mv:tfm ?resul1} . 
-		**
-		TODO LO NECESARIO EN: DESCRIPTION, TITLE Y SUBJECT **
-		{animacion} UNION {vision computador} UNION {} . 
-		**
-		?x mv:language/text:query (rdfs:label 'sp') .
-		?x mv:date ?date 
-	} 
-	FILTER(?date >= 2001^^xsd:dateTime)
+ prefix skos: <http://www.w3.org/2004/02/skos/core#> PREFIX mv:<http://www.example.org/#> prefix dcterms:<http://purl.org/dc/terms/>
+ SELECT DISTINCT ?x WHERE {
+	{?x a mv:tfg} UNION { ?x a mv:tfm } . 
+	{?x mv:title ?content} UNION {?x mv:description ?content} .
+	FILTER regex(?content, "vision por computador | visión por computador | visión por ordenador") .
+	FILTER regex(?content, "sustancias") .
+	OPTIONAL { ?x mv:subject/skos:prefLabel ?subject . FILTER contains(?subject, "visión por computador") . }
+	OPTIONAL { ?x mv:subject/skos:prefLabel ?subject . FILTER contains(?subject, "animacion") . }
+	?x mv:language/dcterms:language "spa" .
+	?x mv:date ?date .
+	FILTER(?date > "2001")
+	}
  
  106-4 Quiero buscar trabajos de veterinaria relacionados con especies felinas (gatos) o especies caninas (perros) entre 2012 y 2018.
  206-4 Trabajos de fin de grado o máster realizados o dirigidos por algún miembro de la familia López en el departamento de Informática. 
