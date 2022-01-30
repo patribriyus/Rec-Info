@@ -1,30 +1,5 @@
- // TODO: cambiar frases por SPARQL
- 101-4 ¿Hay trabajos de fin de grado o trabajos de fin de master que traten sobre la animación o visión por computador publicados en los últimos 20 años, en lenguaje español? 
- 101-4 
- prefix skos: <http://www.w3.org/2004/02/skos/core#> PREFIX mv:<http://purl.obolibrary.org/obo/TEMP#> prefix dcterms:<http://purl.org/dc/terms/>
- SELECT DISTINCT ?x WHERE {
-	{?x a mv:tfg} UNION { ?x a mv:tfm } . 
-	{?x mv:title ?content} UNION {?x mv:description ?content} .
-	FILTER regex(?content, "vision por computador | visión por computador | visión por ordenador") .
-	FILTER regex(?content, "animacion 3d") .
-	OPTIONAL { ?x mv:subject/skos:prefLabel ?subject . FILTER contains(?subject, "visión por computador") . }
-	OPTIONAL { ?x mv:subject/skos:prefLabel ?subject . FILTER contains(?subject, "animacion") . }
-	?x mv:language/dcterms:language "spa" .
-	?x mv:date ?date .
-	FILTER(?date > "2001")
-	}
- 
- 106-4 Quiero buscar trabajos de veterinaria relacionados con especies felinas (gatos) o especies caninas (perros) entre 2012 y 2018.
- 206-4* Trabajos de fin de grado o máster realizados o dirigidos por algún miembro de la familia López en el departamento de Informática.
- 206-4
- prefix skos: <http://www.w3.org/2004/02/skos/core#> PREFIX mv:<http://www.example.org/#> prefix dcterms:<http://purl.org/dc/terms/> prefix foaf:<http://xmlns.com/foaf/0.1/>
- SELECT DISTINCT ?x WHERE {
-	 {?x a mv:tfg} UNION { ?x a mv:tfm } .
-	 {?x mv:contributor/foaf:familyName ?apellido} UNION { ?x mv:creator/foaf:familyName ?apellido} .
-	 FILTER regex(?apellido, '[l|L][o|ó]pez') .
-	 ?x mv:publisher ?publisher .
-	 FILTER regex(?publisher, '[i|I]nform[a|á]tica') . 
- } LIMIT 50
- 209-2 ¿Qué trabajos hay sobre arte? Tienen que ser de arte aragonés, y que no traten temas posteriores al siglo XIX. 
- 305-4* Estoy realizando un estudio sobre la aplicación de algoritmos de búsqueda en entornos relacionados con la medicina, por ejemplo encontrar cadenas de proteinas o hallar pacientes similares basándose en sus síntomas. 
- 305-4
+101-4	prefix skos: <http://www.w3.org/2004/02/skos/core#> PREFIX mv:<http://purl.obolibrary.org/obo/TEMP#> prefix dcterms:<http://purl.org/dc/terms/> SELECT DISTINCT ?docs WHERE { {?docs a mv:tfg} UNION { ?docs a mv:tfm } . ?docs mv:language/dcterms:language 'spa' . ?docs mv:date ?date . ?docs mv:subject/skos:prefLabel ?subject . skos:animacion skos:altLabel ?altLabel . skos:animacion skos:prefLabel ?prefLabel . {?docs mv:title ?content} UNION {?docs mv:description ?content} . FILTER ( (regex(?content, 'visi[o|ó]n por [computador|ordenador]') || regex(?content, 'animaci[o|ó]n 3d') || regex(?subject, '.'+str(?altLabel)+'.') || regex(?subject, '.* '+str(?prefLabel)+'.*')) && ?date >= '2001') }
+106-4	prefix skos: <http://www.w3.org/2004/02/skos/core#> PREFIX mv:<http://purl.obolibrary.org/obo/TEMP#> SELECT DISTINCT ?docs WHERE { {?docs a mv:tfg} UNION { ?docs a mv:tfm } UNION { ?docs a mv:tfc } UNION { ?docs a mv:tesis } . ?docs mv:date ?date . ?docs mv:publisher ?uni . {?docs mv:title ?content} UNION {?docs mv:description ?content} . FILTER ( (regex(?content, 'felin[a|o][s]?') || regex(?content, 'canin[a|o][s]?')) && ?date >= '2012' && ?date <= '2018') }
+206-4	PREFIX mv:<http://purl.obolibrary.org/obo/TEMP#> SELECT DISTINCT ?docs WHERE { {?docs a mv:tfg} UNION { ?docs a mv:tfm } . ?docs mv:contributor|mv:creator ?apellido . FILTER regex(?apellido, '[l|L]opez') . ?docs mv:publisher ?publisher . FILTER regex(?publisher, '[i|I]nformatica') . }
+209-2	prefix skos: <http://www.w3.org/2004/02/skos/core#> PREFIX mv:<http://purl.obolibrary.org/obo/TEMP#> SELECT DISTINCT ?docs WHERE { {?docs a mv:tfg} UNION { ?docs a mv:tfm } UNION { ?docs a mv:tfc } UNION { ?docs a mv:tesis }. ?docs mv:subject/skos:prefLabel ?subject . {?docs mv:title ?content} UNION {?docs mv:description ?content} . skos:bellas_artes_y_diseno skos:broader ?hijos . ?hijos skos:prefLabel ?artes . ?hijos skos:altLabel ?artesAlt . FILTER ( (regex(?content, 'arag[o|ó]n[es]?') || (regex(?subject, '.*'+str(?artes)+'.*') || regex(?subject, '.*'+str(?artesAlt)+'.*'))) && regex(?content, 'X?[V|I{3}] | [I]?X')) }
+305-4	prefix skos: <http://www.w3.org/2004/02/skos/core#> PREFIX mv:<http://purl.obolibrary.org/obo/TEMP#> SELECT DISTINCT ?docs WHERE { {?docs a mv:tfg} UNION { ?docs a mv:tfm } UNION { ?docs a mv:tfc } UNION { ?docs a mv:tesis } . {?docs mv:title ?content} UNION {?docs mv:description ?content} . skos:ciencias_de_la_salud skos:broader ?hijos . ?hijos skos:prefLabel ?medicina . ?hijos skos:altLabel ?medicinaAlt . FILTER ( regex(?content, 'algoritmo( de busqueda)?') || (regex(?subject, '.*'+str(?medicina)+'.*') || regex(?subject, '.*'+str(?medicinaAlt)+'.*')) ) }

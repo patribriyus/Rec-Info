@@ -73,7 +73,7 @@ public class SemanticSearcher {
 					ResultSet results = queryExecution.execSelect();
 					while (results.hasNext()) {
 						QuerySolution result = results.nextSolution();
-						String path = result.getResource("x").getURI();
+						String path = result.getResource("docs").getURI();
 						String idFile = path.substring(path.lastIndexOf("/")+1);
 							
 						fileWriter.write(idNeed + "\toai_zaguan.unizar.es_" + idFile + ".xml\n");

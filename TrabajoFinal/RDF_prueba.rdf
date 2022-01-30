@@ -1,0 +1,1504 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<rdf:RDF
+    xmlns:dct="http://purl.org/dc/terms/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:oboInOwl="http://www.geneontology.org/formats/oboInOwl#"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:j.0="http://www.example.org/#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+  <owl:Ontology rdf:about="http://purl.obolibrary.org/obo/TEMP"/>
+  <owl:Ontology rdf:about="http://www.w3.org/2004/02/skos/core">
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/TR/skos-reference/"/>
+    <owl:versionIRI rdf:resource="http://www.w3.org/RI/NuestroTesauro"/>
+  </owl:Ontology>
+  <rdfs:Datatype rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdf:type>
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Datatype>
+  <rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#SymmetricProperty">
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#TransitiveProperty">
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement">
+    <rdfs:subClassOf>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdfs:subClassOf>
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdf:type>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#Container">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Container"/>
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://www.w3.org/2004/02/skos/core#Concept">
+    <rdfs:subClassOf>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <rdf:type>
+      <rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#Class">
+        <rdf:type>
+          <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        </rdf:type>
+      </rdfs:Resource>
+    </rdf:type>
+    <owl:disjointWith>
+      <rdfs:Class rdf:about="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    </owl:disjointWith>
+    <skos:definition xml:lang="en">An idea or notion; a unit of thought.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">Concept</rdfs:label>
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdf:type>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:about="http://www.w3.org/2004/02/skos/core#Collection">
+    <rdfs:subClassOf>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <skos:scopeNote xml:lang="en">Labelled collections can be used where you would like a set of concepts to be displayed under a 'node label' in the hierarchy.</skos:scopeNote>
+    <owl:disjointWith rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <owl:disjointWith>
+      <rdfs:Class rdf:about="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    </owl:disjointWith>
+    <skos:definition xml:lang="en">A meaningful collection of concepts.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">Collection</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#Collection"/>
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdf:type>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Container"/>
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Literal">
+    <rdfs:subClassOf>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdfs:subClassOf>
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdf:type>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#FunctionalProperty">
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://www.w3.org/2001/XMLSchema#language">
+    <rdfs:subClassOf>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/XMLSchema#language"/>
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdf:type>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.example.org/#tfg">
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#DatatypeProperty">
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://www.w3.org/2004/02/skos/core#OrderedCollection">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#Collection"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <skos:scopeNote xml:lang="en">Ordered collections can be used where you would like a set of concepts to be displayed in a specific order, and optionally under a 'node label'.</skos:scopeNote>
+    <skos:definition xml:lang="en">An ordered collection of concepts, where both the grouping and the ordering are meaningful.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">Ordered Collection</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#OrderedCollection"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#List">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#Axiom">
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:about="http://www.w3.org/2001/XMLSchema#anyURI">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/XMLSchema#anyURI"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#ContainerMembershipProperty">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#ContainerMembershipProperty"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#Ontology">
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#AnnotationProperty">
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#university">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#university"/>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:disjointWith rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Container"/>
+    <rdf:type>
+      <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:type>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#Datatype">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdfs:Resource>
+  <rdfs:Class rdf:nodeID="A0">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:subClassOf rdf:nodeID="A0"/>
+    <owl:unionOf>
+      <rdfs:Resource>
+        <rdf:rest>
+          <rdfs:Resource>
+            <rdf:rest>
+              <rdf:List rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil">
+                <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+              </rdf:List>
+            </rdf:rest>
+            <rdf:first rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+            <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+          </rdfs:Resource>
+        </rdf:rest>
+        <rdf:first rdf:resource="http://www.w3.org/2004/02/skos/core#Collection"/>
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+      </rdfs:Resource>
+    </owl:unionOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#NamedIndividual">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://www.w3.org/2001/XMLSchema#dateTime">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Alt">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Alt"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Container"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#person">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#person"/>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:disjointWith rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <owl:disjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#university"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:about="http://www.w3.org/2004/02/skos/core#ConceptScheme">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <skos:scopeNote xml:lang="en">A concept scheme may be defined to include concepts from different sources.</skos:scopeNote>
+    <skos:example xml:lang="en">Thesauri, classification schemes, subject heading lists, taxonomies, 'folksonomies', and other types of controlled vocabulary are all examples of concept schemes. Concept schemes are also embedded in glossaries and terminologies.</skos:example>
+    <skos:definition xml:lang="en">A set of concepts, optionally including statements about semantic relationships between those concepts.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">Concept Scheme</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </rdfs:Class>
+  <rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#ObjectProperty">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdfs:Resource>
+  <rdfs:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#document">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:disjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#person"/>
+    <owl:disjointWith rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <owl:disjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#university"/>
+    <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdfs:Class>
+  <owl:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#tesis">
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#tfg"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#tesis"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#tfg">
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#tfm"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#tfg"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.obolibrary.org/obo/TEMP#tfm">
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/TEMP#tfm"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#narrowMatch">
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#mappingRelation"/>
+    </rdfs:subPropertyOf>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#narrower"/>
+    </rdfs:subPropertyOf>
+    <skos:definition xml:lang="en">skos:narrowMatch is used to state a hierarchical mapping link between two conceptual resources in different concept schemes.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has narrower match</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#narrowMatch"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    </rdfs:subPropertyOf>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="http://www.w3.org/2004/02/skos/core#narrowerTransitive"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#narrower">
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="http://www.w3.org/2004/02/skos/core#narrowerTransitive"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment xml:lang="en">Narrower concepts are typically rendered as children in a concept hierarchy (tree).</rdfs:comment>
+    <skos:scopeNote xml:lang="en">By convention, skos:broader is only used to assert an immediate (i.e. direct) hierarchical link between two conceptual resources.</skos:scopeNote>
+    <skos:definition xml:lang="en">Relates a concept to a concept that is more specific in meaning.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has narrower</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#narrower"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#broader">
+    <owl:inverseOf rdf:resource="http://www.w3.org/2004/02/skos/core#narrower"/>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="http://www.w3.org/2004/02/skos/core#broaderTransitive"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment xml:lang="en">Broader concepts are typically rendered as parents in a concept hierarchy (tree).</rdfs:comment>
+    <skos:scopeNote xml:lang="en">By convention, skos:broader is only used to assert an immediate (i.e. direct) hierarchical link between two conceptual resources.</skos:scopeNote>
+    <skos:definition xml:lang="en">Relates a concept to a concept that is more general in meaning.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has broader</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#broader"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#contributor">
+    <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:propertyDisjointWith>
+      <owl:ObjectProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#creator"/>
+    </owl:propertyDisjointWith>
+    <owl:propertyDisjointWith>
+      <owl:ObjectProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#publisher"/>
+    </owl:propertyDisjointWith>
+    <owl:propertyDisjointWith>
+      <owl:ObjectProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#subject"/>
+    </owl:propertyDisjointWith>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/TEMP#person"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#mappingRelation">
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment xml:lang="en">These concept mapping relations mirror semantic relations, and the data model defined below is similar (with the exception of skos:exactMatch) to the data model defined for semantic relations. A distinct vocabulary is provided for concept mapping relations, to provide a convenient way to differentiate links within a concept scheme from links between concept schemes. However, this pattern of usage is not a formal requirement of the SKOS data model, and relies on informal definitions of best practice.</rdfs:comment>
+    <skos:definition xml:lang="en">Relates two concepts coming, by convention, from different schemes, and that have comparable meanings</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">is in mapping relation with</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#mappingRelation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#hasTopConcept">
+    <rdfs:domain rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#topConceptOf"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Relates, by convention, a concept scheme to a concept which is topmost in the broader/narrower concept hierarchies for that scheme, providing an entry point to these hierarchies.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has top concept</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#subject">
+    <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#broadMatch">
+    <owl:inverseOf rdf:resource="http://www.w3.org/2004/02/skos/core#narrowMatch"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#mappingRelation"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#broader"/>
+    <skos:definition xml:lang="en">skos:broadMatch is used to state a hierarchical mapping link between two conceptual resources in different concept schemes.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has broader match</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#broadMatch"/>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="http://www.w3.org/2004/02/skos/core#broaderTransitive"/>
+    </rdfs:subPropertyOf>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#semanticRelation">
+    <rdfs:domain rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:scopeNote xml:lang="en">This property should not be used directly, but as a super-property for all properties denoting a relationship of meaning between concepts.</skos:scopeNote>
+    <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Links a concept to a concept related by meaning.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">is in semantic relation with</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#topConceptOf">
+    <rdfs:domain rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#inScheme"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    <skos:definition xml:lang="en">Relates a concept to the concept scheme that it is a top level concept of.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">is top concept in scheme</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#topConceptOf"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#publisher">
+    <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#subject"/>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/TEMP#university"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#member">
+    <rdfs:domain rdf:resource="http://www.w3.org/2004/02/skos/core#Collection"/>
+    <rdfs:range rdf:nodeID="A0"/>
+    <skos:definition xml:lang="en">Relates a collection to one of its members.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has member</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#inScheme">
+    <skos:scopeNote xml:lang="en">A concept may be a member of more than one concept scheme.</skos:scopeNote>
+    <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    <skos:definition xml:lang="en">Relates a resource (for example a concept) to a concept scheme in which it is included.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">is in scheme</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#inScheme"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#creator">
+    <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#publisher"/>
+    <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#subject"/>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:range rdf:resource="http://purl.obolibrary.org/obo/TEMP#person"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:ObjectProperty>
+  <rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate">
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdf:Property>
+  <rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#isDefinedBy">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#isDefinedBy"/>
+    <rdfs:subPropertyOf>
+      <rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#seeAlso">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#seeAlso"/>
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      </rdfs:Resource>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdfs:Resource>
+  <rdfs:Resource rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdfs:Resource>
+  <rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#rest">
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdf:Property>
+  <rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#range">
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdfs:Resource>
+  <rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#subject">
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdf:Property>
+  <rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#comment">
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdfs:Resource>
+  <rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#object">
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#object"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdf:Property>
+  <rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#domain">
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdfs:Resource>
+  <rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#label">
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdfs:Resource>
+  <rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#subPropertyOf">
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdfs:Resource>
+  <rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#subClassOf">
+    <rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdfs:Resource>
+  <rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#first">
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#first"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </rdf:Property>
+  <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#date">
+    <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:propertyDisjointWith>
+      <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#description"/>
+    </owl:propertyDisjointWith>
+    <owl:propertyDisjointWith>
+      <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#identifier"/>
+    </owl:propertyDisjointWith>
+    <owl:propertyDisjointWith>
+      <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#rights"/>
+    </owl:propertyDisjointWith>
+    <owl:propertyDisjointWith>
+      <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#title"/>
+    </owl:propertyDisjointWith>
+    <owl:propertyDisjointWith>
+      <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#language"/>
+    </owl:propertyDisjointWith>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#language">
+    <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:propertyDisjointWith>
+      <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#rights"/>
+    </owl:propertyDisjointWith>
+    <owl:propertyDisjointWith>
+      <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#title"/>
+    </owl:propertyDisjointWith>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#language"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#identifier">
+    <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:propertyDisjointWith>
+      <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#rights"/>
+    </owl:propertyDisjointWith>
+    <owl:propertyDisjointWith>
+      <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#title"/>
+    </owl:propertyDisjointWith>
+    <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#language"/>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#anyURI"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#title">
+    <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#description">
+    <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#identifier"/>
+    <owl:propertyDisjointWith>
+      <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#rights"/>
+    </owl:propertyDisjointWith>
+    <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#title"/>
+    <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#language"/>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.obolibrary.org/obo/TEMP#rights">
+    <rdfs:domain rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:propertyDisjointWith rdf:resource="http://purl.obolibrary.org/obo/TEMP#title"/>
+    <oboInOwl:mv></oboInOwl:mv>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.w3.org/2004/02/skos/core#notation">
+    <skos:scopeNote xml:lang="en">By convention, skos:notation is used with a typed literal in the object position of the triple.</skos:scopeNote>
+    <skos:definition xml:lang="en">A notation, also known as classification code, is a string of characters such as "T58.5" or "303.4833" used to uniquely identify a concept within the scope of a given concept scheme.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">notation</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:DatatypeProperty>
+  <owl:TransitiveProperty rdf:about="http://www.w3.org/2004/02/skos/core#broaderTransitive">
+    <owl:inverseOf>
+      <owl:TransitiveProperty rdf:about="http://www.w3.org/2004/02/skos/core#narrowerTransitive"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <skos:scopeNote xml:lang="en">By convention, skos:broaderTransitive is not used to make assertions. Rather, the properties can be used to draw inferences about the transitive closure of the hierarchical relation, which is useful e.g. when implementing a simple query expansion algorithm in a search application.</skos:scopeNote>
+    <skos:definition>skos:broaderTransitive is a transitive superproperty of skos:broader.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has broader transitive</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#broaderTransitive"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:TransitiveProperty>
+  <owl:TransitiveProperty rdf:about="http://www.w3.org/2004/02/skos/core#narrowerTransitive">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <skos:scopeNote xml:lang="en">By convention, skos:narrowerTransitive is not used to make assertions. Rather, the properties can be used to draw inferences about the transitive closure of the hierarchical relation, which is useful e.g. when implementing a simple query expansion algorithm in a search application.</skos:scopeNote>
+    <skos:definition>skos:narrowerTransitive is a transitive superproperty of skos:narrower.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has narrower transitive</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#narrowerTransitive"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:TransitiveProperty>
+  <owl:SymmetricProperty rdf:about="http://www.w3.org/2004/02/skos/core#closeMatch">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#mappingRelation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <skos:definition xml:lang="en">skos:closeMatch is used to link two concepts that are sufficiently similar that they can be used interchangeably in some information retrieval applications. In order to avoid the possibility of "compound errors" when combining mappings across more than two concept schemes, skos:closeMatch is not declared to be a transitive property.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has close match</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#closeMatch"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:SymmetricProperty>
+  <owl:SymmetricProperty rdf:about="http://www.w3.org/2004/02/skos/core#relatedMatch">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#mappingRelation"/>
+    <rdfs:subPropertyOf>
+      <owl:SymmetricProperty rdf:about="http://www.w3.org/2004/02/skos/core#related"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <skos:definition xml:lang="en">skos:relatedMatch is used to state an associative mapping link between two conceptual resources in different concept schemes.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has related match</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#relatedMatch"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:SymmetricProperty>
+  <owl:SymmetricProperty rdf:about="http://www.w3.org/2004/02/skos/core#exactMatch">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#closeMatch"/>
+    <rdfs:comment xml:lang="en">skos:exactMatch is disjoint with each of the properties skos:broadMatch and skos:relatedMatch.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <skos:definition xml:lang="en">skos:exactMatch is used to link two concepts, indicating a high degree of confidence that the concepts can be used interchangeably across a wide range of information retrieval applications. skos:exactMatch is a transitive property, and is a sub-property of skos:closeMatch.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has exact match</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#exactMatch"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#mappingRelation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:SymmetricProperty>
+  <owl:SymmetricProperty rdf:about="http://www.w3.org/2004/02/skos/core#related">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#semanticRelation"/>
+    <rdfs:comment xml:lang="en">skos:related is disjoint with skos:broaderTransitive</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <skos:definition xml:lang="en">Relates a concept to a concept with which there is an associative semantic relationship.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has related</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#related"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:SymmetricProperty>
+  <owl:FunctionalProperty rdf:about="http://www.w3.org/2004/02/skos/core#memberList">
+    <rdfs:domain rdf:resource="http://www.w3.org/2004/02/skos/core#OrderedCollection"/>
+    <rdfs:comment xml:lang="en">For any resource, every item in the list given as the value of the
+      skos:memberList property is also a value of the skos:member property.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <skos:definition xml:lang="en">Relates an ordered collection to the RDF list containing its members.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">has member list</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:FunctionalProperty>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#language"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+  </owl:Axiom>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#person"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#creator"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#range"/>
+  </owl:Axiom>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#description"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+  </owl:Axiom>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65379">
+    <dct:identifier>http://zaguan.unizar.es/record/65379</dct:identifier>
+    <j.0:rights>
+      <rdf:Description rdf:about="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+        <dct:rights>http://creativecommons.org/licenses/by-nc-sa/3.0/</dct:rights>
+      </rdf:Description>
+    </j.0:rights>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Psicologia y Sociologia; Area de Trabajo Social y Servicios Sociales</j.0:publisher>
+    <j.0:title>Proyecto de sensibilizacion y apoyo a familiares de personas diagnosticadas de enfermedad mental</j.0:title>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Trabajo Social</skos:prefLabel>
+    </j.0:subject>
+    <j.0:date>2017</j.0:date>
+    <j.0:description>Resumen: La idea de este trabajo surge de la deteccion de una carencia de atencion a las familias en las Unidades de Corta Estancia. Asi pues, el objetivo de la elaboracion del proyecto de sensibilizacion y apoyo a familiares de personas diagnosticadas de enfermedad mental, es dar una mayor atencion a estos familiares de personas con Trastorno Mental Grave.  La importancia de todo esto reside en que estas familias son un potente recurso para trabajar con este tipo de pacientes.  Por ello,  lo que se busca alcanzar el proyecto es una reduccion de la “emocion expresada” de dichas familias mediante la adaptacion de talleres psicoeducativos a las caracteristicas de este tipo de unidades, para que estos les ayuden a adquirir habilidades y conocimientos con los que enfrentarse a la enfermedad mental.  Summary: The idea for this project comes from detecting a lack of attention to families at Short Stay Units. Therefore, the aim of the making of this project of sensitivity and support for relatives of people diagnosed with mental illness is to raise awareness about relatives of people suffering from a serious mental disorder.  The importance of all of this lies in the fact that families are a powerful resource to use with this type of patients. Consequently, what is being sought to achieve with this project is a reduction in these families’ “expressed emotion” through the adaptation of psychoeducative workshops to the characteristics of this kind of units, so that these can help the others obtain skills and knowledge they can face their mental illness with.</j.0:description>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65379/files/TAZ-TFG-2017-1770.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65379/files/TAZ-TFG-2017-1770.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:creator>Gonzalez Petisme, Yolanda</j.0:creator>
+    <j.0:contributor>Galan Calvo, Francisco</j.0:contributor>
+  </j.0:tfg>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#example">
+    <skos:definition xml:lang="en">An example of the use of a concept.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">example</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:AnnotationProperty>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#identifier"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+  </owl:Axiom>
+  <owl:NamedIndividual rdf:about="http://purl.obolibrary.org/obo/TEMP#concept"/>
+  <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#mv"/>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#scopeNote">
+    <skos:definition xml:lang="en">A note that helps to clarify the meaning and/or the use of a concept.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">scope note</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:AnnotationProperty>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65378">
+    <j.0:date>2017</j.0:date>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65378/files/TAZ-TFG-2017-1771.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65378/files/TAZ-TFG-2017-1771.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <dct:identifier>http://zaguan.unizar.es/record/65378</dct:identifier>
+    <j.0:contributor>Romeo Gimenez, Luis Miguel</j.0:contributor>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:title>Aplicacion del Power to Gas al sector residencial</j.0:title>
+    <j.0:description>El cambio climatico es un tema actual y el uso de las energias renovables esta en alza, siendo esenciales para conseguir un futuro energetico de bajo carbono. Sin embargo, estas energias son fluctuantes e intermitentes por lo que la tecnologia de almacenamiento es el factor clave para su implantacion futura. El sistema Power to Gas se propone como un metodo alternativo para transformar la energia electrica renovable sobrante en hidrogeno. Este gas puede ser posteriormente convertido en metano sintetico para poder satisfacer mediante su combustion la demanda termica de una instalacion. Por lo tanto, el principal objetivo de este proyecto es el diseno y estudio economico de un sistema Power to Gas para cubrir las necesidades tanto electricas como termicas de un complejo residencial. El estudio se centra en este sector dado que su consumo representa la tercera parte de las emisiones de gases efecto invernadero por lo que su potencial de mejora es muy alto. 	 En las primeras partes del proyecto se contextualiza el porque del Power to Gas, hablando sobre el cambio climatico, la contaminacion por dioxido de carbono y sus tecnicas de captura. Tambien se habla de las energias renovables y de su integracion en el sector residencial, destacando la solar fotovoltaica por ser la mas utilizada. Ademas, se proponen edificios singulares para la implantacion del Power to Gas en ellos, escogiendo las piscinas climatizadas como sector potencial de cambio por sus grandes consumos termicos y electricos, estudiados en puntos sucesivos de la presente memoria. Tras estos estudios se calcula el campo solar que satisface tanto la demanda electrica de la piscina climatizada tipo estudiada, como parte de la termica. Se llega a la conclusion de que para satisfacer los consumos serian necesarios unos 3.000 m2. Con la energia electrica excedente establecida, se disena el sistema Power to Gas, analizando cada uno de los componentes que forman parte de el. Estos son el electrolizador, el buffer de hidrogeno, el metanizador  y la caldera. Finalmente, se realiza un analisis economico de viabilidad de la instalacion, llegando a la conclusion de que hoy en dia la implantacion Power to Gas en este sector residencial no es economicamente viable al resultar 15-38 ct/kWh mas caro que la utilizacion de combustibles fosiles convencionales. Esto es debido a lo poco madura que todavia se encuentra la aplicacion y a la baja eficiencia global.  Sin embargo, esta aplicacion arroja ventajas importantes que hay que considerar si se quieren lograr los objetivos acordados en la COP21 de disminucion de carbono. Esta tecnologia podria evitar anualmente 140 toneladas de carbono, ademas de generar estabilidad electrica a la red. Por lo tanto, si su tecnologia mejorase en los proximos anos, se estaria hablando de una aplicacion muy prometedora para ayudar a mitigar el cambio climatico.</j.0:description>
+    <j.0:creator>Sese Alloza, Gladys</j.0:creator>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Ingenieria Mecanica; Area de Maquinas y Motores Termicos</j.0:publisher>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Ingenieria de Tecnologias Industriales</skos:prefLabel>
+    </j.0:subject>
+  </j.0:tfg>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#editorialNote">
+    <skos:definition xml:lang="en">A note for an editor, translator or maintainer of the vocabulary.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">editorial note</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:AnnotationProperty>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/14344">
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/14344/files/TAZ-TFG-2014-518.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/14344/files/TAZ-TFG-2014-518.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <dct:identifier>http://zaguan.unizar.es/record/14344</dct:identifier>
+    <j.0:description>El programa de intervencion que se presenta va dirigido a familias con hijos adolescentes que estan atravesando por dificultades, por ejemplo, con el consumo de sustancias. Con el programa se pretende , por un lado, dotar a las familias con herramientas y estrategias para mejorar la relacion y la comunicacion con sus hijos adolescentes.Por otro lado, se busca apoyar a los padres a que tomen conciencia plena, a traves de la practica de mindfulness, del momento presente. Aceptando y no juzgando las emociones y pensamientos que se presentan en la relacion con sus hijos, con el objetivo de que lo integren como una experiencia de su vida en el momento presente.</j.0:description>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:date>2014</j.0:date>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Psicologia</skos:prefLabel>
+    </j.0:subject>
+    <j.0:contributor>Jimenez Gutierrez, Teresa Isabel</j.0:contributor>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>comunicacion</skos:prefLabel>
+    </j.0:subject>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>mindfulness</skos:prefLabel>
+    </j.0:subject>
+    <j.0:title>Programa Minfa: Apoyo a familias con hijos adolescentes.Intervencion con mindfulness</j.0:title>
+    <j.0:creator>Sebastian Echenique, Belen</j.0:creator>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Psicologia y Sociologia; Area de Psicologia Evolutiva y de la Educacion</j.0:publisher>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>familia</skos:prefLabel>
+    </j.0:subject>
+  </j.0:tfg>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#note">
+    <skos:scopeNote xml:lang="en">This property may be used directly, or as a super-property for more specific note types.</skos:scopeNote>
+    <skos:definition xml:lang="en">A general note, for any purpose.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">note</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:AnnotationProperty>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#rights"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+  </owl:Axiom>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65389">
+    <dct:identifier>http://zaguan.unizar.es/record/65389</dct:identifier>
+    <j.0:contributor>Manchado Perez, Eduardo Jose</j.0:contributor>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:contributor>Beltran Blazquez, Jose Ramon</j.0:contributor>
+    <j.0:date>2017</j.0:date>
+    <j.0:title>Analisis de la estrategia de comunicacion audiovisual de la EINA y mejora de esta, a traves del rediseno de espacios</j.0:title>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65389/files/TAZ-TFG-2017-1750.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65389/files/TAZ-TFG-2017-1750.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Ingenieria en Diseno Industrial y Desarrollo de Producto</skos:prefLabel>
+    </j.0:subject>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Ingenieria Electronica y Comunicaciones; Area de Tecnologia Electronica</j.0:publisher>
+    <j.0:description>El objetivo del proyecto es mejorar la estrategia de comunicacion de la Escuela de Ingenieria y Arquitectura (EINA) mediante la utilizacion de medios audiovisuales para conseguir que la informacion que el centro quiere transmitir al alumnado le llegue de la manera mas efectiva posible. Para detectar los problemas de comunicacion que perciben los alumnos, se han realizado encuestas, y se han investigado los medios, canales y soportes que actualmente utiliza la EINA para comunicarse. Tras una primera fase de analisis, se plantea la propuesta de mejora que consiste en utilizar las cafeterias como lugares de proyeccion de contenidos en los que los alumnos se puedan informar de lo que ocurre en la Escuela mientras disfrutan de su tiempo de ocio. El proyecto abarca desde el diseno de una metodologia de edicion de contenidos audiovisuales que permita comunicar cualquier tipo de informacion mediante una misma estructura, hasta la seleccion, distribucion en el espacio y explicacion del proceso de instalacion del equipamiento tecnico necesario. Como resultado del proyecto se han realizado pruebas piloto y se han disenado una serie de representaciones virtuales que permiten visualizar como quedaria el resultado del proyecto en su entorno de uso.</j.0:description>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:creator>Mateo Pardo, Maria</j.0:creator>
+  </j.0:tfg>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65377">
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65377/files/TAZ-TFG-2017-1773.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65377/files/TAZ-TFG-2017-1773.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:title>Analisis de las estrategias de CAM en el mecanizado de matrices</j.0:title>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Ingenieria de Diseno y Fabricacion; Area de Ingenieria de los Procesos de Fabricacion</j.0:publisher>
+    <j.0:date>2017</j.0:date>
+    <j.0:description>En este TFG se van a analizar las diferentes estrategias de mecanizado para distintos tipos de superficies, en este caso dos modelos diferentes de piezas. La pieza experimental en la que se observa la influencia de los parametros de corte en diferentes variables como son la altura de cresta, tiempo de mecanizado, sentido ascendente y descendente de corte y rugosidad de la pieza. La segunda pieza industrial es una matriz de estampacion en la que se realizan diferentes modelos para encontrar el mas adecuado para su fabricacion, se valoran las estrategias propuestas con sus acabados finales y tiempos de mecanizado.</j.0:description>
+    <j.0:contributor>Casanova Agustin, Jesus</j.0:contributor>
+    <dct:identifier>http://zaguan.unizar.es/record/65377</dct:identifier>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Ingenieria Mecanica</skos:prefLabel>
+    </j.0:subject>
+    <j.0:contributor>Royo Vazquez, Emilio Julian</j.0:contributor>
+    <j.0:creator>Gracia Langa, Christian</j.0:creator>
+  </j.0:tfg>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#creator"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+  </owl:Axiom>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65388">
+    <j.0:contributor>Eito Mateo, Antonio</j.0:contributor>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Psicologia y Sociologia; Area de Trabajo Social y Servicios Sociales</j.0:publisher>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Trabajo Social</skos:prefLabel>
+    </j.0:subject>
+    <j.0:description>El presente trabajo aborda una aproximacion al estudio de las series de animacion dirigida a la infancia enfocando la problematica que encierran los conceptos sexo y genero que se presentan. Prestando especial atencion a los sexos biologicos representados, el significado del sexo o construccion social del genero y los consiguientes estereotipos de genero masculinos y femeninos lo cuales pueden crear sistemas de exclusion social presentando asi posibles lineas de accion desde el Trabajo Social.</j.0:description>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <dct:identifier>http://zaguan.unizar.es/record/65388</dct:identifier>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65388/files/TAZ-TFG-2017-1751.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65388/files/TAZ-TFG-2017-1751.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:title>Las series de animacion dirigidas a la infancia y las representaciones del sexo y el genero. Una aproximacion desde el Trabajo Social.</j.0:title>
+    <j.0:creator>Cebollada Latorre, Andrea</j.0:creator>
+    <j.0:date>2017</j.0:date>
+  </j.0:tfg>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65376">
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Unidad Predepartamental de Arquitectura; Area de Urbanistica y Ordenacion del Territorio</j.0:publisher>
+    <j.0:date>2017</j.0:date>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65376/files/TAZ-TFG-2017-1775.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65376/files/TAZ-TFG-2017-1775.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:contributor>Garcia Garcia, Miriam</j.0:contributor>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>eng</dct:language>
+    </j.0:language>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Estudios en Arquitectura</skos:prefLabel>
+    </j.0:subject>
+    <j.0:title>Cahokia. El Paisaje Precolombino en la Cuenca del Mississippi</j.0:title>
+    <dct:identifier>http://zaguan.unizar.es/record/65376</dct:identifier>
+    <j.0:creator>Herrera Russert, Daniel</j.0:creator>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:description>Estudio del paisaje de las culturas precolombinas (600-1350) de la cuenca del Mississippi en la region del American Bottom (St. Louis) en Norteamerica, en el contexto de la cultura de Cahokia, con el objetivo de analizar los distintos modelos de asentamiento planteados actualmente en terminos de la dinamica natural del paisaje y los niveles arquitectonicos de los yacimientos arqueologicos hallados, y en ultima instancia los factores que desencadenaron la caida y abandono de las culturas del Mississippi. Por ultimo, una lectura en terminos de resiliencia paisajistica ante circunstancias modernas, como el cambio climatico y asentamiento moderno del territorio.</j.0:description>
+  </j.0:tfg>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#hiddenLabel">
+    <rdfs:comment xml:lang="en">skos:prefLabel, skos:altLabel and skos:hiddenLabel are pairwise disjoint properties.</rdfs:comment>
+    <rdfs:comment xml:lang="en">The range of skos:hiddenLabel is the class of RDF plain literals.</rdfs:comment>
+    <skos:definition xml:lang="en">A lexical label for a resource that should be hidden when generating visual displays of the resource, but should still be accessible to free text search operations.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">hidden label</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:AnnotationProperty>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65387">
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Filosofia; Area de Filosofia</j.0:publisher>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65387/files/TAZ-TFG-2017-1752.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65387/files/TAZ-TFG-2017-1752.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:contributor>Lopiz Canto, Pablo</j.0:contributor>
+    <j.0:date>2017</j.0:date>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Trabajo Social</skos:prefLabel>
+    </j.0:subject>
+    <dct:identifier>http://zaguan.unizar.es/record/65387</dct:identifier>
+    <j.0:title>La nueva forma de ver el mundo. La crisis de lo social y el abandono de los perdedores.</j.0:title>
+    <j.0:creator>Escobedo Muguerza, Irene</j.0:creator>
+    <j.0:description>Durante el siglo XIX presenciamos lo que Jacques Donzelot califica como “la invencion de lo social”, un mecanismo concebido para neutralizar el violento antagonismo entre capital y trabajo. Sin embargo, con la introduccion de la racionalidad neoliberal, asistimos a lo que hemos denominado “la crisis de lo social”, pues se produce el surgimiento de un nuevo orden social que genera nuevas relaciones sociales, comportamientos y formas de vida basadas en la ley de la competencia como norma de conducta y en la empresa como modelo de subjetividad, estableciendose una sociedad de “ganadores” y “perdedores”. Estas nuevas normas guian las actuaciones que se llevan a cabo desde diferentes instituciones y saberes, por lo que se pretende reflejar como el cambio que se ha producido en “lo social” ha influido directamente a los servicios destinados a la atencion a la salud mental.</j.0:description>
+  </j.0:tfg>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65386">
+    <j.0:description>En el actual documento se expone una investigacion sobre la situacion de los jovenes extutelados de la Comunidad Aragonesa, cuyo objetivo principal es analizar los debates actuales en torno a la emancipacion de los jovenes acogidos en el Sistema de Proteccion de la infancia en Aragon. La metodologia utilizada para obtener un exhaustivo analisis del panorama actual de este colectivo ha sido la realizacion de una matriz DAFO a traves de entrevistas semiestructuradas a un joven extutelado inmerso en el programa P.E.P y a los tecnicos referentes de Fundacion Federico Ozanam, IASS e YMCA de dicho programa, la observacion y analisis de las sesiones de la Mesa Tecnica de la Infancia y Adolescencia en Aragon, la extraccion de datos cuantitativos de los datos referentes a dicho programa y una profunda revision y lectura bibliografica. De la cual se concluye con la necesidad de un proceso de sensibilizacion y difusion de informacion a la poblacion, carencia de recursos suficientes y un mecanismo de seguimiento de los usuarios posterior al programa P.E.P, falta de coordinacion entre las entidades y la Administracion Publica y una notable desigualdad y diferencia en las diferentes Comunidades Autonomas Espanolas debido a los diferentes Sistemas de Proteccion implantados.</j.0:description>
+    <j.0:title>Jovenes extutelados y su proceso de transicion a la autonomia en Aragon</j.0:title>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65386/files/TAZ-TFG-2017-1753.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65386/files/TAZ-TFG-2017-1753.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Trabajo Social</skos:prefLabel>
+    </j.0:subject>
+    <j.0:creator>Jordan Oliveros, Sara</j.0:creator>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:contributor>Gimeno Monterde, Chabier</j.0:contributor>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:date>2017</j.0:date>
+    <dct:identifier>http://zaguan.unizar.es/record/65386</dct:identifier>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Psicologia y Sociologia; Area de Trabajo Social y Servicios Sociales</j.0:publisher>
+  </j.0:tfg>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#contributor"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+  </owl:Axiom>
+  <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#ciencias_de_la_salud">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <skos:prefLabel xml:lang="es">ciencias de la salud</skos:prefLabel>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#biotecnologia">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:altLabel xml:lang="en">biotechnology</skos:altLabel>
+        <skos:prefLabel xml:lang="es">biotecnologia</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#genetica">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:altLabel xml:lang="es">genetica</skos:altLabel>
+        <skos:prefLabel xml:lang="es">genética</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#virologia">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:prefLabel xml:lang="es">virologia</skos:prefLabel>
+        <skos:prefLabel xml:lang="es">virología</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#medicina">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:prefLabel xml:lang="es">medicina</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#cirugia">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:prefLabel xml:lang="es">cirugia</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#biotecnologia"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#genetica"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#virologia"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#medicina"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#cirugia"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#biotecnologia"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#genetica"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#virologia"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#medicina"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#cirugia"/>
+  </skos:Concept>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#changeNote">
+    <skos:definition xml:lang="en">A note about a modification to a concept.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">change note</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:AnnotationProperty>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65385">
+    <j.0:date>2017</j.0:date>
+    <j.0:creator>Valderrama Aban, Lorena</j.0:creator>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Psicologia y Sociologia; Area de Sociologia</j.0:publisher>
+    <j.0:contributor>Rincon Ruiz, Maria del Mar del</j.0:contributor>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:description>Los Cuidados Paliativos los recibiran los pacientes en situacion de enfermedad avanzada cuando se determina la imposibilidad de curacion. El siguiente informe de investigacion va guiado a conocer y determinar los factores principales que llevan a prolongar el alta hospitalaria en los pacientes de Cuidados Paliativos. Se ha enfocado en conocer las necesidades que requieren en sus cuidados y los recursos que precisan para ello. A lo largo de todo el informe, se pone de manifiesto la necesidad de los pacientes y sus familias de contar con una buena atencion no solo medica, sino de apoyo psicosocial. La principal dificultad para ellos es la escasez de recursos, lo que proporciona unos cuidados ineficientes para los pacientes. Para un buen cuidado, se precisa una atencion especializada al paciente en su totalidad, asi como recursos que den respuesta agil y eficiente a situaciones de enfermedad avanzada.</j.0:description>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65385/files/TAZ-TFG-2017-1755.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65385/files/TAZ-TFG-2017-1755.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Trabajo Social</skos:prefLabel>
+    </j.0:subject>
+    <j.0:title>Analisis de los factores que contribuyen a prolongar la estancia hospitalaria en los pacientes de cuidados paliativos.</j.0:title>
+    <dct:identifier>http://zaguan.unizar.es/record/65385</dct:identifier>
+  </j.0:tfg>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#university"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#publisher"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#range"/>
+  </owl:Axiom>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65384">
+    <j.0:creator>Celorrio Aranda, Laura</j.0:creator>
+    <dct:identifier>http://zaguan.unizar.es/record/65384</dct:identifier>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:date>2017</j.0:date>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Ingenieria Quimica y Tecnologias del Medio Ambiente</j.0:publisher>
+    <j.0:description>La Hipertermia Magnetica (HM) es una terapia oncologica basada en el calentamiento de tumores mediante la aplicacion remota de un campo magnetico de radiofrecuencia sobre nanoparticulas magneticas (NPMs) previamente incorporadas al tejido diana. La interaccion magnetica entre NPMs y campo resulta en la generacion de calor, elevando la temperatura local hasta 42ºC – 45ºC e induciendo la muerte de las celulas diana. Las potenciales aplicaciones de las NPMs dependen en gran medida del diseno de nuevas particulas con gran capacidad de producir calor bajo la accion de campos magneticos. En este trabajo se sintetizaron y caracterizaron diferentes muestras coloidales compuestas por NPMs de MnFe2O4 con el fin de seleccionar las que posean las propiedades optimas para HM, maximizando la absorcion especifica de potencia (SPA) y minimizando su citotoxicidad para celulas microgliales BV2. Estudios teoricos recientes que sugieren que las interacciones dipolares debidas a la aglomeracion intracelular de las NPMs en condiciones in vitro resultan ser la causa principal de cambios en la relajacion magnetica, lo que conlleva la disminucion del SPA. Para confirmar estas hipotesis, realizamos una prueba de concepto para la HM in vitro: la generacion de cadenas de NPMs internalizadas en el citoplasma celular (aplicando campos magneticos continuos durante el crecimiento) y la comparacion de su eficiencia de calentamiento (SPA) con la correspondiente a las NPMs agregadas en el citoplasma. Mediante el diseno experimental propuesto hemos confirmado que la aglomeracion de NPMs en el interior celular resulta en menores valores de SPA que en el coloide original. Este proceso pudo ser revertido mediante la formacion de cadenas que evitan los aglomerados en el interior celular. Estos experimentos constituyen una base experimental inicial para desarrollar modelos fisicos de absorcion de potencia, que permita la optimizacion de los parametros mas relevantes en hipertermia magnetica clinica, minimizando el dano en los tejidos sanos.</j.0:description>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65384/files/TAZ-TFG-2017-1758.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65384/files/TAZ-TFG-2017-1758.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:contributor>Goya Rossetti, Gerardo Fabian</j.0:contributor>
+    <j.0:title>Desarrollo de nanoparticulas magneticas optimizadas para uso biomedico en hipertermia por radiofrecuencia, y prueba de concepto en celulas de microglia</j.0:title>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Ingenieria Quimica</skos:prefLabel>
+    </j.0:subject>
+    <j.0:contributor>Sanz Sague, Beatriz</j.0:contributor>
+  </j.0:tfg>
+  <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#animacion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <skos:altLabel xml:lang="es">modelo 2D</skos:altLabel>
+    <skos:altLabel xml:lang="es">modelo 3D</skos:altLabel>
+    <skos:altLabel xml:lang="es">dibujos animados</skos:altLabel>
+    <skos:altLabel xml:lang="es">3D</skos:altLabel>
+    <skos:prefLabel xml:lang="es">animación</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </skos:Concept>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#title"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+  </owl:Axiom>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65395">
+    <j.0:contributor>Alcala Heredia, Vicente</j.0:contributor>
+    <j.0:title>Instalacion en baja tension de una clinica deportiva</j.0:title>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Ingenieria Electrica; Area de Ingenieria Electrica</j.0:publisher>
+    <j.0:date>2017</j.0:date>
+    <dct:identifier>http://zaguan.unizar.es/record/65395</dct:identifier>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Ingenieria Electrica</skos:prefLabel>
+    </j.0:subject>
+    <j.0:creator>Artal Anson, Carlos</j.0:creator>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65395/files/TAZ-TFG-2017-1730_ANE.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65395/files/TAZ-TFG-2017-1730_ANE.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:description>Instalacion en baja tension de una clinica deportiva.</j.0:description>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+  </j.0:tfg>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65383">
+    <j.0:date>2017</j.0:date>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65383/files/TAZ-TFG-2017-1759.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65383/files/TAZ-TFG-2017-1759.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <dct:identifier>http://zaguan.unizar.es/record/65383</dct:identifier>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:contributor>Siurana Lopez, Sergio</j.0:contributor>
+    <j.0:description>En el trabajo se presenta un proyecto social cuyo fin es erradicar el estigma existente a dia de hoy en la salud mental. En dicho proyecto participaran tanto personas con un Trastorno Mental Grave, como estudiantes de la Universidad de Zaragoza, compartiendo convivencia. Para la realizacion del mismo ha sido necesaria la revision de una serie de documentos bibliograficos y noticias impresas y online, en relacion a la salud mental, el estigma y la rehabilitacion psicosocial. El proyecto esta elaborado en funcion de los datos obtenidos en dicha revision documental y esta planteado acorde con los objetivos de la Estrategia Nacional de Salud Mental Espana. Se elaborara por ultimo un cronograma donde apareceran las actividades necesarias para llevar a cabo el proyecto con los meses en los que transcurrira este.</j.0:description>
+    <j.0:creator>Marin Arias, Noelia</j.0:creator>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:title>Erradicacion del estigma en la salud mental: pisos compartidos entre personas con un trastorno mental grave y estudiantes de la Universidad de Zaragoza.</j.0:title>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Trabajo Social</skos:prefLabel>
+    </j.0:subject>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Psicologia y Sociologia; Area de Trabajo Social y Servicios Sociales</j.0:publisher>
+  </j.0:tfg>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#altLabel">
+    <rdfs:comment xml:lang="en">The range of skos:altLabel is the class of RDF plain literals.</rdfs:comment>
+    <rdfs:comment xml:lang="en">skos:prefLabel, skos:altLabel and skos:hiddenLabel are pairwise disjoint properties.</rdfs:comment>
+    <skos:example xml:lang="en">Acronyms, abbreviations, spelling variants, and irregular plural/singular forms may be included among the alternative labels for a concept. Mis-spelled terms are normally included as hidden labels (see skos:hiddenLabel).</skos:example>
+    <skos:definition xml:lang="en">An alternative lexical label for a resource.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">alternative label</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:AnnotationProperty>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#prefLabel">
+    <rdfs:comment xml:lang="en">The range of skos:prefLabel is the class of RDF plain literals.</rdfs:comment>
+    <rdfs:comment xml:lang="en">skos:prefLabel, skos:altLabel and skos:hiddenLabel are pairwise
+      disjoint properties.</rdfs:comment>
+    <rdfs:comment xml:lang="en">A resource has no more than one value of skos:prefLabel per language tag, and no more than one value of skos:prefLabel without language tag.</rdfs:comment>
+    <skos:definition xml:lang="en">The preferred lexical label for a resource, in a given language.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">preferred label</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:AnnotationProperty>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65394">
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Psicologia y Sociologia; Area de Trabajo Social y Servicios Sociales</j.0:publisher>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:contributor>Galan Calvo, Francisco</j.0:contributor>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65394/files/TAZ-TFG-2017-1731.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65394/files/TAZ-TFG-2017-1731.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:title>La percepcion de la discapacidad en el medio rural</j.0:title>
+    <j.0:description>En la actualidad, las personas con discapacidad son tratadas con total integracion y normalizacion, la principal idea que recorre esta investigacion es la imagen y la opinion que tiene la sociedad sobre las personas con disparidades, es decir, la percepcion de los habitantes sobre este colectivo en la comarca de Valdejalon (Zaragoza).</j.0:description>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Trabajo Social</skos:prefLabel>
+    </j.0:subject>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <dct:identifier>http://zaguan.unizar.es/record/65394</dct:identifier>
+    <j.0:date>2017</j.0:date>
+    <j.0:creator>Saz Cacho, Beatriz</j.0:creator>
+  </j.0:tfg>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#person"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#contributor"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#range"/>
+  </owl:Axiom>
+  <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#bellas_artes_y_diseño">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <skos:altLabel xml:lang="es">artes</skos:altLabel>
+    <skos:altLabel xml:lang="es">arte</skos:altLabel>
+    <skos:altLabel xml:lang="es">bellas artes</skos:altLabel>
+    <skos:prefLabel xml:lang="es">bellas artes y diseño</skos:prefLabel>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#literatura">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:altLabel xml:lang="es">critica literaria</skos:altLabel>
+        <skos:altLabel xml:lang="es">crítica literaria</skos:altLabel>
+        <skos:prefLabel xml:lang="es">literatura</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#cine">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:altLabel xml:lang="es">crítica cinematográfica</skos:altLabel>
+        <skos:altLabel xml:lang="es">cinematografia</skos:altLabel>
+        <skos:altLabel xml:lang="es">critica cinematografica</skos:altLabel>
+        <skos:altLabel xml:lang="es">filmografia</skos:altLabel>
+        <skos:prefLabel xml:lang="es">cine</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#danza">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:altLabel xml:lang="es">baile</skos:altLabel>
+        <skos:prefLabel xml:lang="es">danza</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#escultura">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:altLabel xml:lang="es">figuras</skos:altLabel>
+        <skos:prefLabel xml:lang="es">escultura</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#pintura">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:altLabel xml:lang="es">artes plásticas</skos:altLabel>
+        <skos:prefLabel xml:lang="es">pintura</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#arquitectura">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:prefLabel xml:lang="es">arquitectura</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <skos:broader>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#musica">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:altLabel xml:lang="es">musica</skos:altLabel>
+        <skos:prefLabel xml:lang="es">música</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:broader>
+    <skos:related>
+      <skos:Concept rdf:about="http://www.w3.org/2004/02/skos/core#restauracion_y_conservacion">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <skos:altLabel xml:lang="es">conservación</skos:altLabel>
+        <skos:altLabel xml:lang="es">restauración</skos:altLabel>
+        <skos:altLabel xml:lang="es">restauracion</skos:altLabel>
+        <skos:prefLabel xml:lang="es">restauración y conservación</skos:prefLabel>
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+      </skos:Concept>
+    </skos:related>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#literatura"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#cine"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#danza"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#escultura"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#pintura"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#arquitectura"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#musica"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#literatura"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#cine"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#danza"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#escultura"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#pintura"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#arquitectura"/>
+    <skos:broaderTransitive rdf:resource="http://www.w3.org/2004/02/skos/core#musica"/>
+    <skos:semanticRelation rdf:resource="http://www.w3.org/2004/02/skos/core#restauracion_y_conservacion"/>
+  </skos:Concept>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65382">
+    <dct:identifier>http://zaguan.unizar.es/record/65382</dct:identifier>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Informatica e Ingenieria de Sistemas; Area de Lenguajes y Sistemas Informaticos</j.0:publisher>
+    <j.0:contributor>Ortin Obon, Marta</j.0:contributor>
+    <j.0:date>2017</j.0:date>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:contributor>Guitierrez Perez, Diego</j.0:contributor>
+    <j.0:description>Evaluar problemas de vision en ninos es de gran interes para evitar complicaciones en su desarrollo cognitivo. Sin embargo, la incapacidad de los ninos mas pequenos para comunicarse y colaborar con los medicos dificulta la administracion de los test, haciendo que los resultados sean poco precisos y fiables. Ademas, los test utilizados en las consultas son caros, voluminosos, complicados y lentos. Este trabajo fin de grado se enmarca dentro de un proyecto que comenzo en el ano 2014, como una colaboracion con el Hospital Infantil de Zaragoza y el grupo Graphics and Imaging Lab. El objetivo principal del proyecto es la creacion de herramientas digitales novedosas para el diagnostico de problemas visuales en ninos preverbales. El fruto de esta colaboracion es DIVE, una aplicacion que utiliza eye tracking para diagnosticar diversos problemas visuales en ninos de cualquier edad. En este trabajo de fin de grado, colaboramos en el proyecto anadiendo dos test visuales a DIVE. El primero de estos test trata el problema de las negligencias espaciales. Las personas que sufren este problema son incapaces de visualizar la mitad de su campo visual. Creamos un test de cancelacion digital para diagnosticar estos problemas en ninos. El test presenta multiples figuras en pantalla, de entre las cuales el paciente debera tocar todas aquellas de un tipo concreto. Si el paciente muestra una preferencia clara por las figuras de una mitad de la pantalla, se considerara un claro indicativo de una negligencia espacial. El segundo se enfrenta al diagnostico de discromatopsias, un conjunto de defectos en la vision de color conocidos coloquialmente como daltonismo. En este caso, nos centramos en las bases teoricas y matematicas sobre el color y las discromatopsias para crear imagenes en las que se muestra una figura oculta que solo los sujetos con vision normal pueden ver correctamente. Creamos dos test independientes: uno, de mayor precision, permitira evaluar el grado de defecto visual de ninos mayores de 3 anos y el otro, permitira diagnosticar discromatopsias en ninos pequenos, incapaces de cooperar con el oftalmologo. Para ello, este ultimo utilizara eye tracking para determinar, de manera automatica, si los pacientes son capaces de ver las figuras ocultas en las imagenes.</j.0:description>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Ingenieria Informatica</skos:prefLabel>
+    </j.0:subject>
+    <j.0:creator>Galindo Ramos, Miguel Jorge</j.0:creator>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65382/files/TAZ-TFG-2017-1765.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65382/files/TAZ-TFG-2017-1765.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:title>Diagnostico de problemas visuales en ninos mediante eye tracking: test de cancelacion y percepcion del color</j.0:title>
+    <j.0:contributor>Echevarria Vallespi, Jose Ignacio</j.0:contributor>
+  </j.0:tfg>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#definition">
+    <skos:definition xml:lang="en">A statement or formal explanation of the meaning of a concept.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">definition</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:AnnotationProperty>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#date"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+  </owl:Axiom>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65393">
+    <j.0:date>2017</j.0:date>
+    <j.0:contributor>Altabas Navarro, Jose Antonio</j.0:contributor>
+    <j.0:creator>Seron Casabona, Cristina</j.0:creator>
+    <j.0:contributor>Garces de Gregorio, Juan Ignacio</j.0:contributor>
+    <j.0:contributor>Izquierdo Nunez, David</j.0:contributor>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Ingenieria Electronica y Comunicaciones; Area de Teoria de la Senal y Comunicaciones</j.0:publisher>
+    <j.0:title>Desarrollo de algoritmos de procesado digital de senal para receptores opticos coherentes de redes opticas de nueva generacion</j.0:title>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:description>El proyecto consiste en la implementacion de los algoritmos de procesado digital de la senal para receptores opticos coherentes, asi como su verificacion en un esquema de recepcion coherente homodino. Se realiza el estudio de los principios de funcionamiento de este tipo de deteccion, asi como sus prestaciones en un programa de simulacion y de manera experimental.</j.0:description>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65393/files/TAZ-TFG-2017-1732.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65393/files/TAZ-TFG-2017-1732.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <dct:identifier>http://zaguan.unizar.es/record/65393</dct:identifier>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Ingenieria de Tecnologias y Servicios de Telecomunicacion</skos:prefLabel>
+    </j.0:subject>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+  </j.0:tfg>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65381">
+    <dct:identifier>http://zaguan.unizar.es/record/65381</dct:identifier>
+    <j.0:title>Analisis y comparativa de la estructura y el espacio urbanos en los pueblos indigenas de Acoma y Walpi</j.0:title>
+    <j.0:contributor>Perez Herreras, Javier</j.0:contributor>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>eng</dct:language>
+    </j.0:language>
+    <j.0:creator>Sebastian Rico, Jorge</j.0:creator>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65381/files/TAZ-TFG-2017-1766.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65381/files/TAZ-TFG-2017-1766.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Estudios en Arquitectura</skos:prefLabel>
+    </j.0:subject>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Unidad Predepartamental de Arquitectura; Area de Proyectos Arquitectonicos</j.0:publisher>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:description>The topic of this work is the Pueblos, the typical settlements of the Native people in the southwestern area of United States, more specifically the Indian tribes from the northern areas of the current states of New Mexico and Arizona.  A Pueblo is a type of native American settlement architecturally developed by indigenous people between AD 750 and 1300 in the regions belonging to the current states of Utah, Arizona, Colorado and New Mexico, and preserved and inhabited until present days despite some social, cultural, architectonic and constructive modifications or outer influences.</j.0:description>
+    <j.0:date>2017</j.0:date>
+  </j.0:tfg>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65392">
+    <j.0:contributor>Lopiz Canto, Pablo</j.0:contributor>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65392/files/TAZ-TFG-2017-1735.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65392/files/TAZ-TFG-2017-1735.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <dct:identifier>http://zaguan.unizar.es/record/65392</dct:identifier>
+    <j.0:description>Este Trabajo de Fin de Grado propone el debate sobre las implicaciones del Trabajo Social en los procesos de insercion sociolaboral con los sectores de poblacion en situacion y/o riesgo de exclusion. El estudio de investigacion tiene por objeto revisar la construccion del discurso de la politica social y la base teorica del Trabajo Social. Se determina la coyuntura politica, social y  economica y su significacion respecto de la intervencion profesional practica en la realidad. Para ello se plantea un analisis mixto, para determinar la coherencia de la practica profesional en relacion a la problematica que aborda, recogiendo como ejemplo especifico, el caso de las familias monomarentales. Finalmente, se presentan algunas propuestas que pretenden contribuir a repensar ciertas perspectivas del Trabajo Social, para asi mejorar la calidad de la intervencion, y por tanto la atencion a la poblacion.</j.0:description>
+    <j.0:contributor>Dominguez Olivan, Guillermo</j.0:contributor>
+    <j.0:creator>Acena Bardeci, Nerea</j.0:creator>
+    <j.0:title>¿Que papel ocupa el Trabajo Social en los procesos de insercion sociolaboral?</j.0:title>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Trabajo Social</skos:prefLabel>
+    </j.0:subject>
+    <j.0:date>2017</j.0:date>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Metodos Estadisticos; Area de Estadistica e Investigacion Operativa</j.0:publisher>
+  </j.0:tfg>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65380">
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65380/files/TAZ-TFG-2017-1769.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65380/files/TAZ-TFG-2017-1769.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:date>2017</j.0:date>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:description>Existen determinadas profesiones que presentan un mayor riesgo de ideacion y hasta de consumacion del suicidio por parte de sus trabajadores. Es el caso del personal sanitario, cuyas caracteristicas laborales, que implican presion de tiempo de trabajo, desgaste emocional o elevado nivel de estres, los hacen mas susceptibles de padecer problemas psiquicos que incluso pueden derivar en el deseo de acabar con su vida. Por ello es importante llevar a cabo una correcta prevencion de los riesgos psicosociales asociados al suicidio, con especial referencia al personal sanitario, y saber identificar cuando las personas vulnerables pueden estar en riesgo.</j.0:description>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Relaciones Laborales y Recursos Humanos</skos:prefLabel>
+    </j.0:subject>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Derecho de la Empresa; Area de Derecho del Trabajo y de la Seguridad Social</j.0:publisher>
+    <j.0:contributor>Lafuente Pastor, Vicente Pedro</j.0:contributor>
+    <j.0:title>La relacion existente entre suicidio y profesion ejercida. Especial referencia al personal sanitario.</j.0:title>
+    <j.0:creator>Garcia Bayo, Berta</j.0:creator>
+    <dct:identifier>http://zaguan.unizar.es/record/65380</dct:identifier>
+  </j.0:tfg>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#historyNote">
+    <skos:definition xml:lang="en">A note about the past state/use/meaning of a concept.</skos:definition>
+    <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <rdfs:label xml:lang="en">history note</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+  </owl:AnnotationProperty>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#subject"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+  </owl:Axiom>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65391">
+    <j.0:date>2017</j.0:date>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:description>El proceso de extravasacion celular es un momento clave de la cascada metastasica. En el, la celula cancerosa ubicada en el interior del vaso sanguineo se adhiere a la monocapa celular de la pared de este y la atraviesa, pudiendo asi invadir organos y completar la metastasis.  En este proceso, es clave como se rompen las adhesiones entre las celulas que conforman la monocapa originando asi la abertura por la que la celula cancerosa es capaz de extravasar el vaso sanguineo.  Dentro de este proceso, este Trabajo Fin de Grado se ha centrado en estudiar la dinamica de rotura que se produce en la monocapa endotelial por el efecto de una onda de Calcio. La regulacion de esta monocapa es de vital importancia, no solo en la metastasis, sino tambien en enfermedades como el edema pulmonar o la aterosclerosis. Con el fin de conocer en mayor profundidad esta dinamica de rotura se creo un modelo comunicacional hibrido que simula las celulas endoteliales como elastico lineales y las adhesiones celula-celula de la monocapa mediante una subrutina de usuario compatible con Abaqus FEA para caracterizar el comportamiento de dichas uniones. Se estudiaron los efectos que la contraccion causada por una onda de Calcio tenia en la monocapa endotelial en funcion de la cilindridad de esta. Para ello, se crearon modelos bidimensionales de tension plana, para geometrias en las que el diametro del vaso sanguineo era lo suficientemente grande, y modelos tridimensionales, para estudiar el efecto de los distintos valores de cilindridad. Finalmente, los resultados indicaron que se producia un mayor esfuerzo de traccion sobre las uniones que estaban situadas en vertices comunes a varias celulas. Esto conducia a la formacion de agujeros en la monocapa endotelial, por los cuales se podria producir la extravasacion de celulas tumorales. Para las distintas geometrias estudiadas, no se observo un efecto importante de la cilindridad sobre la rotura de las adhesiones de la monocapa.</j.0:description>
+    <j.0:creator>Nieto Sandino, Alberto</j.0:creator>
+    <j.0:title>Simulacion por elementos finitos de la ruptura de adhesiones celulares en vasos sanguineos</j.0:title>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Ingenieria Mecanica</skos:prefLabel>
+    </j.0:subject>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65391/files/TAZ-TFG-2017-1747.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65391/files/TAZ-TFG-2017-1747.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:contributor>Escribano Jimenez, Jorge</j.0:contributor>
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Ingenieria Mecanica; Area de Mec. de Medios Continuos y Teor. de Estructuras</j.0:publisher>
+    <j.0:contributor>Garcia Aznar, Jose Manuel</j.0:contributor>
+    <dct:identifier>http://zaguan.unizar.es/record/65391</dct:identifier>
+  </j.0:tfg>
+  <owl:Axiom>
+    <oboInOwl:mv></oboInOwl:mv>
+    <owl:annotatedTarget rdf:resource="http://purl.obolibrary.org/obo/TEMP#document"/>
+    <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/TEMP#publisher"/>
+    <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+  </owl:Axiom>
+  <j.0:tfg rdf:about="http://zaguan.unizar.es/record/65390">
+    <j.0:publisher>Universidad de Zaragoza; Departamento de Filosofia; Area de Filosofia</j.0:publisher>
+    <j.0:contributor>Lopiz Canto, Pablo</j.0:contributor>
+    <dct:identifier>http://zaguan.unizar.es/record/65390</dct:identifier>
+    <j.0:relation>
+      <rdf:Description rdf:about="http://zaguan.unizar.es/record/65390/files/TAZ-TFG-2017-1749.pdf">
+        <dct:relation>http://zaguan.unizar.es/record/65390/files/TAZ-TFG-2017-1749.pdf</dct:relation>
+      </rdf:Description>
+    </j.0:relation>
+    <j.0:description>Valorar y visibilizar la importancia de los cuidados supone avanzar en terminos de equidad y justicia social. Los cuidados son pilar fundamental de la sociedad, por ello debemos ser conscientes de la importancia de los mismos como sosten de la vida, y en que medida debemos trabajar desde la equidad no solo de genero, sino tambien en otros aspectos que pueden generar desequilibrios como la clase o la raza. Usando como herramienta metodologica la teoria interseccional podemos tener en cuenta la tematica de los cuidados, atendiendo a todas las variables que pueden afectar en el sentir de los distintos agentes que configuran la tematica abordada; los cuidados. De modo que, a traves de la buena praxis, consigamos mejorar las condiciones psicosociales de comunidades con niveles bajos de bienestar.</j.0:description>
+    <j.0:language rdf:parseType="Resource">
+      <dct:language>spa</dct:language>
+    </j.0:language>
+    <j.0:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+    <j.0:date>2017</j.0:date>
+    <j.0:subject rdf:parseType="Resource">
+      <skos:prefLabel>Graduado en Trabajo Social</skos:prefLabel>
+    </j.0:subject>
+    <j.0:creator>Navarro Moreno, David</j.0:creator>
+    <j.0:title>Cuidados y teoria interseccional: proyecto de investigacion/intervencion</j.0:title>
+  </j.0:tfg>
+</rdf:RDF>
