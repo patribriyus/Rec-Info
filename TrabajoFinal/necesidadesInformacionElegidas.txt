@@ -1,7 +1,7 @@
  // TODO: cambiar frases por SPARQL
  101-4 ¿Hay trabajos de fin de grado o trabajos de fin de master que traten sobre la animación o visión por computador publicados en los últimos 20 años, en lenguaje español? 
  101-4 
- prefix skos: <http://www.w3.org/2004/02/skos/core#> PREFIX mv:<http://www.example.org/#> prefix dcterms:<http://purl.org/dc/terms/>
+ prefix skos: <http://www.w3.org/2004/02/skos/core#> PREFIX mv:<http://purl.obolibrary.org/obo/TEMP#> prefix dcterms:<http://purl.org/dc/terms/>
  SELECT DISTINCT ?x WHERE {
 	{?x a mv:tfg} UNION { ?x a mv:tfm } . 
 	{?x mv:title ?content} UNION {?x mv:description ?content} .
@@ -15,6 +15,16 @@
 	}
  
  106-4 Quiero buscar trabajos de veterinaria relacionados con especies felinas (gatos) o especies caninas (perros) entre 2012 y 2018.
- 206-4 Trabajos de fin de grado o máster realizados o dirigidos por algún miembro de la familia López en el departamento de Informática. 
+ 206-4* Trabajos de fin de grado o máster realizados o dirigidos por algún miembro de la familia López en el departamento de Informática.
+ 206-4
+ prefix skos: <http://www.w3.org/2004/02/skos/core#> PREFIX mv:<http://www.example.org/#> prefix dcterms:<http://purl.org/dc/terms/> prefix foaf:<http://xmlns.com/foaf/0.1/>
+ SELECT DISTINCT ?x WHERE {
+	 {?x a mv:tfg} UNION { ?x a mv:tfm } .
+	 {?x mv:contributor/foaf:familyName ?apellido} UNION { ?x mv:creator/foaf:familyName ?apellido} .
+	 FILTER regex(?apellido, '[l|L][o|ó]pez') .
+	 ?x mv:publisher ?publisher .
+	 FILTER regex(?publisher, '[i|I]nform[a|á]tica') . 
+ } LIMIT 50
  209-2 ¿Qué trabajos hay sobre arte? Tienen que ser de arte aragonés, y que no traten temas posteriores al siglo XIX. 
- 305-4 Estoy realizando un estudio sobre la aplicación de algoritmos de búsqueda en entornos relacionados con la medicina, por ejemplo encontrar cadenas de proteinas o hallar pacientes similares basándose en sus síntomas. 
+ 305-4* Estoy realizando un estudio sobre la aplicación de algoritmos de búsqueda en entornos relacionados con la medicina, por ejemplo encontrar cadenas de proteinas o hallar pacientes similares basándose en sus síntomas. 
+ 305-4

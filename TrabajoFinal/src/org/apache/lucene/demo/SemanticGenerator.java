@@ -156,7 +156,7 @@ public class SemanticGenerator {
 							* Creación de propiedades
 							*/ 
 							String prefix_skos = "http://www.w3.org/2004/02/skos/core#";
-							String prefix_mv = "http://www.example.org/#";
+							String prefix_mv = "http://purl.obolibrary.org/obo/TEMP#";
 							
 							// Identifier
 							Resource docResource = collectionModel.createResource(identifier)
@@ -173,33 +173,33 @@ public class SemanticGenerator {
 								contributor = StringUtils.stripAccents(contributor);
 								// Resource contributorResource = collectionModel.createResource(
 								// 		StringUtils.stripAccents(contributor).replaceAll("\\s", "-"));								
-								Resource contributorResource = collectionModel.createResource(prefix_mv+"contributor");
-								// A veces el campo del nombre no está separado por ','
-								String firstName = "", familyName = "";
-								if(contributor.contains(",")){
-									firstName = contributor.split(",")[1].trim();
-									familyName = contributor.split(",")[0].trim();
-								}
-								else{
-									String[] nomCompleto = contributor.split("\\s");
-									switch(nomCompleto.length){
-										case 2:
-											firstName = nomCompleto[0];
-											familyName = nomCompleto[1];
-											break;
-										case 3:
-											firstName = nomCompleto[0];
-											familyName = nomCompleto[1] +""+ nomCompleto[2];
-											break;
-										case 4:
-											firstName = nomCompleto[0] +""+ nomCompleto[1];
-											familyName = nomCompleto[2] +""+ nomCompleto[3];
-											break;
-									}
-								}
-								contributorResource.addProperty(FOAF.firstName, firstName);
-								contributorResource.addProperty(FOAF.familyName, familyName);
-								docResource.addProperty(contributorProperty, contributorResource);
+								// Resource contributorResource = collectionModel.createResource(prefix_mv+"contributor");
+								// // A veces el campo del nombre no está separado por ','
+								// String firstName = "", familyName = "";
+								// if(contributor.contains(",")){
+								// 	firstName = contributor.split(",")[1].trim();
+								// 	familyName = contributor.split(",")[0].trim();
+								// }
+								// else{
+								// 	String[] nomCompleto = contributor.split("\\s");
+								// 	switch(nomCompleto.length){
+								// 		case 2:
+								// 			firstName = nomCompleto[0];
+								// 			familyName = nomCompleto[1];
+								// 			break;
+								// 		case 3:
+								// 			firstName = nomCompleto[0];
+								// 			familyName = nomCompleto[1] +""+ nomCompleto[2];
+								// 			break;
+								// 		case 4:
+								// 			firstName = nomCompleto[0] +""+ nomCompleto[1];
+								// 			familyName = nomCompleto[2] +""+ nomCompleto[3];
+								// 			break;
+								// 	}
+								// }
+								// contributorResource.addProperty(FOAF.firstName, firstName);
+								// contributorResource.addProperty(FOAF.familyName, familyName);
+								docResource.addProperty(contributorProperty, contributor);
 							}
 							// } catch(Exception e){
 							// 	System.err.println("hola");
@@ -238,33 +238,33 @@ public class SemanticGenerator {
 							Property creatorProperty = collectionModel.createProperty(prefix_mv+"creator");
 							// Resource creatorResource = collectionModel.createResource(creator.replaceAll("\\s", "-"));
 							// Resource creatorResource = FOAF.Person;
-							Resource creatorResource = collectionModel.createResource(prefix_mv+"creator");
-							// A veces el campo del nombre no está separado por ','
-							String firstName = "", familyName = "";
-							if(creator.contains(",")){
-								firstName = creator.split(",")[1].trim();
-								familyName = creator.split(",")[0].trim();
-							}
-							else{
-								String[] nomCompleto = creator.split("\\s");
-								switch(nomCompleto.length){
-									case 2:
-										firstName = nomCompleto[0];
-										familyName = nomCompleto[1];
-										break;
-									case 3:
-										firstName = nomCompleto[0];
-										familyName = nomCompleto[1] +""+ nomCompleto[2];
-										break;
-									case 4:
-										firstName = nomCompleto[0] +""+ nomCompleto[1];
-										familyName = nomCompleto[2] +""+ nomCompleto[3];
-										break;
-								}
-							}
-							creatorResource.addProperty(FOAF.firstName, firstName);
-							creatorResource.addProperty(FOAF.familyName, familyName);
-							docResource.addProperty(creatorProperty, creatorResource);
+							// Resource creatorResource = collectionModel.createResource(prefix_mv+"creator");
+							// // A veces el campo del nombre no está separado por ','
+							// String firstName = "", familyName = "";
+							// if(creator.contains(",")){
+							// 	firstName = creator.split(",")[1].trim();
+							// 	familyName = creator.split(",")[0].trim();
+							// }
+							// else{
+							// 	String[] nomCompleto = creator.split("\\s");
+							// 	switch(nomCompleto.length){
+							// 		case 2:
+							// 			firstName = nomCompleto[0];
+							// 			familyName = nomCompleto[1];
+							// 			break;
+							// 		case 3:
+							// 			firstName = nomCompleto[0];
+							// 			familyName = nomCompleto[1] +""+ nomCompleto[2];
+							// 			break;
+							// 		case 4:
+							// 			firstName = nomCompleto[0] +""+ nomCompleto[1];
+							// 			familyName = nomCompleto[2] +""+ nomCompleto[3];
+							// 			break;
+							// 	}
+							// }
+							// creatorResource.addProperty(FOAF.firstName, firstName);
+							// creatorResource.addProperty(FOAF.familyName, familyName);
+							docResource.addProperty(creatorProperty, creator);
 
 							// Publisher
 							Property publisherProperty = collectionModel.createProperty(prefix_mv+"publisher");
