@@ -69,7 +69,6 @@ public class SemanticGenerator {
 		Date start = new Date();
 		
 		// Generar RDF de la coleccion
-		// Model ddddd = ModelFactory.createDefaultModel();
 		Model collectionModel = generateCollectionModel(docsPath);
 		
 		Date end = new Date();
@@ -167,7 +166,6 @@ public class SemanticGenerator {
 							docResource.addProperty(titleProperty, title);
 
 							// Contributor
-							// try{
 							Property contributorProperty = collectionModel.createProperty(prefix_mv+"contributor");
 							for (String contributor : contributors) {
 								contributor = StringUtils.stripAccents(contributor);
@@ -201,9 +199,6 @@ public class SemanticGenerator {
 								// contributorResource.addProperty(FOAF.familyName, familyName);
 								docResource.addProperty(contributorProperty, contributor);
 							}
-							// } catch(Exception e){
-							// 	System.err.println("hola");
-							// }
 
 							// Subject
 							Property subjectProperty = collectionModel.createProperty(prefix_mv+"subject");
@@ -214,8 +209,6 @@ public class SemanticGenerator {
 								Resource subjectResource = collectionModel.createResource()
 									.addProperty(SKOS.prefLabel, subject);
 								docResource.addProperty(subjectProperty, subjectResource);
-
-								// insertSubject(docResource, NS, collectionModel, skosModel, subject);
 							}
 							
 							String docType;
@@ -224,7 +217,6 @@ public class SemanticGenerator {
 							else if (type.contains("tfg")) docType = "tfg";
 							else docType = "pfc";
 							
-							// TODO: un resource por cada tipo??
 							Resource typeResource = collectionModel.createResource(prefix_mv+docType);
 							docResource.addProperty(RDF.type, typeResource);
 							
@@ -318,37 +310,4 @@ public class SemanticGenerator {
 			}
 		}
 	}
-
-// 	private void insertSubject(Resource document, String NS, Model model, Model thesaurus, String s) {
-// 		s= s.replace("'", "");
-// 		s= s.replace("\n", "").toLowerCase(Locale.ROOT);
-// 		String queryString =
-// 				  "prefix skos: <http://www.w3.org/2004/02/skos/core#>" +
-// 							 "prefix s: <http://www.grupo202.com/skos/subjects#>" +
-// 							 "select ?parentConcept ?parentLabel WHERE {" +
-// 								  "{ ?childConcept skos:prefLabel '" + s + "' } . " +
-// 								  "{ ?childConcept skos:broader ?parentConcept } . " +
-// 								  "{?parentConcept skos:prefLabel ?parentLabel} " +
-// 							 "}";
-
-// 		Query q1 = QueryFactory.create(queryString) ;
-
-// 		try (QueryExecution qexec = QueryExecutionFactory.create(q1, thesaurus)) {
-// 			 ResultSet results = qexec.execSelect();
-// 			 while (results.hasNext()) {
-// 				  QuerySolution soln = results.nextSolution();
-// 				  Resource x = soln.getResource("parentConcept");
-// 				  RDFNode z = soln.get("parentLabel");
-
-// 				  Resource newResource = model.createResource(SKOS.Concept);
-// 				  Resource resourceToInsert = model.createResource(NS + x.getURI());
-// 				  resourceToInsert.addProperty(RDF.type, newResource);
-
-// 				  resourceToInsert.addProperty(SKOS.prefLabel, model.createLiteral(z.toString().toLowerCase(Locale.ROOT)));
-// 				  document.addProperty(model.getProperty(NS + SUBJECT_ID), resourceToInsert);
-
-
-// 			 }
-// 		}
-//   }
 }
